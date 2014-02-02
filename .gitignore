@@ -1,0 +1,5 @@
+*.pyc
+settings.py
+propietapi/propietapi/settings.py
+propietapi/.coverage
+propietapi/reports
