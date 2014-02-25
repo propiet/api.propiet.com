@@ -27,7 +27,7 @@ class ListResource(ModelResource):
      requestHandler = RequestHandler() 
 
      class Meta:
-        allowed_methods = ['post']
+        allowed_methods = ['post','get']
         queryset = Service.objects.all() 
         resource_name = 'list'
 
@@ -54,7 +54,21 @@ class ListResource(ModelResource):
             url(r"^(?P<resource_name>%s)/cities%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('cities'), name="api_list_cities"),
+            url(r"^(?P<resource_name>%s)/test%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('test'), name="api_list_test"),
         ]
+
+     def test(self, request, **kwargs):
+       
+        return self.create_response(request, {
+            'response':{
+                'data':{
+                    'list':'[CATEGORIES]'
+                    },
+                'success': True
+                },                    
+        })
 
      def categories(self, request, **kwargs):
         request_data = self.requestHandler.getDataAuth(request)

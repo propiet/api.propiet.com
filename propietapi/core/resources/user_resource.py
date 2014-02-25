@@ -65,6 +65,8 @@ class UserResource(ModelResource):
                             'user_id': user.pk,
                             'username': user.username,
                             'user_email': user.email,
+                            'user_firstname': user.first_name,
+                            'user_lastname': user.last_name,
                             'user_token': api_key.key,                            
                             'user_role': user_group
                             },
