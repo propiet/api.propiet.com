@@ -46,6 +46,9 @@ class UserResource(ModelResource):
             url(r"^(?P<resource_name>%s)/chpwd%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('change_password'), name="api_user_chpwd"),
+            url(r"^(?P<resource_name>%s)/me%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('me'), name="api_user_me"),
         ]
 
      def login(self, request, **kwargs):
@@ -85,6 +88,32 @@ class UserResource(ModelResource):
              return self.create_response(request, {'response': { 'success': True }})
          else:
              return self.create_response(request, {'response': { 'success': False }}, HttpUnauthorized)    
+
+     def me(self, request, **kwargs):
+        self.is_secure(request) 
+        data = self.requestHandler.getDataAuth(request)
+        username = data['username']        
+        self.method_check(request, allowed=['get','post'])
+        if request.user and request.user.is_authenticated() and username == request.user.username:
+            user = request.user
+            api_key = ApiKey.objects.get(user=user)
+            user_group = user.groups.all()[0]          
+            return self.create_response(request, {
+                'response':{
+                    'data':{
+                        'user_id': user.pk,
+                        'username': user.username,
+                        'user_email': user.email,
+                        'user_firstname': user.first_name,
+                        'user_lastname': user.last_name,
+                        'user_token': api_key.key,                            
+                        'user_role': user_group
+                        },
+                    'success': True
+                    },                    
+            })
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_USER_INVALID','success': False }}, HttpUnauthorized)
 
      def update(self, request, **kwargs):
         self.is_secure(request)
