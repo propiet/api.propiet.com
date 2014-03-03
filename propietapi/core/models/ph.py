@@ -86,7 +86,6 @@ class Ph(Property):
     quantityBedrooms = models.IntegerField(max_length=1, choices=QUANTITY)
     quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY)
     quantityGarages = models.IntegerField(max_length=1, choices=QUANTITY)
-    quantityBuildingLifts = models.IntegerField(blank=True, null=True)
     garageCoverage = models.FloatField(blank=True, null=True)
     unityType = models.IntegerField(max_length=1, choices=UNITY_TYPE)
     orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE)
