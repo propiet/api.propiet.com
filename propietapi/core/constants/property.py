@@ -32,6 +32,10 @@ SUBCATEGORIES = {
     12:{1:'Consultorios'},
     13:{1:'Cocheras'},
 }
+OPERATION_TYPE = {
+    1: 'Venta',
+    2: 'Alquiler'
+}
 PROPERTYFORM = {
     1:{1:'Department', 2:'Department', 3:'Department', 4:'Department', 5:'Department', 6:'Department', 7:'Department'},
     2:{1:'House', 2:'House', 3:'House', 4:'House', 5:'House'},
@@ -150,4 +154,37 @@ INDUSTRIAL_ROOF_TYPE = {
     14:'Tres aguas',
     15:'Zinc',
     16:'Otro',
+}
+FIELD_LABEL = {
+    'creation_date':'Creado',
+    'antiqueness':'Antiguedad',
+    'square_meters':'Mt2',
+    'total_meters':'Mts Totales',
+    'total_uncovered_meters':'Metros descubiertos',
+    'suitableProfessional': 'Apto profesional',
+    'suitableCredit':'Apto Crédito',
+    'providesFunding':'Ofrece Financiación',
+    'quantityBedrooms': 'Cantidad de Dormitorios',  
+    'quantityBathrooms':'Cantidad de baños',
+    'quantityGarages':'Cantidad de cocheras',
+    'garageCoverage':'Cobertura cochera',
+    'orientation':'Orientación',
+    'disposition':'Disposición',
+    'buildingType':'Tipo de Edificio',
+    'buildingCondition': 'Estado del Inmueble',
+    'buildingStatus': 'Estado del Edificio',
+    'buildingCategory': 'Categoría del Edificio',
+    'apartmentsPerFloor': 'Departamentos por piso',
+    'quantityBuildingFloors': 'Cantidad de pisos en edificio',
+    'quantityBuildingFloors': 'Cantidad de pisos en edificio',
+    'floorNumber': 'Piso',
+    'quantityElevators': 'Cantidad de Ascensores',
+    'expenses': 'Expensas',
+    'lightness': 'Luminosidad',
+    'roofType': 'Tipo techo',
+    'frontGround': 'Metros de Frente',
+    'largeGround': 'Metros de Largo',
+    'hectares': 'Hectáreas',
+    'fot': 'FOT'
+
 }

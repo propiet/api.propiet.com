@@ -19,6 +19,7 @@ from tastypie.serializers import Serializer
 from core.handlers  import *
 from core.constants import *
 from core.models import Service, Ambience
+from core.forms import GetObjectForm
 from cities_light.models import Country, Region, City
 
 class ListResource(ModelResource):
@@ -54,21 +55,13 @@ class ListResource(ModelResource):
             url(r"^(?P<resource_name>%s)/cities%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('cities'), name="api_list_cities"),
-            url(r"^(?P<resource_name>%s)/test%s$" %
+            url(r"^(?P<resource_name>%s)/form/fields%s$" %
                 (self._meta.resource_name, trailing_slash()),
-                self.wrap_view('test'), name="api_list_test"),
+                self.wrap_view('get_form'), name="api_list_form"),
+            url(r"^(?P<resource_name>%s)/operations%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('operations'), name="api_list_operations"),
         ]
-
-     def test(self, request, **kwargs):
-       
-        return self.create_response(request, {
-            'response':{
-                'data':{
-                    'list':'[CATEGORIES]'
-                    },
-                'success': True
-                },                    
-        })
 
      def categories(self, request, **kwargs):
         request_data = self.requestHandler.getDataAuth(request)
@@ -93,6 +86,21 @@ class ListResource(ModelResource):
                 'response':{
                     'data':{
                         'list':[SUBCATEGORIES[category]]
+                        },
+                    'success': True
+                    },                    
+            })
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
+
+     def operations(self, request, **kwargs):
+        request_data = self.requestHandler.getDataAuth(request)
+        if request_data:
+            
+            return self.create_response(request, {
+                'response':{
+                    'data':{
+                        'list':[OPERATION_TYPE]
                         },
                     'success': True
                     },                    
@@ -245,6 +253,34 @@ class ListResource(ModelResource):
                 })
             else:
                 return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})     
+
+     def get_form(self, request, **kwargs):
+        request_data = self.requestHandler.getDataAuth(request)
+        if request_data:
+            category = int(request_data['data']['category'])
+            subcategory = int(request_data['data']['subcategory'])
+            model = str(PROPERTYFORM[category][subcategory])
+            form_class = GetObjectForm(model)
+            form = form_class()
+            default_data = {}
+
+            for field in form:
+                if (field.label != 'Ambiences' and field.label != 'Location' 
+                and field.label != 'Category' and field.label != 'Subcategory'
+                and field.label != 'User' and field.label != 'Services'
+                and field.label != 'Features'):
+                    default_data[field.html_name] = field
+
+            return self.create_response(request, {
+                'response':{
+                    'data':{
+                        'form':[default_data]
+                        },
+                    'success': True
+                    },                    
+            })
         else:
             return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
 
