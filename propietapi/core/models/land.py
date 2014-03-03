@@ -15,7 +15,7 @@ class Land(Property):
     )
     frontGround = models.FloatField(blank=True, null=True)
     largeGround = models.FloatField(blank=True, null=True)    
-    commercialUsage = models.IntegerField(max_length=1, choices=SUITABLE)    
+    commercialUsage = models.IntegerField(max_length=1, choices=SUITABLE, default=0)    
 
     class Meta:
         db_table = "core_property_land"

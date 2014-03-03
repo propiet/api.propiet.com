@@ -282,17 +282,30 @@ class ListResource(ModelResource):
         if request_data:
             category = int(request_data['data']['category'])
             subcategory = int(request_data['data']['subcategory'])
+            operation_type = int(request_data['data']['operation_type'])
             model = str(PROPERTYFORM[category][subcategory])
             form_class = GetObjectForm(model)
             form = form_class()
             default_data = {}
 
             for field in form:
-                if (field.label != 'Ambiences' and field.label != 'Location' 
-                and field.label != 'Category' and field.label != 'Subcategory'
-                and field.label != 'User' and field.label != 'Services'
-                and field.label != 'Features'):
-                    default_data[field.html_name] = field
+                if(OPERATION_TYPE[operation_type] == 'Venta'):
+                    if (field.label != 'Ambiences' and field.label != 'Location' 
+                    and field.label != 'Category' and field.label != 'Subcategory'
+                    and field.label != 'User' and field.label != 'Services'
+                    and field.label != 'Features' and field.label != 'Expenses'):
+
+                        field_label = FIELDS_LABELS[field.html_name]
+                        default_data[field_label] = field.as_widget(attrs={"class":"form-control"})
+                else:
+                    if (field.label != 'Ambiences' and field.label != 'Location' 
+                    and field.label != 'Category' and field.label != 'Subcategory'
+                    and field.label != 'User' and field.label != 'Services'
+                    and field.label != 'Features' and field.label != 'ProvidesFunding'
+                    and field.label != 'SuitableCredit'):
+
+                        field_label = FIELDS_LABELS[field.html_name]
+                        default_data[field_label] = field.as_widget(attrs={"class":"form-control"})
 
             return self.create_response(request, {
                 'response':{

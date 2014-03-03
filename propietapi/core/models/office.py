@@ -74,21 +74,21 @@ class Office(Property):
         (3, 'Poco luminoso'),
     )
         
-    quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY)
-    quantityGarages = models.IntegerField(max_length=1, choices=QUANTITY)    
+    quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
+    quantityGarages = models.IntegerField(max_length=1, choices=QUANTITY, default=0)    
     garageCoverage = models.FloatField(blank=True, null=True)
-    orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE)
-    disposition = models.IntegerField(max_length=1, choices=DISPOSITION_TYPE)
-    buildingType = models.IntegerField(max_length=1, choices=BUILDING_TYPE)
-    buildingCondition = models.IntegerField(max_length=1, choices=BUILDING_STATUS)
-    buildingStatus = models.IntegerField(max_length=1, choices=BUILDING_STATUS)
-    buildingCategory = models.IntegerField(max_length=1, choices=BUILDING_CATEGORY)    
+    orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE, default=0)
+    disposition = models.IntegerField(max_length=1, choices=DISPOSITION_TYPE, default=0)
+    buildingType = models.IntegerField(max_length=1, choices=BUILDING_TYPE, default=0)
+    buildingCondition = models.IntegerField(max_length=1, choices=BUILDING_STATUS, default=0)
+    buildingStatus = models.IntegerField(max_length=1, choices=BUILDING_STATUS, default=0)
+    buildingCategory = models.IntegerField(max_length=1, choices=BUILDING_CATEGORY, default=0)    
     apartmentsPerFloor = models.IntegerField(blank=True, null=True)
     quantityBuildingFloors = models.IntegerField(blank=True, null=True)
     floorNumber = models.IntegerField(blank=True, null=True)
-    quantityElevators = models.IntegerField(max_length=1, choices=QUANTITY)
+    quantityElevators = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     expenses = models.FloatField(blank=True, null=True)
-    lightness = models.IntegerField(max_length=1, choices=LIGHTNESS)    
+    lightness = models.IntegerField(max_length=1, choices=LIGHTNESS, default=0)    
 
     class Meta:
         db_table = "core_property_office"

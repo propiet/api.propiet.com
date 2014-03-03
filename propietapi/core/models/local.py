@@ -55,13 +55,13 @@ class Local(Property):
         (2, 'No'),        
     )
     
-    quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY)
-    quantityGarages = models.IntegerField(max_length=1, choices=QUANTITY)    
-    orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE)
-    disposition = models.IntegerField(max_length=1, choices=DISPOSITION_TYPE)    
-    buildingStatus = models.IntegerField(max_length=1, choices=BUILDING_STATUS)
+    quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
+    quantityGarages = models.IntegerField(max_length=1, choices=QUANTITY, default=0)    
+    orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE, default=0)
+    disposition = models.IntegerField(max_length=1, choices=DISPOSITION_TYPE, default=0)    
+    buildingStatus = models.IntegerField(max_length=1, choices=BUILDING_STATUS, default=0)
     expenses = models.FloatField(blank=True, null=True)
-    lightness = models.IntegerField(max_length=1, choices=LIGHTNESS)    
+    lightness = models.IntegerField(max_length=1, choices=LIGHTNESS, default=0)    
 
     class Meta:
         db_table = "core_property_local"

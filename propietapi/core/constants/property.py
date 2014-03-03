@@ -155,15 +155,16 @@ INDUSTRIAL_ROOF_TYPE = {
     15:'Zinc',
     16:'Otro',
 }
-FIELD_LABEL = {
+FIELDS_LABELS = {
     'creation_date':'Creado',
     'antiqueness':'Antiguedad',
-    'square_meters':'Mt2',
+    'square_meters':'Metros Cuadrados (m2)',
     'total_meters':'Superficie total (m2)',
     'total_uncovered_meters':'Superficie descubierta (m2)',
     'suitableProfessional': 'Apto profesional',
     'suitableCredit':'Apto Crédito',
     'providesFunding':'Ofrece Financiación',
+    'commercialUsage':'Apto profesional',
     'quantityAmbiences': 'Cantidad de ambientes',
     'quantityBedrooms': 'Cantidad de dormitorios',  
     'quantityBathrooms':'Cantidad de baños',
@@ -191,4 +192,5 @@ FIELD_LABEL = {
     'gateType': 'Tipo de portón',
     'quantityShips': 'Cantidad de naves',
     'unityType': 'Tipo de unidad',
+    'quantityFloors': 'Cantidad de plantas',
 }

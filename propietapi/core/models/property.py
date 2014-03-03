@@ -29,7 +29,7 @@ class Property(models.Model):
     subcategory = models.ForeignKey(SubCategory, null=True)
     creation_date = models.DateTimeField(auto_now=True)
     last_update = models.DateTimeField(auto_now=True)
-    antiqueness = models.IntegerField(max_length=1, choices=ANTIQUENESS)
+    antiqueness = models.IntegerField(max_length=1, choices=ANTIQUENESS, default=0)
     square_meters = models.FloatField()
     total_meters = models.FloatField()
     total_uncovered_meters = models.FloatField(blank=True, null=True)

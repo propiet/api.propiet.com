@@ -56,13 +56,13 @@ class CountryHouse(Property):
     )
     frontGround = models.FloatField(blank=True, null=True)
     largeGround = models.FloatField(blank=True, null=True)
-    quantityBedrooms = models.IntegerField(max_length=1, choices=QUANTITY)
-    quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY)
-    quantityFloors = models.IntegerField(max_length=1, choices=QUANTITY)
-    roofType = models.IntegerField(max_length=1, choices=ROOF_TYPE)
-    buildingStatus = models.IntegerField(max_length=1, choices=BUILDING_STATUS)
-    orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE)        
-    lightness = models.IntegerField(max_length=1, choices=LIGHTNESS)
+    quantityBedrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
+    quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
+    quantityFloors = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
+    roofType = models.IntegerField(max_length=1, choices=ROOF_TYPE, default=0)
+    buildingStatus = models.IntegerField(max_length=1, choices=BUILDING_STATUS, default=0)
+    orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE, default=0)        
+    lightness = models.IntegerField(max_length=1, choices=LIGHTNESS, default=0)
 
     class Meta:
         db_table = "core_property_country_house"
