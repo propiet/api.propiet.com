@@ -61,6 +61,9 @@ class ListResource(ModelResource):
             url(r"^(?P<resource_name>%s)/operations%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('operations'), name="api_list_operations"),
+            url(r"^(?P<resource_name>%s)/search%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('seach'), name="api_list_search"),
         ]
 
      def categories(self, request, **kwargs):
@@ -136,6 +139,24 @@ class ListResource(ModelResource):
         else:
             return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
         
+     def search(self, request, **kwargs):
+        request_data = self.requestHandler.getDataAuth(request)
+        if request_data:
+            
+            return self.create_response(request, {
+                'response':{
+                    'data':{
+                        'list':[
+                            {"CATEGORIES":CATEGORIES,
+                            "OPERATION_TYPE":OPERATION_TYPE,                            
+                        ]
+                    },
+                    'success': True
+                    },                    
+            })
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
+
      def services(self, request, **kwargs):
         request_data = self.requestHandler.getDataAuth(request)
         if request_data:
