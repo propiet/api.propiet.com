@@ -148,7 +148,7 @@ class ListResource(ModelResource):
                     'data':{
                         'list':[
                             {"CATEGORIES":CATEGORIES,
-                            "OPERATION_TYPE":OPERATION_TYPE,                            
+                            "OPERATION_TYPE":OPERATION_TYPE},                            
                         ]
                     },
                     'success': True
