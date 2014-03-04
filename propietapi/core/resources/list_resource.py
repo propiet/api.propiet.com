@@ -18,7 +18,7 @@ from tastypie.serializers import Serializer
 # core
 from core.handlers  import *
 from core.constants import *
-from core.models import Service, Ambience
+from core.models import Service, Ambience, Feature
 from core.forms import GetObjectForm
 from cities_light.models import Country, Region, City
 
@@ -49,6 +49,9 @@ class ListResource(ModelResource):
             url(r"^(?P<resource_name>%s)/ambiences%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('ambiences'), name="api_list_ambiences"),
+            url(r"^(?P<resource_name>%s)/features%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('features'), name="api_list_features"),
             url(r"^(?P<resource_name>%s)/regions%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('regions'), name="api_list_regions"),
@@ -192,6 +195,36 @@ class ListResource(ModelResource):
         if request_data:
             
             object_list = Ambience.objects.all()
+            paginator = Paginator(object_list.values(), 50)
+            if('page' in request_data['pagination']):                
+                page = request_data['pagination']['page']
+            else:
+                page = 1
+            try:
+                objects = paginator.page(page)
+            except PageNotAnInteger:
+                objects = paginator.page(1)
+            except EmptyPage:
+                objects = paginator.page(paginator.num_pages)            
+            if objects:                                      
+                return self.create_response(request, {
+                    'response':{
+                        'data':{
+                            'list':list(objects)
+                            },
+                        'success': True
+                        },                    
+                })
+            else:
+                return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
+
+     def features(self, request, **kwargs):
+        request_data = self.requestHandler.getDataAuth(request)
+        if request_data:
+            
+            object_list = Feature.objects.all()
             paginator = Paginator(object_list.values(), 50)
             if('page' in request_data['pagination']):                
                 page = request_data['pagination']['page']
