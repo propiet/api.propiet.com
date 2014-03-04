@@ -63,7 +63,7 @@ class ListResource(ModelResource):
                 self.wrap_view('operations'), name="api_list_operations"),
             url(r"^(?P<resource_name>%s)/search%s$" %
                 (self._meta.resource_name, trailing_slash()),
-                self.wrap_view('seach'), name="api_list_search"),
+                self.wrap_view('search'), name="api_list_search"),
         ]
 
      def categories(self, request, **kwargs):
