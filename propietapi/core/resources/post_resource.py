@@ -137,19 +137,24 @@ class PostResource(ModelResource):
         else:
             return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False}}, HttpUnauthorized)
      
-     def add(self, request, **kwargs):
+     def add(self, request, **kwargs):       
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)        
         if request_data:
             locationForm = LocationForm(request_data['data']['location'])
-            propertyForm = self._get_property_form(request_data['data']['property'])
-            postForm = PostForm(request_data['data']['post'])
             try:
                 if(locationForm.is_valid()):
                     location = locationForm.save()
+                    request_data['data']['property']['location'] = location.pk
+                    propertyForm = self._get_property_form(request_data['data']['property'])
                     propertyForm.location = location.pk
+
                     if(propertyForm.is_valid()):
                         unit = propertyForm.save()
+                        request_data['data']['post']['property'] = unit.pk
+                        request_data['data']['post']['region'] = location.region.pk
+                        request_data['data']['post']['city'] = location.city.pk
+                        postForm = PostForm(request_data['data']['post'])
                         postForm.property = unit.pk
                         postForm.region = location.region.pk
                         postForm.city = location.city.pk

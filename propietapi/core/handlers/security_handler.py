@@ -46,13 +46,13 @@ class SecurityHandler():
 
 	def is_valid_key(self, request):
 		try:
-			api_key = request.POST.get('k')
-			user = request.user
-			user_api = ApiKey.objects.get(user=user)
-			if(api_key == user_api.key):
+
+			api_key = request.POST.get('k')			
+			user_api = ApiKey.objects.get(key=api_key)
+			if(user_api.key):
 				return True
 			else:
 				return False
 		except ApiKey.DoesNotExist as e:
 			pass
-        	return False
+        	return e
