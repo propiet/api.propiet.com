@@ -10,12 +10,11 @@ CATEGORIES = {
     5:'Quintas',
     6:'Terrenos y lotes',
     7:'Campos y chacras',
-    8:'Galpones:depósitos y Edificios',
-    9:'Locales comerciales',
-    10:'Negocios y Fondos de Comercio',
-    11:'Oficinas',
-    12:'Consultorios',
-    13:'Cocheras',
+    8:'Galpones, depósitos y edificios industriales',
+    9:'Locales comerciales',    
+    10:'Oficinas',
+    11:'Consultorios',
+    12:'Cocheras',
 }
 SUBCATEGORIES = {
     1:{1:'Dúplex', 2:'Triplex', 3:'Loft', 4:'Piso', 5:'Semipiso', 6:'Penthouse', 7:'Departamento'},
@@ -26,11 +25,10 @@ SUBCATEGORIES = {
     6:{1:'Terrenos y lotes'},
     7:{1:'Campos y chacras'},
     8:{1:'Galpones', 2:'Depósitos', 3:'Edificios Industriales'},
-    9:{1:'Locales comerciales'},
-    10:{1:'Negocios y Fondos de Comercio'},
-    11:{1:'Oficinas'},
-    12:{1:'Consultorios'},
-    13:{1:'Cocheras'},
+    9:{1:'Locales comerciales'},    
+    10:{1:'Oficinas'},
+    11:{1:'Consultorios'},
+    12:{1:'Cocheras'},
 }
 OPERATION_TYPE = {
     1: 'Venta',
