@@ -99,6 +99,12 @@ class PostResource(ModelResource):
                         'data':{
                             'list':list(posts)
                             },
+                        'pagination': {
+                            'page': page,
+                            'count': paginator.count,
+                            'num_pages': paginator.num_pages,
+                            'page_range': paginator.page_range,
+                            },
                         'success': True
                         },                    
                 })
@@ -134,6 +140,12 @@ class PostResource(ModelResource):
                     'response':{
                         'data':{
                             'list':list(posts)
+                            },
+                        'pagination': {
+                            'page': page,
+                            'count': paginator.count,
+                            'num_pages': paginator.num_pages,
+                            'page_range': paginator.page_range,
                             },
                         'success': True
                         },                    
