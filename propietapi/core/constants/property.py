@@ -32,7 +32,8 @@ SUBCATEGORIES = {
 }
 OPERATION_TYPE = {
     1: 'Venta',
-    2: 'Alquiler'
+    2: 'Alquiler',
+    3: 'Emprendimiento'
 }
 PROPERTYFORM = {
     1:{1:'Department', 2:'Department', 3:'Department', 4:'Department', 5:'Department', 6:'Department', 7:'Department'},
