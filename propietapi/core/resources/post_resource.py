@@ -110,8 +110,14 @@ class PostResource(ModelResource):
      def list(self, request, **kwargs):
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)
-        if request_data:            
-            post_list = Post.objects.filter(user=request.user).order_by('-creation_date')
+        if request_data:
+            user = int(request_data['data']['user'])
+            status = int(request_data['data']['status'])
+            agent = request_data['data']['agent']
+            if(agent == None):
+                post_list = Post.objects.filter(user=user,status=status).order_by('-creation_date')
+            else:
+                post_list = Post.objects.filter(user=user,status=status,agent=int(agent)).order_by('-creation_date')
             paginator = Paginator(post_list.values(), 50)
             if('page' in request_data['pagination']):
                 page = request_data['pagination']['page']

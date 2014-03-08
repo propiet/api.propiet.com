@@ -10,14 +10,16 @@ class Post(models.Model):
 
 	STATUS = (
 	 	(0, 'INACTIVE'),
-        (1, 'READY'),
-        (2, 'PENDING'),
+        (1, 'NEW'),
+        (2, 'PAUSED'),
         (3, 'PUBLISHED'),
+        (4, 'SOLD'),
     )
 
 	id = models.AutoField(primary_key=True, db_index=True)
 	property = models.OneToOneField(Property)
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, related_name='post_user')
+	agent = models.ForeignKey(User, blank=True, null=True, related_name='post_agent')
 	category = models.ForeignKey(Category)
 	operation = models.ForeignKey(Operation)
 	price = models.FloatField(default=0)

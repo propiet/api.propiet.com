@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.conf.urls import *
 from django.utils import simplejson
-from django.core.exceptions import ValidationError
+from django.db import IntegrityError
+from django.core.exceptions import ValidationError 
 # Tastypie imports
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.resources import ModelResource
@@ -154,7 +155,13 @@ class UserResource(ModelResource):
                     return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':userRegistrationForm.errors,'success': False }})     
             except ValidationError as e:
                 pass
-                return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':userRegistrationForm.errors,'success': False }})             
+                return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':userRegistrationForm.errors,'success': False }})
+            except IntegrityError as e:
+                pass
+                return self.create_response(request, {'response': {'error':'ERR_USER_EXISTS','form':request_data['data'],'data':userRegistrationForm.errors,'success': False }})
+            except IntegrityError as e:
+                pass
+                return self.create_response(request, {'response': {'error':'ERR_DATABASE','form':request_data['data'],'data':userRegistrationForm.errors,'success': False }})
         else:
             return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
      
