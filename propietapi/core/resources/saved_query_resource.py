@@ -39,19 +39,53 @@ class SavedQueryResource(ModelResource):
             url(r"^(?P<resource_name>%s)/add_logged_in%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('add_logged_in'), name="api_query_add_logged_in"),
+            url(r"^(?P<resource_name>%s)/update%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('update'), name="api_query_update"), 
             url(r"^(?P<resource_name>%s)/delete%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('delete'), name="api_query_delete"), 
             url(r"^(?P<resource_name>%s)/list%s$" %
                 (self._meta.resource_name, trailing_slash()),
-                self.wrap_view('list'), name="api_query_list"),            
+                self.wrap_view('list'), name="api_query_list"),
+            url(r"^(?P<resource_name>%s)/get%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('get'), name="api_query_get"),           
         ]
+
+
+     def get(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getData(request)
+        if request_data:            
+            user = int(request_data['data']['user'])
+            saved_query_id = int(request_data['data']['id'])
+            query = SavedQuery.objects.get(pk=saved_query_id, user=user)            
+            if query:                                      
+                return self.create_response(request, {
+                    'response':{
+                        'data':{
+                            'id':query.pk,
+                            'name': query.name,
+                            'query': query.query,
+                            'user': query.user.pk,
+                            'creation_date': query.creation_date,
+                            'last_update': query.last_update,
+                            },                        
+                        'success': True
+                        },                    
+                })
+            else:
+                return self.create_response(request, {'response': {'error':'ERR_NOT_FOUND','success': False }})            
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False}}, HttpUnauthorized)
 
      def list(self, request, **kwargs):
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)
         if request_data:            
-            query_list = SavedQuery.objects.filter(user=request.user).order_by('-creation_date')
+            user = int(request_data['data']['user'])            
+            query_list = SavedQuery.objects.filter(user=user).order_by('-creation_date')
             paginator = Paginator(query_list.values(), 50)
             if('page' in request_data['pagination']):
                 page = request_data['pagination']['page']
@@ -68,6 +102,12 @@ class SavedQueryResource(ModelResource):
                     'response':{
                         'data':{
                             'list':list(querys)
+                            },
+                        'pagination': {
+                            'page': page,
+                            'count': paginator.count,
+                            'num_pages': paginator.num_pages,
+                            'page_range': paginator.page_range,
                             },
                         'success': True
                         },                    
@@ -100,7 +140,7 @@ class SavedQueryResource(ModelResource):
                 saved_query = saved_query_form.save()
                 alert_form = AlertForm()
                 alert_form.user = user
-                alert_form.name = 0
+                alert_form.alert_type = 0
                 alert_form.query = saved_query
                 if(alert_form.is_valid()):
                     alert_form.save()
@@ -132,7 +172,7 @@ class SavedQueryResource(ModelResource):
                    saved_query = saved_query_form.save()
                    alert_form = AlertForm()
                    alert_form.user = user
-                   alert_form.name = 0
+                   alert_form.alert_type = 0
                    alert_form.query = saved_query
                    alert_form.save()
                    return self.create_response(request, {'response': {'data':'SCC_CREATED','success': True }}, HttpCreated)
@@ -144,6 +184,37 @@ class SavedQueryResource(ModelResource):
         else:                
             return self.create_response(request, {'response': {'error':'ERR_INVALID_KEY','success': False }}, HttpUnauthorized)
 
+     def update(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getData(request)
+        if request_data:
+            user_id = int(request_data['data']['user'])
+            saved_query_id = int(request_data['data']['id'])
+            name = request_data['data']['name']
+            query = request_data['data']['query']
+            user = User.objects.get(pk=user_id)            
+            saved_query_ins = SavedQuery.objects.get(pk=saved_query_id, user=user)
+            if(saved_query_ins):
+                saved_query_form = SavedQueryForm(request_data['data'], instance=saved_query_ins)                
+                try:
+                    if(saved_query_form.is_valid()):                
+                       saved_query = saved_query_form.save()
+                       alert_form = AlertForm()
+                       alert_form.user = user
+                       alert_form.alert_type = 0
+                       alert_form.query = saved_query
+                       alert_form.save()
+                       return self.create_response(request, {'response': {'data':'SCC_CREATED','success': True }}, HttpCreated)
+                    else:                
+                        return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','data':saved_query_form.errors,'success': False }})
+                except ValidationError as e:
+                        pass
+                        return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','data':saved_query_form.errors,'success': False }})
+            else:
+                return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
+        else:                
+            return self.create_response(request, {'response': {'error':'ERR_INVALID_KEY','success': False }}, HttpUnauthorized)
+
      def delete(self, request, **kwargs):
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)
@@ -151,9 +222,11 @@ class SavedQueryResource(ModelResource):
             id = int(request_data['data']['id'])
             query = SavedQuery.objects.get(pk=id)
             user_id = int(request_data['data']['user'])
-            user = User.objects.get(pk=user_id)                        
+            user = User.objects.get(pk=user_id)
+            alert = Alert.objects.get(query=query.pk)                      
             if(user.pk == query.user.pk):        
-               query.delete()               
+               query.delete()
+               alert.delete()
                return self.create_response(request, {'response': {'data':'SCC_DELETED','success': True }})
             else:                
                 return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)

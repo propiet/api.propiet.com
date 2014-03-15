@@ -19,7 +19,7 @@ from tastypie.serializers import Serializer
 # core
 from core.handlers  import *
 from core.models  import Post, Location
-from core.forms import PostForm, GetObjectForm, LocationForm
+from core.forms import PostForm, GetObjectForm, LocationForm, PostAgentForm, PostStatusForm
 from core.constants import PROPERTYFORM
 
 
@@ -50,7 +50,13 @@ class PostResource(ModelResource):
                 self.wrap_view('update'), name="api_post_update"),
             url(r"^(?P<resource_name>%s)/status%s$" %
                 (self._meta.resource_name, trailing_slash()),
-                self.wrap_view('status'), name="api_post_status"),            
+                self.wrap_view('status'), name="api_post_status"),
+            url(r"^(?P<resource_name>%s)/assign%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('assign'), name="api_post_assign"),
+            url(r"^(?P<resource_name>%s)/unassign%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('unassign'), name="api_post_unassign"),           
         ]
 
      def search(self, request, **kwargs):        
@@ -81,6 +87,7 @@ class PostResource(ModelResource):
             if('currency' in request_data):
                 kwargs['currency'] = request_data['currency']
 
+            kwargs['status'] = 3 #Retrieve only Published posts
             post_list = Post.objects.filter(**kwargs).order_by('-creation_date')
             paginator = Paginator(post_list.values(), 50)
             if('page' in request_data['pagination']):                
@@ -119,11 +126,17 @@ class PostResource(ModelResource):
         if request_data:
             user = int(request_data['data']['user'])
             status = int(request_data['data']['status'])
-            agent = request_data['data']['agent']
-            if(agent == None):
+            agent = int(request_data['data']['agent'])
+
+            if(agent == 0 and user > 0 and status >= 0):
                 post_list = Post.objects.filter(user=user,status=status).order_by('-creation_date')
+            elif (agent == 0 and user == 0 and status >= 0):
+                post_list = Post.objects.filter(status=status,agent=None).order_by('-creation_date')
+            elif (agent > 0 and user == 0 and status < 0):
+                post_list = Post.objects.filter(agent=agent).order_by('-creation_date')
             else:
-                post_list = Post.objects.filter(user=user,status=status,agent=int(agent)).order_by('-creation_date')
+                post_list = Post.objects.filter(user=user,status=status,agent=agent).order_by('-creation_date')
+
             paginator = Paginator(post_list.values(), 50)
             if('page' in request_data['pagination']):
                 page = request_data['pagination']['page']
@@ -230,9 +243,11 @@ class PostResource(ModelResource):
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)        
         if request_data:
-            post_id = request_data['data']['id']
+            post_id = int(request_data['data']['post'])
+            status = int(request_data['data']['status'])
+            form_data = {'status': status}
             post = Post.objects.get(pk=post_id)
-            postStatusForm = PostStatusForm(request_data['data'], instance=post)
+            postStatusForm = PostStatusForm(form_data, instance=post)
             try:
                 if(postStatusForm.is_valid()):
                     postStatusForm.save()
@@ -242,6 +257,52 @@ class PostResource(ModelResource):
             except ValidationError as e:
                 pass
                 return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postStatusForm.errors,'success': False }})
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
+
+     def assign(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getData(request)        
+        if request_data:
+            posts = request_data['data']['posts']
+            agent_id = request_data['data']['agent']
+            form_data = {'agent': int(agent_id), 'status':3}
+
+            for post_id in posts:
+                post = Post.objects.get(pk=int(post_id))                
+                postAgentForm = PostAgentForm(form_data, instance=post)
+                try:
+                    if(postAgentForm.is_valid()):
+                        postAgentForm.save()                        
+                    else:
+                        return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postAgentForm.errors,'success': False }}) 
+                except ValidationError as e:
+                    pass
+                    return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postAgentForm.errors,'success': False }})
+            return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})      
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
+
+     def unassign(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getData(request)        
+        if request_data:
+            posts = request_data['data']['posts']
+            agent_id = request_data['data']['agent']
+            form_data = {'agent': None, 'status': 1}
+
+            for post_id in posts:
+                post = Post.objects.get(pk=int(post_id), agent=int(agent_id))                
+                postAgentForm = PostAgentForm(form_data, instance=post)
+                try:
+                    if(postAgentForm.is_valid()):
+                        postAgentForm.save()                        
+                    else:
+                        return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postAgentForm.errors,'success': False }}) 
+                except ValidationError as e:
+                    pass
+                    return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postAgentForm.errors,'success': False }})
+            return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
         else:
             return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
 

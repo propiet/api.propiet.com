@@ -3,6 +3,7 @@ from core.forms.user_profile_form import UserProfileForm
 from core.forms.user_registration_form import UserRegistrationForm
 from core.forms.post_form import PostForm
 from core.forms.post_status_form import PostStatusForm
+from core.forms.post_agent_form import PostAgentForm
 from core.forms.location_form import LocationForm
 from core.forms.saved_query_form import SavedQueryForm
 from core.forms.alert_form import AlertForm

@@ -14,7 +14,7 @@ class Alert(models.Model):
 	id = models.AutoField(primary_key=True, db_index=True)	
 	user = models.ForeignKey(User)
 	query = models.OneToOneField(SavedQuery)
-	name = models.IntegerField(max_length=1,choices=ALERT_TYPE)	
+	alert_type = models.IntegerField(max_length=1,choices=ALERT_TYPE)	
 	creation_date = models.DateTimeField(auto_now=True)
 	last_update = models.DateTimeField(auto_now=True)	
 
@@ -26,4 +26,4 @@ class Alert(models.Model):
 		return self.user	
 
 	def __unicode__(self):
-		return self.name
+		return self.query.name
