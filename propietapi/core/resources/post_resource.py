@@ -63,7 +63,10 @@ class PostResource(ModelResource):
                 self.wrap_view('get'), name="api_post_get"),
             url(r"^(?P<resource_name>%s)/get_form%s$" %
                 (self._meta.resource_name, trailing_slash()),
-                self.wrap_view('get_form'), name="api_post_get_form"),          
+                self.wrap_view('get_form'), name="api_post_get_form"),
+            url(r"^(?P<resource_name>%s)/agent%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('agent'), name="api_post_get_agent"),       
         ]
 
      def search(self, request, **kwargs):        
@@ -246,6 +249,34 @@ class PostResource(ModelResource):
                 return self.create_response(request, {'response': {'error':'ERR_NOT_FOUND','success': False }})            
         else:
             return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False}}, HttpUnauthorized)
+
+     def agent(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getData(request)
+        if request_data:
+            agent_id = int(request_data['data']['id'])            
+            agent = User.objects.get(pk=agent_id)
+            if agent:
+                user_group = user.groups.all()[0]
+                user_profile = UserProfile.objects.get(user=agent)    
+                return self.create_response(request, {
+                    'response':{
+                        'data':{
+                            'id': agent.pk,
+                            'username': agent.username,
+                            'email': agent.email,
+                            'firstname': agent.first_name,
+                            'lastname': agent.last_name,
+                            'role': user_group,
+                            'phone': user_profile.phone
+                            },
+                        'success': True
+                        },                    
+                })
+            else:
+                return self.create_response(request, {'response': {'error':'ERR_NOT_FOUND','success': False }})            
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False}}, HttpUnauthorized)
      
      def add(self, request, **kwargs):       
         self.is_secure(request)
@@ -294,15 +325,31 @@ class PostResource(ModelResource):
             try:
                 if(locationForm.is_valid()):
                     location = locationForm.save()
-                    
-                    property = self._get_property_model(request_data['data']['property'])
-                    propertyForm = self._get_property_form(request_data['data']['property'], instance=property)
+                    category = int(request_data['data']['property']['category'])
+                    subcategory = int(request_data['data']['property']['subcategory'])
+
+                    post_id = request_data['data']['post']['id']
+                    post = Post.objects.get(pk=post_id)
+
+                    property_id = request_data['data']['property']['id']
+                    property = Property.objects.get(pk=post_id)
+
+                    model = str(PROPERTYFORM[category][subcategory])
+                    form_class = GetObjectForm(model)
+                    request_data['data']['property']['location'] = location.pk
+                    propertyForm = form_class(request_data['data']['property'], instance=property)                    
+
                     if(propertyForm.is_valid()):
                         unit = propertyForm.save()
-                        
-                        post_id = request_data['data']['post']['id']
-                        post = Location.objects.get(pk=post_id)
+
+                        request_data['data']['post']['property'] = unit.pk
+                        request_data['data']['post']['region'] = location.region.pk
+                        request_data['data']['post']['city'] = location.city.pk
                         postForm = PostForm(request_data['data']['post'], instance=post)
+                        postForm.property = unit.pk
+                        postForm.region = location.region.pk
+                        postForm.city = location.city.pk
+
                         if(postForm.is_valid()):
                             postForm.save()
                             return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
