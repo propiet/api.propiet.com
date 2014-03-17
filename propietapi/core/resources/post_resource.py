@@ -336,15 +336,16 @@ class PostResource(ModelResource):
 
                     model = str(PROPERTYFORM[category][subcategory])
                     form_class = GetObjectForm(model)
-                    request_data['data']['property']['location'] = location.pk
+                    request_data['data']['property']['location'] = property.location.pk
                     propertyForm = form_class(request_data['data']['property'], instance=property)                    
 
                     if(propertyForm.is_valid()):
                         unit = propertyForm.save()
 
-                        request_data['data']['post']['property'] = unit.pk
+                        request_data['data']['post']['property'] = post.property.pk
                         request_data['data']['post']['region'] = location.region.pk
                         request_data['data']['post']['city'] = location.city.pk
+                        request_data['data']['post']['status'] = post.status
                         postForm = PostForm(request_data['data']['post'], instance=post)
                         postForm.property = unit.pk
                         postForm.region = location.region.pk
