@@ -48,4 +48,4 @@ class Property(models.Model):
         return self.user    
 
     def __unicode__(self):
-        return self.category.name+'-'+self.location.address+'-'+str(self.location.number)
+        return self.category.name+'-'+self.location.address
