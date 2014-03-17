@@ -179,7 +179,7 @@ class PostResource(ModelResource):
             post = Post.objects.get(pk=post_id)
             if post:
                 property = Property.objects.get(pk=post.property.pk)
-                location = Location.objects.get(post=post_id)
+                location = Location.objects.get(property=post.property.pk)
                 user = User.objects.get(pk=post.user.pk)
                 agent = User.objects.get(pk=post.agent.pk)
                         
