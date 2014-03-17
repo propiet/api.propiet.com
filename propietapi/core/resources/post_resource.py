@@ -27,7 +27,8 @@ class PostResource(ModelResource):
      """ Class PostResource post endpoint.
         @author: Lionel Cuevas <lionel@hoopemedia.com>"""
 
-     requestHandler = RequestHandler() 
+     requestHandler = RequestHandler()
+     serializer = SerializationHandler()
 
      class Meta:
         allowed_methods = ['post']
@@ -187,22 +188,23 @@ class PostResource(ModelResource):
                     return self.create_response(request, {
                         'response':{
                             'data':{
-                                'post': {
+                                'post_data': {
                                     'id': post.pk,
-                                    'category': post.category,
-                                    'operation': post.operation,
+                                    'category': {post.category.pk:post.category.name},
+                                    'operation': {post.operation.pk:post.operation.name},
                                     'price': post.price,
-                                    'currency': post.currency,
+                                    'currency': {post.currency.pk:post.currency.name},
                                     'title': post.title,
                                     'status': post.status,
                                     'description': post.description,
-                                    'region': post.region,
-                                    'city': post.city,
+                                    'region': {post.region.pk:post.region.name},
+                                    'city':{post.city.pk:post.city.name},
                                 },
-                                'property':property,                            
-                                'location':location,
-                                'user':user,
-                                'agent':agent,
+                                'post':self.serializer.encode(post),
+                                'property':self.serializer.encode(property),                            
+                                'location':self.serializer.encode(location),
+                                'user':self.serializer.encode(user),
+                                'agent':self.serializer.encode(agent),
                                 },                        
                             'success': True
                             },                    
@@ -211,22 +213,22 @@ class PostResource(ModelResource):
                     return self.create_response(request, {
                         'response':{
                             'data':{
-                                'post': {
+                                'post_data': {
                                     'id': post.pk,
-                                    'category': post.category,
-                                    'operation': post.operation,
+                                    'category': {post.category.pk:post.category.name},
+                                    'operation': {post.operation.pk:post.operation.name},
                                     'price': post.price,
-                                    'currency': post.currency,
+                                    'currency': {post.currency.pk:post.currency.name},
                                     'title': post.title,
                                     'status': post.status,
                                     'description': post.description,
-                                    'region': post.region,
-                                    'city': post.city,
+                                    'region': {post.region.pk:post.region.name},
+                                    'city':{post.city.pk:post.city.name},
                                 },
-                                'property':property,                            
-                                'location':location,
-                                'user':user,
-                                
+                                'post':self.serializer.encode(post),
+                                'property':self.serializer.encode(property),                            
+                                'location':self.serializer.encode(location),
+                                'user':self.serializer.encode(user),                                
                                 },                        
                             'success': True
                             },                    
