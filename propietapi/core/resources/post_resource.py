@@ -18,7 +18,7 @@ from tastypie.models import ApiKey
 from tastypie.serializers import Serializer
 # core
 from core.handlers  import *
-from core.models  import Post, Location, Property
+from core.models  import Post, Location, Property, UserProfile
 from core.forms import PostForm, GetObjectForm, LocationForm, PostAgentForm, PostStatusForm
 from core.constants import *
 
