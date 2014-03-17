@@ -62,7 +62,8 @@ class UserResource(ModelResource):
             if user.is_active:
                 login(request, user)
                 api_key = ApiKey.objects.get(user=user)
-                user_group = user.groups.all()[0]          
+                user_group = user.groups.all()[0]
+                user_profile = UserProfile.objects.get(user=user)
                 return self.create_response(request, {
                     'response':{
                         'data':{
@@ -72,7 +73,8 @@ class UserResource(ModelResource):
                             'user_firstname': user.first_name,
                             'user_lastname': user.last_name,
                             'user_token': api_key.key,                            
-                            'user_role': user_group
+                            'user_role': user_group,
+                            'user_phone': user_profile.phone
                             },
                         'success': True
                         },                    
@@ -91,24 +93,24 @@ class UserResource(ModelResource):
              return self.create_response(request, {'response': { 'success': False }}, HttpUnauthorized)    
 
      def me(self, request, **kwargs):
-        self.is_secure(request) 
-        data = self.requestHandler.getDataAuth(request)
-        username = data['username']        
-        self.method_check(request, allowed=['get','post'])
-        if request.user and request.user.is_authenticated() and username == request.user.username:
-            user = request.user
+        self.is_secure(request)
+        request_data = self.requestHandler.getData(request)
+        username = request_data['username']                
+        if username:
+            user = User.objects.get(username=username)
             api_key = ApiKey.objects.get(user=user)
-            user_group = user.groups.all()[0]          
+            user_group = user.groups.all()[0]
+            user_profile = UserProfile.objects.get(user=user)    
             return self.create_response(request, {
                 'response':{
                     'data':{
-                        'user_id': user.pk,
+                        'id': user.pk,
                         'username': user.username,
-                        'user_email': user.email,
-                        'user_firstname': user.first_name,
-                        'user_lastname': user.last_name,
-                        'user_token': api_key.key,                            
-                        'user_role': user_group
+                        'email': user.email,
+                        'firstname': user.first_name,
+                        'lastname': user.last_name,
+                        'role': user_group,
+                        'phone': user_profile.phone
                         },
                     'success': True
                     },                    
@@ -120,11 +122,11 @@ class UserResource(ModelResource):
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)
         if request_data:
-            user_id = request_data['data']['user_id']
+            user_id = request_data['data']['id']
             user = User.objects.get(pk=user_id)
             profile = UserProfile.objects.get(pk=user)
 
-            if(str(request.user.id) == user_id):
+            if(user):
                 userForm = UserForm(request_data['data'], instance=user)
                 userProfileForm = UserProfileForm(request_data['data'], instance=profile) 
                 try:
@@ -169,11 +171,11 @@ class UserResource(ModelResource):
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)
         if request_data:
-            user_id = request_data['data']['user_id']
+            user_id = request_data['data']['id']
             user_raw_pass = request_data['data']['old_password']
             user = User.objects.get(pk=user_id)
 
-            if(str(request.user.id) == user_id):
+            if(user):
                 if(user.check_password(user_raw_pass) == True):
                     try:
                         if(request_data['data']['password1'] == request_data['data']['password2']):

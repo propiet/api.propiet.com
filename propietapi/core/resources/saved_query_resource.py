@@ -198,13 +198,8 @@ class SavedQueryResource(ModelResource):
                 saved_query_form = SavedQueryForm(request_data['data'], instance=saved_query_ins)                
                 try:
                     if(saved_query_form.is_valid()):                
-                       saved_query = saved_query_form.save()
-                       alert_form = AlertForm()
-                       alert_form.user = user
-                       alert_form.alert_type = 0
-                       alert_form.query = saved_query
-                       alert_form.save()
-                       return self.create_response(request, {'response': {'data':'SCC_CREATED','success': True }}, HttpCreated)
+                       saved_query = saved_query_form.save()                       
+                       return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
                     else:                
                         return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','data':saved_query_form.errors,'success': False }})
                 except ValidationError as e:
