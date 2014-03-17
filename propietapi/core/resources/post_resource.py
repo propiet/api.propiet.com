@@ -257,7 +257,7 @@ class PostResource(ModelResource):
             agent_id = int(request_data['data']['id'])            
             agent = User.objects.get(pk=agent_id)
             if agent:
-                user_group = user.groups.all()[0]
+                user_group = agent.groups.all()[0]
                 user_profile = UserProfile.objects.get(user=agent)    
                 return self.create_response(request, {
                     'response':{
