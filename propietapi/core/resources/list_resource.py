@@ -322,7 +322,7 @@ class ListResource(ModelResource):
             default_data = {}
 
             for field in form:
-                if(OPERATION_TYPE[operation_type] == 'Venta'):
+                if(OPERATION_TYPE[operation_type] == 'Venta' or OPERATION_TYPE[operation_type] == 'Emprendimiento'):
                     if (field.label != 'Ambiences' and field.label != 'Location' 
                     and field.label != 'Category' and field.label != 'Subcategory'
                     and field.label != 'User' and field.label != 'Services'
