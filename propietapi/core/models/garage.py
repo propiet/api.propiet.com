@@ -14,7 +14,13 @@ class Garage(Property):
         (2, 'No'),        
     )
 
-    garageCoverage = models.FloatField()        
+    COVERAGE = (
+        (0, 'Descubierta'),
+        (1, 'Cubierta'),
+        (2, 'Semicubierta'),        
+    )
+
+    garageCoverage = models.IntegerField(max_length=1, choices=COVERAGE, default=0)        
     expenses = models.FloatField(blank=True, null=True)            
 
     class Meta:
