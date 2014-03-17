@@ -191,7 +191,7 @@ class PostResource(ModelResource):
                                 'post_data': {
                                     'id': post.pk,
                                     'category': {post.category.pk:post.category.name},
-                                    'operation': {post.operation.pk:post.operation.name},
+                                    'operation': {post.operation.pk:post.operation.operation},
                                     'price': post.price,
                                     'currency': {post.currency.pk:post.currency.name},
                                     'title': post.title,
@@ -216,7 +216,7 @@ class PostResource(ModelResource):
                                 'post_data': {
                                     'id': post.pk,
                                     'category': {post.category.pk:post.category.name},
-                                    'operation': {post.operation.pk:post.operation.name},
+                                    'operation': {post.operation.pk:post.operation.operation},
                                     'price': post.price,
                                     'currency': {post.currency.pk:post.currency.name},
                                     'title': post.title,
