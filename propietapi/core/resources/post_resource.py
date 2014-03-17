@@ -20,7 +20,7 @@ from tastypie.serializers import Serializer
 from core.handlers  import *
 from core.models  import Post, Location, Property
 from core.forms import PostForm, GetObjectForm, LocationForm, PostAgentForm, PostStatusForm
-from core.constants import PROPERTYFORM
+from core.constants import *
 
 
 class PostResource(ModelResource):
@@ -181,20 +181,56 @@ class PostResource(ModelResource):
                 property = Property.objects.get(pk=post.property.pk)
                 location = Location.objects.get(property=post.property.pk)
                 user = User.objects.get(pk=post.user.pk)
-                agent = User.objects.get(pk=post.agent.pk)
+                if(post.agent != None):
+                    agent = User.objects.get(pk=post.agent.pk)                
                         
-                return self.create_response(request, {
-                    'response':{
-                        'data':{
-                            'post':post,
-                            'property':property,                            
-                            'location':location,
-                            'user':user,
-                            'agent':agent,
-                            },                        
-                        'success': True
-                        },                    
-                })
+                    return self.create_response(request, {
+                        'response':{
+                            'data':{
+                                'post': {
+                                    'id': post.pk,
+                                    'category': post.category,
+                                    'operation': post.operation,
+                                    'price': post.price,
+                                    'currency': post.currency,
+                                    'title': post.title,
+                                    'status': post.status,
+                                    'description': post.description,
+                                    'region': post.region,
+                                    'city': post.city,
+                                },
+                                'property':property,                            
+                                'location':location,
+                                'user':user,
+                                'agent':agent,
+                                },                        
+                            'success': True
+                            },                    
+                    })
+                else:
+                    return self.create_response(request, {
+                        'response':{
+                            'data':{
+                                'post': {
+                                    'id': post.pk,
+                                    'category': post.category,
+                                    'operation': post.operation,
+                                    'price': post.price,
+                                    'currency': post.currency,
+                                    'title': post.title,
+                                    'status': post.status,
+                                    'description': post.description,
+                                    'region': post.region,
+                                    'city': post.city,
+                                },
+                                'property':property,                            
+                                'location':location,
+                                'user':user,
+                                
+                                },                        
+                            'success': True
+                            },                    
+                    })
             else:
                 return self.create_response(request, {'response': {'error':'ERR_NOT_FOUND','success': False }})            
         else:
