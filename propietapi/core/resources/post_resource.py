@@ -56,7 +56,10 @@ class PostResource(ModelResource):
                 self.wrap_view('assign'), name="api_post_assign"),
             url(r"^(?P<resource_name>%s)/unassign%s$" %
                 (self._meta.resource_name, trailing_slash()),
-                self.wrap_view('unassign'), name="api_post_unassign"),           
+                self.wrap_view('unassign'), name="api_post_unassign"),
+            url(r"^(?P<resource_name>%s)/get%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('get'), name="api_post_get"),          
         ]
 
      def search(self, request, **kwargs):        
@@ -165,6 +168,35 @@ class PostResource(ModelResource):
                 })
             else:
                 return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})            
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False}}, HttpUnauthorized)
+
+     def get(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getData(request)
+        if request_data:
+            post_id = int(request_data['data']['id'])            
+            post = Post.objects.get(pk=post_id)
+            if post:
+                property = Property.objects.get(pk=post.property.pk)
+                location = Location.objects.get(post=post_id)
+                user = User.objects.get(pk=post.user.pk)
+                agent = User.objects.get(pk=post.agent.pk)
+                        
+                return self.create_response(request, {
+                    'response':{
+                        'data':{
+                            'post':post,
+                            'property':property,                            
+                            'location':location,
+                            'user':user,
+                            'agent':agent,
+                            },                        
+                        'success': True
+                        },                    
+                })
+            else:
+                return self.create_response(request, {'response': {'error':'ERR_NOT_FOUND','success': False }})            
         else:
             return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False}}, HttpUnauthorized)
      

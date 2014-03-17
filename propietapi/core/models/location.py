@@ -8,8 +8,7 @@ class Location(models.Model):
 	@author: Lionel Cuevas <lionel@hoopemedia.com>"""
 
 	id = models.AutoField(primary_key=True, db_index=True)	
-	address = models.CharField(max_length=500)
-	number = models.IntegerField(max_length=10, default=0)
+	address = models.CharField(max_length=500)	
 	longitude = models.CharField(max_length=100, blank=True, null=True, default=0)
 	latitude = models.CharField(max_length=100, blank=True, null=True, default=0)
 	country = models.ForeignKey(Country, null=True)
@@ -24,4 +23,4 @@ class Location(models.Model):
 		return self.user	
 
 	def __unicode__(self):
-		return self.address+'-'+str(self.number)+' > '+self.region.name+'-'+self.city.name
+		return self.address+' > '+self.region.name+'-'+self.city.name
