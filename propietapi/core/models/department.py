@@ -91,7 +91,7 @@ class Department(Property):
     quantityBedrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     quantityGarages = models.IntegerField(max_length=1, choices=QUANTITY, default=0)    
-    garageCoverage = models.FloatField(blank=True, null=True, choices=COVERAGE)
+    garageCoverage = models.IntegerField(blank=True, null=True, choices=COVERAGE)
     unityType = models.IntegerField(max_length=1, choices=UNITY_TYPE, default=0)
     orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE, default=0)
     disposition = models.IntegerField(max_length=1, choices=DISPOSITION_TYPE, default=0)
