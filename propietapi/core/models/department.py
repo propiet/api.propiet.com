@@ -82,11 +82,16 @@ class Department(Property):
         (2, 'Luminoso'),
         (3, 'Poco luminoso'),
     )
+    COVERAGE = (
+        (0, 'Descubierta'),
+        (1, 'Cubierta'),
+        (2, 'Semicubierta'),        
+    )
     quantityAmbiences = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     quantityBedrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     quantityGarages = models.IntegerField(max_length=1, choices=QUANTITY, default=0)    
-    garageCoverage = models.FloatField(blank=True, null=True)
+    garageCoverage = models.FloatField(blank=True, null=True, choices=COVERAGE)
     unityType = models.IntegerField(max_length=1, choices=UNITY_TYPE, default=0)
     orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE, default=0)
     disposition = models.IntegerField(max_length=1, choices=DISPOSITION_TYPE, default=0)

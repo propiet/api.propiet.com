@@ -112,6 +112,11 @@ class IndustrialBuilding(Property):
         (15, 'Zinc'),
         (16, 'Otro'),
     )
+    COVERAGE = (
+        (0, 'Descubierta'),
+        (1, 'Cubierta'),
+        (2, 'Semicubierta'),        
+    )
     fot = models.IntegerField(blank=True, null=True)
     frontGround = models.FloatField(blank=True, null=True)
     largeGround = models.FloatField(blank=True, null=True)
@@ -120,7 +125,7 @@ class IndustrialBuilding(Property):
     quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     quantityGarages = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     quantityShips = models.IntegerField(max_length=1, choices=QUANTITY, default=0)    
-    garageCoverage = models.FloatField(blank=True, null=True)
+    garageCoverage = models.FloatField(blank=True, null=True, choices=COVERAGE)
     unityType = models.IntegerField(max_length=1, choices=UNITY_TYPE, default=0)
     orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE, default=0)
     disposition = models.IntegerField(max_length=1, choices=DISPOSITION_TYPE, default=0)

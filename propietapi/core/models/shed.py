@@ -112,6 +112,11 @@ class Shed(Property):
         (15, 'Zinc'),
         (16, 'Otro'),
     )
+    COVERAGE = (
+        (0, 'Descubierta'),
+        (1, 'Cubierta'),
+        (2, 'Semicubierta'),        
+    )
     fot = models.IntegerField()
     frontGround = models.IntegerField()
     largeGround = models.IntegerField()
@@ -120,7 +125,7 @@ class Shed(Property):
     quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     quantityGarages = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     quantityShips = models.IntegerField(max_length=1, choices=QUANTITY, default=0)    
-    garageCoverage = models.IntegerField()
+    garageCoverage = models.IntegerField(max_length=1, blank=True, choices=COVERAGE, default=0)
     unityType = models.IntegerField(max_length=1, choices=UNITY_TYPE, default=0)
     orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE, default=0)
     disposition = models.IntegerField(max_length=1, choices=DISPOSITION_TYPE, default=0)

@@ -73,10 +73,14 @@ class ConsultingRoom(Property):
         (2, 'Luminoso'),
         (3, 'Poco luminoso'),
     )
-        
+    COVERAGE = (
+        (0, 'Descubierta'),
+        (1, 'Cubierta'),
+        (2, 'Semicubierta'),        
+    )
     quantityBathrooms = models.IntegerField(max_length=1, choices=QUANTITY, default=0)
     quantityGarages = models.IntegerField(max_length=1, choices=QUANTITY, default=0)    
-    garageCoverage = models.FloatField(blank=True, null=True)    
+    garageCoverage = models.FloatField(blank=True, null=True, choices=COVERAGE)    
     orientation = models.IntegerField(max_length=1, choices=ORIENTATION_TYPE, default=0)
     disposition = models.IntegerField(max_length=1, choices=DISPOSITION_TYPE, default=0)
     buildingType = models.IntegerField(max_length=1, choices=BUILDING_TYPE, default=0)
