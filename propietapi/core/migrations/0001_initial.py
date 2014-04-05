@@ -1,103 +1,354 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
-        # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
+        # Adding model 'UserProfile'
+        db.create_table('core_user_profile', (
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='profile', unique=True, primary_key=True, to=orm['auth.User'])),
+            ('phone', self.gf('django.db.models.fields.TextField')(max_length=40)),
+        ))
+        db.send_create_signal('core', ['UserProfile'])
+
+        # Adding model 'Feature'
+        db.create_table('core_feature', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('core', ['Feature'])
+
+        # Adding model 'Operation'
+        db.create_table('core_operation', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('operation', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('core', ['Operation'])
+
+        # Adding model 'Currency'
+        db.create_table('core_currency', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('symbol', self.gf('django.db.models.fields.CharField')(max_length=10)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('core', ['Currency'])
+
+        # Adding model 'Service'
+        db.create_table('core_service', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('core', ['Service'])
+
+        # Adding model 'Category'
+        db.create_table('core_category', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('core', ['Category'])
+
+        # Adding model 'SubCategory'
+        db.create_table('core_sub_category', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Category'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('core', ['SubCategory'])
+
+        # Adding model 'Ambience'
+        db.create_table('core_ambience', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('core', ['Ambience'])
+
+        # Adding model 'Location'
+        db.create_table('core_location', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('address', self.gf('django.db.models.fields.CharField')(max_length=500)),
+            ('longitude', self.gf('django.db.models.fields.CharField')(default=0, max_length=100, null=True, blank=True)),
+            ('latitude', self.gf('django.db.models.fields.CharField')(default=0, max_length=100, null=True, blank=True)),
+            ('country', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cities_light.Country'], null=True)),
+            ('region', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cities_light.Region'], null=True)),
+            ('city', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cities_light.City'], null=True)),
+        ))
+        db.send_create_signal('core', ['Location'])
+
+        # Adding model 'Property'
+        db.create_table('core_property', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Category'])),
+            ('subcategory', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.SubCategory'], null=True)),
+            ('creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('last_update', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('antiqueness', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('square_meters', self.gf('django.db.models.fields.FloatField')()),
+            ('total_meters', self.gf('django.db.models.fields.FloatField')()),
+            ('total_uncovered_meters', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
+            ('location', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['core.Location'], unique=True)),
+            ('lightness', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('orientation', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('disposition', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('quantityAmbiences', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('quantityBathrooms', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('quantityBedrooms', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('quantityGarages', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('garageCoverage', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, null=True, blank=True)),
+            ('buildingType', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('buildingCondition', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('buildingStatus', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('buildingCategory', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('apartmentsPerFloor', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=None, null=True, blank=True)),
+            ('quantityBuildingFloors', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=None, null=True, blank=True)),
+            ('floorNumber', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=None, null=True, blank=True)),
+            ('quantityElevators', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('expenses', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
+            ('roofType', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('industrialRoofType', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('roofHeight', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
+            ('gateType', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('frontGround', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
+            ('largeGround', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
+            ('hectares', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
+            ('fot', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
+            ('fos', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
+            ('fraction', self.gf('django.db.models.fields.CharField')(default=None, max_length=100, null=True, blank=True)),
+            ('plane', self.gf('django.db.models.fields.CharField')(default=None, max_length=100, null=True, blank=True)),
+            ('zonification', self.gf('django.db.models.fields.CharField')(default=None, max_length=100, null=True, blank=True)),
+            ('documentation', self.gf('django.db.models.fields.CharField')(default=None, max_length=100, null=True, blank=True)),
+            ('contactName', self.gf('django.db.models.fields.CharField')(default=None, max_length=100, null=True, blank=True)),
+            ('contactPhone', self.gf('django.db.models.fields.TextField')(default=None, max_length=40, null=True, blank=True)),
+            ('suitableProfessional', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('commercialUsage', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, blank=True)),
+            ('suitableCredit', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, null=True, blank=True)),
+            ('providesFunding', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1, null=True, blank=True)),
+        ))
+        db.send_create_signal('core', ['Property'])
+
+        # Adding M2M table for field features on 'Property'
+        db.create_table('core_property_features', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('property', models.ForeignKey(orm['core.property'], null=False)),
+            ('feature', models.ForeignKey(orm['core.feature'], null=False))
+        ))
+        db.create_unique('core_property_features', ['property_id', 'feature_id'])
+
+        # Adding M2M table for field services on 'Property'
+        db.create_table('core_property_services', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('property', models.ForeignKey(orm['core.property'], null=False)),
+            ('service', models.ForeignKey(orm['core.service'], null=False))
+        ))
+        db.create_unique('core_property_services', ['property_id', 'service_id'])
+
+        # Adding M2M table for field ambiences on 'Property'
+        db.create_table('core_property_ambiences', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('property', models.ForeignKey(orm['core.property'], null=False)),
+            ('ambience', models.ForeignKey(orm['core.ambience'], null=False))
+        ))
+        db.create_unique('core_property_ambiences', ['property_id', 'ambience_id'])
+
+        # Adding model 'Post'
+        db.create_table('core_post', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('property', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Property'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='post_user', to=orm['auth.User'])),
+            ('agent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='post_agent', to=orm['auth.User'])),
+            ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Category'])),
+            ('operation', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Operation'])),
+            ('price', self.gf('django.db.models.fields.FloatField')(default=0)),
+            ('currency', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Currency'])),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('description', self.gf('django.db.models.fields.TextField')(max_length=500)),
+            ('status', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0, max_length=1)),
+            ('featured', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('video_url', self.gf('django.db.models.fields.URLField')(default=None, max_length=500, null=True, blank=True)),
+            ('map_image_url', self.gf('django.db.models.fields.URLField')(default=None, max_length=500, null=True, blank=True)),
+            ('plane_url', self.gf('django.db.models.fields.URLField')(default=None, max_length=500, null=True, blank=True)),
+            ('region', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cities_light.Region'], null=True)),
+            ('city', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cities_light.City'], null=True)),
+            ('creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('last_update', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        ))
+        db.send_create_signal('core', ['Post'])
+
+        # Adding model 'PostPhoto'
+        db.create_table('core_post_photo', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('post', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['core.Post'], blank=True)),
+            ('creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('last_update', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('file', self.gf('imagekit.models.fields.ProcessedImageField')(max_length=100)),
+        ))
+        db.send_create_signal('core', ['PostPhoto'])
+
+        # Adding model 'SavedQuery'
+        db.create_table('core_saved_query', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('query', self.gf('django.db.models.fields.TextField')()),
+            ('creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('last_update', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        ))
+        db.send_create_signal('core', ['SavedQuery'])
+
+        # Adding model 'Alert'
+        db.create_table('core_alert', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_index=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('query', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['core.SavedQuery'], unique=True)),
+            ('alert_type', self.gf('django.db.models.fields.IntegerField')(max_length=1)),
+            ('creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('last_update', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        ))
+        db.send_create_signal('core', ['Alert'])
+
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Deleting model 'UserProfile'
+        db.delete_table('core_user_profile')
+
+        # Deleting model 'Feature'
+        db.delete_table('core_feature')
+
+        # Deleting model 'Operation'
+        db.delete_table('core_operation')
+
+        # Deleting model 'Currency'
+        db.delete_table('core_currency')
+
+        # Deleting model 'Service'
+        db.delete_table('core_service')
+
+        # Deleting model 'Category'
+        db.delete_table('core_category')
+
+        # Deleting model 'SubCategory'
+        db.delete_table('core_sub_category')
+
+        # Deleting model 'Ambience'
+        db.delete_table('core_ambience')
+
+        # Deleting model 'Location'
+        db.delete_table('core_location')
+
+        # Deleting model 'Property'
+        db.delete_table('core_property')
+
+        # Removing M2M table for field features on 'Property'
+        db.delete_table('core_property_features')
+
+        # Removing M2M table for field services on 'Property'
+        db.delete_table('core_property_services')
+
+        # Removing M2M table for field ambiences on 'Property'
+        db.delete_table('core_property_ambiences')
+
+        # Deleting model 'Post'
+        db.delete_table('core_post')
+
+        # Deleting model 'PostPhoto'
+        db.delete_table('core_post_photo')
+
+        # Deleting model 'SavedQuery'
+        db.delete_table('core_saved_query')
+
+        # Deleting model 'Alert'
+        db.delete_table('core_alert')
+
 
     models = {
-        'auth.group': {
+        u'auth.group': {
             'Meta': {'object_name': 'Group'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
+            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
         },
-        'auth.permission': {
-            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
+        u'auth.permission': {
+            'Meta': {'ordering': "(u'content_type__app_label', u'content_type__model', u'codename')", 'unique_together': "((u'content_type', u'codename'),)", 'object_name': 'Permission'},
             'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        'auth.user': {
+        u'auth.user': {
             'Meta': {'object_name': 'User'},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Group']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'cities_light.city': {
+        u'cities_light.city': {
             'Meta': {'unique_together': "(('region', 'name'),)", 'object_name': 'City'},
             'alternate_names': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cities_light.Country']"}),
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cities_light.Country']"}),
             'display_name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'geoname_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'latitude': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '5', 'blank': 'True'}),
             'longitude': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '8', 'decimal_places': '5', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'db_index': 'True'}),
             'name_ascii': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '200', 'blank': 'True'}),
-            'region': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cities_light.Region']", 'null': 'True', 'blank': 'True'}),
+            'region': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cities_light.Region']", 'null': 'True', 'blank': 'True'}),
             'search_names': ('cities_light.models.ToSearchTextField', [], {'default': "''", 'max_length': '4000', 'blank': 'True'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '50', 'populate_from': "'name_ascii'"})
         },
-        'cities_light.country': {
+        u'cities_light.country': {
             'Meta': {'object_name': 'Country'},
             'alternate_names': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
             'code2': ('django.db.models.fields.CharField', [], {'max_length': '2', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'code3': ('django.db.models.fields.CharField', [], {'max_length': '3', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'continent': ('django.db.models.fields.CharField', [], {'max_length': '2', 'db_index': 'True'}),
             'geoname_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
             'name_ascii': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '200', 'blank': 'True'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '50', 'populate_from': "'name_ascii'"}),
             'tld': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '5', 'blank': 'True'})
         },
-        'cities_light.region': {
+        u'cities_light.region': {
             'Meta': {'unique_together': "(('country', 'name'),)", 'object_name': 'Region'},
             'alternate_names': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cities_light.Country']"}),
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cities_light.Country']"}),
             'display_name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'geoname_code': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'geoname_id': ('django.db.models.fields.IntegerField', [], {'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'db_index': 'True'}),
             'name_ascii': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '200', 'blank': 'True'}),
             'slug': ('autoslug.fields.AutoSlugField', [], {'unique_with': '()', 'max_length': '50', 'populate_from': "'name_ascii'"})
         },
-        'contenttypes.contenttype': {
+        u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'core.alert': {
             'Meta': {'object_name': 'Alert'},
-            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'alert_type': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
+            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
             'last_update': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
             'query': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.SavedQuery']", 'unique': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         'core.ambience': {
             'Meta': {'object_name': 'Ambience'},
@@ -109,329 +360,128 @@ class Migration(DataMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'core.consultingroom': {
-            'Meta': {'object_name': 'ConsultingRoom', 'db_table': "'core_property_consulting_room'", '_ormbases': ['core.Property']},
-            'apartmentsPerFloor': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'buildingCategory': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingCondition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingStatus': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'disposition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'expenses': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'floorNumber': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'garageCoverage': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'lightness': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'orientation': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'}),
-            'quantityBathrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBuildingFloors': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'quantityElevators': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityGarages': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
-        },
-        'core.countryhouse': {
-            'Meta': {'object_name': 'CountryHouse', 'db_table': "'core_property_country_house'", '_ormbases': ['core.Property']},
-            'buildingStatus': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'frontGround': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'largeGround': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'lightness': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'orientation': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'}),
-            'quantityBathrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBedrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityFloors': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'roofType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
-        },
         'core.currency': {
             'Meta': {'object_name': 'Currency'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'symbol': ('django.db.models.fields.CharField', [], {'max_length': '10'})
         },
-        'core.department': {
-            'Meta': {'object_name': 'Department', 'db_table': "'core_property_department'", '_ormbases': ['core.Property']},
-            'apartmentsPerFloor': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'buildingCategory': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingCondition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingStatus': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'commercialUsage': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'disposition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'expenses': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'floorNumber': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'garageCoverage': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'lightness': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'orientation': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'}),
-            'quantityAmbiences': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBathrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBedrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBuildingFloors': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'quantityElevators': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityGarages': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'suitableProfessional': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'unityType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
-        },
         'core.feature': {
             'Meta': {'object_name': 'Feature'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'core.field': {
-            'Meta': {'object_name': 'Field', 'db_table': "'core_property_field'", '_ormbases': ['core.Property']},
-            'hectares': ('django.db.models.fields.FloatField', [], {}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        'core.garage': {
-            'Meta': {'object_name': 'Garage', 'db_table': "'core_property_garage'", '_ormbases': ['core.Property']},
-            'expenses': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'garageCoverage': ('django.db.models.fields.FloatField', [], {}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        'core.house': {
-            'Meta': {'object_name': 'House', 'db_table': "'core_property_house'", '_ormbases': ['core.Property']},
-            'buildingStatus': ('django.db.models.fields.IntegerField', [], {'default': '0', 'max_length': '1'}),
-            'commercialUsage': ('django.db.models.fields.IntegerField', [], {'default': '0', 'max_length': '1'}),
-            'lightness': ('django.db.models.fields.IntegerField', [], {'default': '0', 'max_length': '1'}),
-            'orientation': ('django.db.models.fields.IntegerField', [], {'default': '0', 'max_length': '1'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'}),
-            'quantityBathrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBedrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityFloors': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'roofType': ('django.db.models.fields.IntegerField', [], {'default': '0', 'max_length': '1'})
-        },
-        'core.industrialbuilding': {
-            'Meta': {'object_name': 'IndustrialBuilding', 'db_table': "'core_property_industrial_building'", '_ormbases': ['core.Property']},
-            'apartmentsPerFloor': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'buildingCategory': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingCondition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingStatus': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'commercialUsage': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'disposition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'expenses': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'floorNumber': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'fot': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'frontGround': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'garageCoverage': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'gateType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'industrialRoofType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'largeGround': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'lightness': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'orientation': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'}),
-            'quantityAmbiences': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBathrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBedrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBuildingFloors': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'quantityElevators': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityGarages': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityShips': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'roofHeight': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'roofType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'suitableProfessional': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'unityType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
-        },
-        'core.land': {
-            'Meta': {'object_name': 'Land', 'db_table': "'core_property_land'", '_ormbases': ['core.Property']},
-            'commercialUsage': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'frontGround': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'largeGround': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        'core.local': {
-            'Meta': {'object_name': 'Local', 'db_table': "'core_property_local'", '_ormbases': ['core.Property']},
-            'buildingStatus': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'disposition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'expenses': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'lightness': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'orientation': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'}),
-            'quantityBathrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityGarages': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
-        },
         'core.location': {
             'Meta': {'object_name': 'Location'},
             'address': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cities_light.City']", 'null': 'True'}),
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cities_light.Country']", 'null': 'True'}),
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cities_light.City']", 'null': 'True'}),
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cities_light.Country']", 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
             'latitude': ('django.db.models.fields.CharField', [], {'default': '0', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'longitude': ('django.db.models.fields.CharField', [], {'default': '0', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'number': ('django.db.models.fields.IntegerField', [], {'default': '0', 'max_length': '10'}),
-            'region': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cities_light.Region']", 'null': 'True'})
-        },
-        'core.office': {
-            'Meta': {'object_name': 'Office', 'db_table': "'core_property_office'", '_ormbases': ['core.Property']},
-            'apartmentsPerFloor': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'buildingCategory': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingCondition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingStatus': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'disposition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'expenses': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'floorNumber': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'garageCoverage': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'lightness': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'orientation': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'}),
-            'quantityBathrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBuildingFloors': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'quantityElevators': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityGarages': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
+            'region': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cities_light.Region']", 'null': 'True'})
         },
         'core.operation': {
             'Meta': {'object_name': 'Operation'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
             'operation': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'core.ph': {
-            'Meta': {'object_name': 'Ph', 'db_table': "'core_property_ph'", '_ormbases': ['core.Property']},
-            'apartmentsPerFloor': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'buildingCategory': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingCondition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingStatus': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'commercialUsage': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'disposition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'expenses': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'floorNumber': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'garageCoverage': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'lightness': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'orientation': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'}),
-            'quantityAmbiences': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBathrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBedrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBuildingFloors': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'quantityBuildingLifts': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'quantityElevators': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityGarages': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'suitableProfessional': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'unityType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
-        },
-        'core.picture': {
-            'Meta': {'object_name': 'Picture'},
-            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
-            'last_update': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'default': "'pic'", 'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'post': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.Post']"}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
-        },
         'core.post': {
             'Meta': {'object_name': 'Post'},
+            'agent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'post_agent'", 'to': u"orm['auth.User']"}),
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.Category']"}),
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cities_light.City']", 'null': 'True'}),
-            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cities_light.City']", 'null': 'True'}),
+            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'currency': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.Currency']"}),
             'description': ('django.db.models.fields.TextField', [], {'max_length': '500'}),
+            'featured': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
             'last_update': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'map_image_url': ('django.db.models.fields.URLField', [], {'default': 'None', 'max_length': '500', 'null': 'True', 'blank': 'True'}),
             'operation': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.Operation']"}),
+            'plane_url': ('django.db.models.fields.URLField', [], {'default': 'None', 'max_length': '500', 'null': 'True', 'blank': 'True'}),
             'price': ('django.db.models.fields.FloatField', [], {'default': '0'}),
-            'property': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True'}),
-            'region': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cities_light.Region']", 'null': 'True'}),
-            'status': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
+            'property': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.Property']"}),
+            'region': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cities_light.Region']", 'null': 'True'}),
+            'status': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'post_user'", 'to': u"orm['auth.User']"}),
+            'video_url': ('django.db.models.fields.URLField', [], {'default': 'None', 'max_length': '500', 'null': 'True', 'blank': 'True'})
+        },
+        'core.postphoto': {
+            'Meta': {'object_name': 'PostPhoto', 'db_table': "'core_post_photo'"},
+            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'file': ('imagekit.models.fields.ProcessedImageField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
+            'last_update': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'post': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['core.Post']", 'blank': 'True'})
         },
         'core.property': {
             'Meta': {'object_name': 'Property'},
             'ambiences': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['core.Ambience']", 'symmetrical': 'False', 'blank': 'True'}),
-            'antiqueness': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
+            'antiqueness': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'apartmentsPerFloor': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'buildingCategory': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'buildingCondition': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'buildingStatus': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'buildingType': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.Category']"}),
-            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'commercialUsage': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'contactName': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'contactPhone': ('django.db.models.fields.TextField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'disposition': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'documentation': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'expenses': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
             'features': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['core.Feature']", 'symmetrical': 'False', 'blank': 'True'}),
+            'floorNumber': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'fos': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'fot': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'fraction': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'frontGround': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'garageCoverage': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
+            'gateType': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'hectares': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
+            'industrialRoofType': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'largeGround': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
             'last_update': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'lightness': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
             'location': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Location']", 'unique': 'True'}),
-            'providesFunding': ('django.db.models.fields.IntegerField', [], {'default': '0', 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'orientation': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'plane': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'providesFunding': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'quantityAmbiences': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'quantityBathrooms': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'quantityBedrooms': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'quantityBuildingFloors': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'quantityElevators': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'quantityGarages': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
+            'roofHeight': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'roofType': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
             'services': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['core.Service']", 'symmetrical': 'False', 'blank': 'True'}),
             'square_meters': ('django.db.models.fields.FloatField', [], {}),
             'subcategory': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.SubCategory']", 'null': 'True'}),
-            'suitableCredit': ('django.db.models.fields.IntegerField', [], {'default': '0', 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'suitableCredit': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'suitableProfessional': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0', 'max_length': '1', 'blank': 'True'}),
             'total_meters': ('django.db.models.fields.FloatField', [], {}),
-            'total_uncovered_meters': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'total_uncovered_meters': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
+            'zonification': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'})
         },
         'core.savedquery': {
             'Meta': {'object_name': 'SavedQuery', 'db_table': "'core_saved_query'"},
-            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
             'last_update': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'query': ('django.db.models.fields.TextField', [], {}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         'core.service': {
             'Meta': {'object_name': 'Service'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_index': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        'core.shed': {
-            'Meta': {'object_name': 'Shed', 'db_table': "'core_property_shed'", '_ormbases': ['core.Property']},
-            'apartmentsPerFloor': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'buildingCategory': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingCondition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingStatus': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'commercialUsage': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'disposition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'expenses': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'floorNumber': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'fot': ('django.db.models.fields.IntegerField', [], {}),
-            'frontGround': ('django.db.models.fields.IntegerField', [], {}),
-            'garageCoverage': ('django.db.models.fields.IntegerField', [], {}),
-            'gateType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'industrialRoofType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'largeGround': ('django.db.models.fields.IntegerField', [], {}),
-            'lightness': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'orientation': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'}),
-            'quantityAmbiences': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBathrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBedrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBuildingFloors': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'quantityElevators': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityGarages': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityShips': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'roofHeight': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'roofType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'suitableProfessional': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'unityType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
-        },
-        'core.storage': {
-            'Meta': {'object_name': 'Storage', 'db_table': "'core_property_storage'", '_ormbases': ['core.Property']},
-            'apartmentsPerFloor': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'buildingCategory': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingCondition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingStatus': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'buildingType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'commercialUsage': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'disposition': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'expenses': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'floorNumber': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'fot': ('django.db.models.fields.FloatField', [], {}),
-            'frontGround': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'garageCoverage': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'gateType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'industrialRoofType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'largeGround': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'lightness': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'orientation': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'property_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.Property']", 'unique': 'True', 'primary_key': 'True'}),
-            'quantityAmbiences': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBathrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBedrooms': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityBuildingFloors': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'quantityElevators': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityGarages': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'quantityShips': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'roofHeight': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'roofType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'suitableProfessional': ('django.db.models.fields.IntegerField', [], {'max_length': '1'}),
-            'unityType': ('django.db.models.fields.IntegerField', [], {'max_length': '1'})
         },
         'core.subcategory': {
             'Meta': {'object_name': 'SubCategory', 'db_table': "'core_sub_category'"},
@@ -441,10 +491,9 @@ class Migration(DataMigration):
         },
         'core.userprofile': {
             'Meta': {'object_name': 'UserProfile', 'db_table': "'core_user_profile'"},
-            'phone': ('django.db.models.fields.IntegerField', [], {'max_length': '10'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'profile'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['auth.User']"})
+            'phone': ('django.db.models.fields.TextField', [], {'max_length': '40'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'profile'", 'unique': 'True', 'primary_key': 'True', 'to': u"orm['auth.User']"})
         }
     }
 
     complete_apps = ['core']
-    symmetrical = True

@@ -1,0 +1,358 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-05 14:16-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+#: core/models/alert.py:16 core/models/post.py:23 core/models/property.py:123
+#: core/models/saved_query.py:11 core/models/user_profile.py:7
+msgid "User"
+msgstr "Usuario"
+
+#: core/models/alert.py:18
+msgid "Alert Type"
+msgstr "Tipo de Alerta"
+
+#: core/models/alert.py:25
+msgid "Alert"
+msgstr "Alerta"
+
+#: core/models/alert.py:26
+msgid "Alerts"
+msgstr "Alertas"
+
+#: core/models/ambience.py:10 core/models/category.py:10
+#: core/models/currency.py:11 core/models/feature.py:10
+#: core/models/saved_query.py:12 core/models/service.py:10
+#: core/models/subcategory.py:12
+msgid "Name"
+msgstr "Nombre"
+
+#: core/models/ambience.py:15
+msgid "Ambience"
+msgstr "Ambiente"
+
+#: core/models/ambience.py:16 core/models/property.py:135
+msgid "Ambiences"
+msgstr "Ambientes"
+
+#: core/models/category.py:15 core/models/post.py:25
+#: core/models/property.py:124 core/models/subcategory.py:11
+msgid "Category"
+msgstr "Categoria"
+
+#: core/models/category.py:16
+msgid "Categories"
+msgstr "Categorias"
+
+#: core/models/currency.py:10
+msgid "Symbol"
+msgstr "Simbolo"
+
+#: core/models/currency.py:16 core/models/post.py:28
+msgid "Currency"
+msgstr "Moneda"
+
+#: core/models/currency.py:17
+msgid "Currencies"
+msgstr "Monedas"
+
+#: core/models/feature.py:15
+msgid "Feature"
+msgstr "Adicional"
+
+#: core/models/feature.py:16 core/models/property.py:133
+msgid "Features"
+msgstr "Adicionales"
+
+#: core/models/location.py:13
+msgid "Address"
+msgstr "Dirección"
+
+#: core/models/location.py:14
+msgid "Longitude"
+msgstr "Longitud"
+
+#: core/models/location.py:15
+msgid "Latitude"
+msgstr "Latitud"
+
+#: core/models/location.py:16
+msgid "Country"
+msgstr "País"
+
+#: core/models/location.py:17 core/models/post.py:36
+msgid "Region"
+msgstr "Región"
+
+#: core/models/location.py:18 core/models/post.py:37
+msgid "City"
+msgstr "Ciudad"
+
+#: core/models/location.py:23 core/models/property.py:132
+msgid "Location"
+msgstr "Ubicación"
+
+#: core/models/location.py:24
+msgid "Locations"
+msgstr "Ubicaciones"
+
+#: core/models/operation.py:11 core/models/operation.py:16
+#: core/models/post.py:26
+msgid "Operation"
+msgstr "Operación"
+
+#: core/models/operation.py:17
+msgid "Operations"
+msgstr "Operaciones"
+
+#: core/models/post.py:22 core/models/property.py:176
+msgid "Property"
+msgstr "Propiedad"
+
+#: core/models/post.py:24
+msgid "Agent"
+msgstr "Agente"
+
+#: core/models/post.py:27
+msgid "Price"
+msgstr "Precio"
+
+#: core/models/post.py:29
+msgid "Title"
+msgstr "Título"
+
+#: core/models/post.py:30
+msgid "Description"
+msgstr "Descripción"
+
+#: core/models/post.py:31
+msgid "Status"
+msgstr "Estado"
+
+#: core/models/post.py:32
+msgid "Featured"
+msgstr "Destacado"
+
+#: core/models/post.py:33
+msgid "Video Url"
+msgstr "Url de Video"
+
+#: core/models/post.py:34
+msgid "Map Image Url"
+msgstr "Url de Mapa"
+
+#: core/models/post.py:35
+msgid "Plane Url"
+msgstr "Url de Plano"
+
+#: core/models/post.py:44 core/models/post_photo.py:16
+msgid "Post"
+msgstr "Publicación"
+
+#: core/models/post.py:45
+msgid "Posts"
+msgstr "Publicaciones"
+
+#: core/models/post_photo.py:19
+msgid "File"
+msgstr "Archivo"
+
+#: core/models/post_photo.py:24
+msgid "Photo"
+msgstr "Foto"
+
+#: core/models/post_photo.py:25
+msgid "Photos"
+msgstr "Fotos"
+
+#: core/models/property.py:125 core/models/subcategory.py:17
+msgid "Subcategory"
+msgstr "Subcategoría"
+
+#: core/models/property.py:128
+msgid "Antiqueness"
+msgstr "Antiguedad"
+
+#: core/models/property.py:129
+msgid "Square Meters"
+msgstr "Mt2"
+
+#: core/models/property.py:130
+msgid "Total Meters"
+msgstr "Mt. Totales"
+
+#: core/models/property.py:131
+msgid "Total Uncovered Meters"
+msgstr "Mt. Descubiertos"
+
+#: core/models/property.py:134 core/models/service.py:16
+msgid "Services"
+msgstr "Servicios"
+
+#: core/models/property.py:136
+msgid "Lightness"
+msgstr "Luminosidad"
+
+#: core/models/property.py:137
+msgid "Orientation"
+msgstr "Orientación"
+
+#: core/models/property.py:138
+msgid "Disposition"
+msgstr "Disposición"
+
+#: core/models/property.py:139
+msgid "Quantity Ambiences"
+msgstr "Cant. de Ambientes"
+
+#: core/models/property.py:140
+msgid "Quantity Bathrooms"
+msgstr "Cant. de Baños"
+
+#: core/models/property.py:141
+msgid "Quantity Bedrooms"
+msgstr "Cant. de Dormitorios"
+
+#: core/models/property.py:142
+msgid "Quantity Garages"
+msgstr "Cant. de Cocheras"
+
+#: core/models/property.py:143
+msgid "Garage Coverage"
+msgstr "Cobertura de Cochera"
+
+#: core/models/property.py:144
+msgid "Building Type"
+msgstr "Tipo de Inmueble"
+
+#: core/models/property.py:145
+msgid "Building Condition"
+msgstr "Condición del Inmueble"
+
+#: core/models/property.py:146
+msgid "Building Status"
+msgstr "Estado del Inmueble"
+
+#: core/models/property.py:147
+msgid "Building Category"
+msgstr "Categoría del Inmueble"
+
+#: core/models/property.py:148
+msgid "Apartments per Floor"
+msgstr "Departamentos por piso"
+
+#: core/models/property.py:149
+msgid "Quantity Building Floors"
+msgstr "Cant. de Pisos en Edificio"
+
+#: core/models/property.py:150
+msgid "Floor Number"
+msgstr "Piso"
+
+#: core/models/property.py:151
+msgid "Quantity Elevators"
+msgstr "Cant. de Ascensores"
+
+#: core/models/property.py:152
+msgid "Expenses"
+msgstr "Expensas"
+
+#: core/models/property.py:153
+msgid "Roof Type"
+msgstr "Tipo de Techo"
+
+#: core/models/property.py:154
+msgid "Industrial Roof Type"
+msgstr "Tipo de Techo industrial"
+
+#: core/models/property.py:155
+msgid "Roof Height"
+msgstr "Altura del techo"
+
+#: core/models/property.py:156
+msgid "Gate Type"
+msgstr "Tipo de Portón"
+
+#: core/models/property.py:157
+msgid "Front Ground"
+msgstr "Mt. Frente"
+
+#: core/models/property.py:158
+msgid "Large Ground"
+msgstr "Mt. Fondo"
+
+#: core/models/property.py:159
+msgid "Hectares"
+msgstr "Hectáreas"
+
+#: core/models/property.py:160
+msgid "FOT"
+msgstr "F.O.T"
+
+#: core/models/property.py:161
+msgid "FOS"
+msgstr "F.O.S"
+
+#: core/models/property.py:168
+msgid "Suitable Professional"
+msgstr "Apto Profesional"
+
+#: core/models/property.py:169
+msgid "Commercial Usage"
+msgstr "Uso comercial"
+
+#: core/models/property.py:170
+msgid "Suitable Credit"
+msgstr "Apto Crédito"
+
+#: core/models/property.py:171
+msgid "Provides Funding"
+msgstr "Permite Financiación"
+
+#: core/models/property.py:177
+msgid "Properties"
+msgstr "Propiedades"
+
+#: core/models/saved_query.py:20
+msgid "Saved Query"
+msgstr "Búsqueda Guardada"
+
+#: core/models/saved_query.py:21
+msgid "Saved Querys"
+msgstr "Búsquedas Guardadas"
+
+#: core/models/service.py:15
+msgid "Service"
+msgstr "Servicio"
+
+#: core/models/subcategory.py:18
+msgid "Subcategories"
+msgstr "Subcategorias"
+
+#: core/models/user_profile.py:8
+msgid "Phone"
+msgstr "Teléfono"
+
+#: core/models/user_profile.py:13
+msgid "User Profile"
+msgstr "Perfíl de usuario"
+
+#: core/models/user_profile.py:14
+msgid "User Profiles"
+msgstr "Perfiles de usuario"

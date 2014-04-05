@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from core.models import Location, Category, SubCategory, Feature, Service, Ambience
-
+from django.utils.translation import ugettext_lazy as _
 
 # Property Model
 class Property(models.Model):
@@ -22,30 +22,159 @@ class Property(models.Model):
         (1, 'Si'),
         (2, 'No'),
     )
+    DISPOSITION_TYPE = (
+        (0, 'No especificado'),
+        (1, 'Frente'),
+        (2, 'Contrafrente'),
+        (3, 'Interno'),
+        (4, 'Lateral')
+        )
+    QUANTITY = (
+        (0, 'No especificado'),
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5 o más')
+        )
+    ORIENTATION_TYPE = (
+        (0, 'No especificado'),
+        (1, 'N'),
+        (2, 'S'),
+        (3, 'E'),
+        (4, 'O'),
+        (5, 'NE'),
+        (6, 'NO'),
+        (7, 'SE'),
+        (8, 'SO'),
+    )
+    BUILDING_TYPE = (
+        (0, 'No especificado'),
+        (1, 'Entre medianeras'),
+        (2, 'Torre'),
+        (3, 'Tipo Block'),
+        (4, 'Esquina'),
+        (5, 'Antiguo'),
+        (6, 'Inteligente'),
+        (7, 'Primera Categoria'),
+        (8, 'Estándar'),
+    )
+    BUILDING_STATUS = (
+        (0, 'No especificado'),
+        (1, 'Reciclado'),
+        (2, 'Excelente'),
+        (3, 'Muy Bueno'),
+        (4, 'Bueno'),
+        (5, 'Regular'),
+        (6, 'A Refaccionar'),        
+    )
+    BUILDING_CATEGORY = (
+        (0, 'No especificado'),
+        (1, 'Excelente'),
+        (2, 'Muy Buena'),
+        (3, 'Buena'),
+        (4, 'Estándar'),
+        (5, 'Económica'),        
+    )
+    COVERAGE = (
+        (0, 'No especificado'),
+        (1, 'Descubierta'),
+        (2, 'Cubierta'),
+        (3, 'Semicubierta'),        
+    )
+    LIGHTNESS = (
+        (0, 'No especificado'),
+        (1, 'Muy luminoso'),
+        (2, 'Luminoso'),
+        (3, 'Poco luminoso'),
+    )
+    ROOF_TYPE = (
+        (0, 'No especificado'),
+        (1, 'Chapa'),
+        (2, 'Losa'),
+        (3, 'Pizzarra'),
+        (4, 'Teja'),
+    )
+    GATE_TYPE = (
+        (0, 'No especificado'),
+        (1, 'Corredizo'),
+        (2, 'Levadizo'),        
+    )
+    INDUSTRIAL_ROOF_TYPE = (
+        (0, 'No especificado'),
+        (1, 'Astori'),
+        (2, 'Bobedilla'),
+        (3, 'Cabriada'),
+        (4, 'Chapa'),
+        (5, 'Dos aguas'),
+        (6, 'Fibrocemento'),
+        (7, 'Galvanizado'),
+        (8, 'Hormigón'),
+        (9, 'Losa'),
+        (10, 'Parabolico'),
+        (11, 'Premoldeado'),
+        (12, 'Tinglado'),
+        (14, 'Tres aguas'),
+        (15, 'Zinc'),
+        (16, 'Otro'),
+    )
 
     id = models.AutoField(primary_key=True, db_index=True)
-    user = models.ForeignKey(User)
-    category = models.ForeignKey(Category)
-    subcategory = models.ForeignKey(SubCategory, null=True)
-    creation_date = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, verbose_name=_('User'))
+    category = models.ForeignKey(Category, verbose_name=_('Category'))
+    subcategory = models.ForeignKey(SubCategory, null=True, verbose_name=_('Subcategory'))
+    creation_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
-    antiqueness = models.IntegerField(max_length=1, choices=ANTIQUENESS, default=0)
-    square_meters = models.FloatField()
-    total_meters = models.FloatField()
-    total_uncovered_meters = models.FloatField(blank=True, null=True)
-    location = models.OneToOneField(Location)
-    features = models.ManyToManyField(Feature, blank=True)
-    services = models.ManyToManyField(Service, blank=True)
-    ambiences = models.ManyToManyField(Ambience, blank=True)    
-    suitableCredit = models.IntegerField(max_length=1, choices=SUITABLE, blank=True, null=True, default=0)
-    providesFunding = models.IntegerField(max_length=1, choices=SUITABLE, blank=True, null=True, default=0)
+    antiqueness = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=ANTIQUENESS, default=0, verbose_name=_('Antiqueness'))
+    square_meters = models.FloatField(verbose_name=_('Square Meters'))
+    total_meters = models.FloatField(verbose_name=_('Total Meters'))
+    total_uncovered_meters = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Total Uncovered Meters'))
+    location = models.OneToOneField(Location, verbose_name=_('Location'))
+    features = models.ManyToManyField(Feature, blank=True, verbose_name=_('Features'))
+    services = models.ManyToManyField(Service, blank=True, verbose_name=_('Services'))
+    ambiences = models.ManyToManyField(Ambience, blank=True, verbose_name=_('Ambiences'))
+    lightness = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=LIGHTNESS, default=0, verbose_name=_('Lightness'))
+    orientation = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=ORIENTATION_TYPE, default=0, verbose_name=_('Orientation'))
+    disposition = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=DISPOSITION_TYPE, default=0, verbose_name=_('Disposition'))
+    quantityAmbiences = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=QUANTITY, default=0, verbose_name=_('Quantity Ambiences'))
+    quantityBathrooms = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=QUANTITY, default=0, verbose_name=_('Quantity Bathrooms'))
+    quantityBedrooms = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=QUANTITY, default=0, verbose_name=_('Quantity Bedrooms'))
+    quantityGarages = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=QUANTITY, default=0, verbose_name=_('Quantity Garages'))    
+    garageCoverage = models.PositiveSmallIntegerField(blank=True, null=True, choices=COVERAGE, default=0, verbose_name=_('Garage Coverage'))        
+    buildingType = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=BUILDING_TYPE, default=0, verbose_name=_('Building Type'))
+    buildingCondition = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=BUILDING_STATUS, default=0, verbose_name=_('Building Condition'))
+    buildingStatus = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=BUILDING_STATUS, default=0, verbose_name=_('Building Status'))
+    buildingCategory = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=BUILDING_CATEGORY, default=0, verbose_name=_('Building Category'))    
+    apartmentsPerFloor = models.PositiveSmallIntegerField(blank=True, null=True, default=None, verbose_name=_('Apartments per Floor'))
+    quantityBuildingFloors = models.PositiveSmallIntegerField(blank=True, null=True, default=None, verbose_name=_('Quantity Building Floors'))
+    floorNumber = models.PositiveSmallIntegerField(blank=True, null=True, default=None, verbose_name=_('Floor Number'))
+    quantityElevators = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=QUANTITY, default=0, verbose_name=_('Quantity Elevators'))
+    expenses = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Expenses'))    
+    roofType = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=ROOF_TYPE, default=0, verbose_name=_('Roof Type'))
+    industrialRoofType = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=INDUSTRIAL_ROOF_TYPE, default=0, verbose_name=_('Industrial Roof Type'))
+    roofHeight = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Roof Height'))
+    gateType = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=GATE_TYPE, default=0, verbose_name=_('Gate Type'))
+    frontGround = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Front Ground'))
+    largeGround = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Large Ground'))
+    hectares = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Hectares'))
+    fot = models.FloatField(blank=True, null=True, default=None, verbose_name=_('FOT'))
+    fos = models.FloatField(blank=True, null=True, default=None, verbose_name=_('FOS'))
+    suitableProfessional = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=SUITABLE, default=0, verbose_name=_('Suitable Professional'))
+    commercialUsage = models.PositiveSmallIntegerField(max_length=1, choices=SUITABLE, blank=True, default=0, verbose_name=_('Commercial Usage'))   
+    suitableCredit = models.PositiveSmallIntegerField(max_length=1, choices=SUITABLE, blank=True, null=True, default=0, verbose_name=_('Suitable Credit'))
+    providesFunding = models.PositiveSmallIntegerField(max_length=1, choices=SUITABLE, blank=True, null=True, default=0, verbose_name=_('Provides Funding'))
 
     class Meta:
         db_table = "core_property"
         app_label = "core"
+        verbose_name = _('Property')
+        verbose_name_plural = _('Properties')
 
     def get_user(self):
         return self.user    
 
     def __unicode__(self):
-        return self.category.name+'-'+self.location.address
+        if self.id is None:
+            return "None"
+        else:
+            return self.category.name+'-'+self.location.address
