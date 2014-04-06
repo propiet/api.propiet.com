@@ -27,7 +27,7 @@ CREATE TABLE `auth_group` (
   `name` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,6 +36,7 @@ CREATE TABLE `auth_group` (
 
 LOCK TABLES `auth_group` WRITE;
 /*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
+INSERT INTO `auth_group` VALUES (2,'ROLE_ADMIN'),(3,'ROLE_AGENT'),(6,'ROLE_CLIENT'),(4,'ROLE_COMPANY'),(5,'ROLE_SUPER_ADMIN'),(1,'ROLE_USER'),(7,'ROLE_USER_SEARCH');
 /*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -118,7 +119,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +128,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$9KFvkuMWhI6j$qMqA3KyThel/rC+PkHgIZLYkAzVosS75LFKfnnv+ERc=','2014-04-05 15:55:38',1,'propiet@propiet.com','','','propiet@propiet.com',1,1,'2014-04-05 15:36:44');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$9KFvkuMWhI6j$qMqA3KyThel/rC+PkHgIZLYkAzVosS75LFKfnnv+ERc=','2014-04-05 18:10:08',1,'propiet@propiet.com','Admin','Admin','propiet@propiet.com',1,1,'2014-04-05 15:36:44'),(2,'pbkdf2_sha256$12000$oodBRfqeFF0P$ZcluzvY37o/aH7/cFoIG7VWSVVxQV2ECnldSNRaS3b0=','2014-04-05 18:17:23',0,'agente@propiet.com','Agente','Prueba','agente@propiet.com',0,1,'2014-04-05 18:17:06');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,7 +149,7 @@ CREATE TABLE `auth_user_groups` (
   KEY `auth_user_groups_5f412f9a` (`group_id`),
   CONSTRAINT `user_id_refs_id_40c41112` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   CONSTRAINT `group_id_refs_id_274b862c` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,6 +158,7 @@ CREATE TABLE `auth_user_groups` (
 
 LOCK TABLES `auth_user_groups` WRITE;
 /*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
+INSERT INTO `auth_user_groups` VALUES (3,1,1),(4,1,2),(5,2,3);
 /*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -353,7 +355,7 @@ CREATE TABLE `core_ambience` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,6 +364,7 @@ CREATE TABLE `core_ambience` (
 
 LOCK TABLES `core_ambience` WRITE;
 /*!40000 ALTER TABLE `core_ambience` DISABLE KEYS */;
+INSERT INTO `core_ambience` VALUES (1,'Altillo'),(2,'Balcón'),(3,'Baulera'),(4,'Cocina'),(5,'Hall'),(6,'Jardín'),(7,'Patio'),(8,'Sótano'),(9,'Terraza'),(10,'Toilette'),(11,'Comedor'),(12,'Comedor de diario'),(13,'Dependencia de servicio'),(14,'Dormitorio en suite'),(15,'Escritorio'),(16,'Hall'),(17,'Lavadero'),(18,'Living'),(19,'Living comedor'),(20,'Terraza'),(21,'Vestidor');
 /*!40000 ALTER TABLE `core_ambience` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -376,7 +379,7 @@ CREATE TABLE `core_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -401,7 +404,7 @@ CREATE TABLE `core_currency` (
   `symbol` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -425,7 +428,7 @@ CREATE TABLE `core_feature` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -460,7 +463,7 @@ CREATE TABLE `core_location` (
   CONSTRAINT `city_id_refs_id_2bbf48de` FOREIGN KEY (`city_id`) REFERENCES `cities_light_city` (`id`),
   CONSTRAINT `country_id_refs_id_3cde47e3` FOREIGN KEY (`country_id`) REFERENCES `cities_light_country` (`id`),
   CONSTRAINT `region_id_refs_id_88552e4b` FOREIGN KEY (`region_id`) REFERENCES `cities_light_region` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -483,7 +486,7 @@ CREATE TABLE `core_operation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `operation` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -507,7 +510,7 @@ CREATE TABLE `core_post` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `property_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `agent_id` int(11) NOT NULL,
+  `agent_id` int(11) DEFAULT NULL,
   `category_id` int(11) NOT NULL,
   `operation_id` int(11) NOT NULL,
   `price` double NOT NULL,
@@ -532,15 +535,15 @@ CREATE TABLE `core_post` (
   KEY `core_post_b2321453` (`currency_id`),
   KEY `core_post_55a4ce96` (`region_id`),
   KEY `core_post_b376980e` (`city_id`),
-  CONSTRAINT `city_id_refs_id_91d5351f` FOREIGN KEY (`city_id`) REFERENCES `cities_light_city` (`id`),
   CONSTRAINT `agent_id_refs_id_7c48a680` FOREIGN KEY (`agent_id`) REFERENCES `auth_user` (`id`),
   CONSTRAINT `category_id_refs_id_a9827efd` FOREIGN KEY (`category_id`) REFERENCES `core_category` (`id`),
+  CONSTRAINT `city_id_refs_id_91d5351f` FOREIGN KEY (`city_id`) REFERENCES `cities_light_city` (`id`),
   CONSTRAINT `currency_id_refs_id_fea7d77c` FOREIGN KEY (`currency_id`) REFERENCES `core_currency` (`id`),
   CONSTRAINT `operation_id_refs_id_adb0cc33` FOREIGN KEY (`operation_id`) REFERENCES `core_operation` (`id`),
   CONSTRAINT `property_id_refs_id_76b8fd6c` FOREIGN KEY (`property_id`) REFERENCES `core_property` (`id`),
   CONSTRAINT `region_id_refs_id_7b7b129f` FOREIGN KEY (`region_id`) REFERENCES `cities_light_region` (`id`),
   CONSTRAINT `user_id_refs_id_7c48a680` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -568,7 +571,7 @@ CREATE TABLE `core_post_photo` (
   PRIMARY KEY (`id`),
   KEY `core_post_photo_87a49a9a` (`post_id`),
   CONSTRAINT `post_id_refs_id_c2eacd87` FOREIGN KEY (`post_id`) REFERENCES `core_post` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -595,8 +598,8 @@ CREATE TABLE `core_property` (
   `creation_date` datetime NOT NULL,
   `last_update` datetime NOT NULL,
   `antiqueness` smallint(5) unsigned NOT NULL,
-  `square_meters` double NOT NULL,
-  `total_meters` double NOT NULL,
+  `square_meters` double,
+  `total_meters` double,
   `total_uncovered_meters` double DEFAULT NULL,
   `location_id` int(11) NOT NULL,
   `lightness` smallint(5) unsigned NOT NULL,
@@ -629,6 +632,8 @@ CREATE TABLE `core_property` (
   `commercialUsage` smallint(5) unsigned NOT NULL,
   `suitableCredit` smallint(5) unsigned DEFAULT NULL,
   `providesFunding` smallint(5) unsigned DEFAULT NULL,
+  `stage` smallint(5) unsigned NOT NULL,
+  `deliveryYear` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `location_id` (`location_id`),
   KEY `core_property_6340c63c` (`user_id`),
@@ -638,7 +643,7 @@ CREATE TABLE `core_property` (
   CONSTRAINT `location_id_refs_id_e3603458` FOREIGN KEY (`location_id`) REFERENCES `core_location` (`id`),
   CONSTRAINT `subcategory_id_refs_id_b4c82e44` FOREIGN KEY (`subcategory_id`) REFERENCES `core_sub_category` (`id`),
   CONSTRAINT `user_id_refs_id_2d3884e0` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -667,7 +672,7 @@ CREATE TABLE `core_property_ambiences` (
   KEY `core_property_ambiences_0bde50ee` (`ambience_id`),
   CONSTRAINT `property_id_refs_id_292e9fae` FOREIGN KEY (`property_id`) REFERENCES `core_property` (`id`),
   CONSTRAINT `ambience_id_refs_id_2ae7c702` FOREIGN KEY (`ambience_id`) REFERENCES `core_ambience` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -696,7 +701,7 @@ CREATE TABLE `core_property_features` (
   KEY `core_property_features_27b2b2cf` (`feature_id`),
   CONSTRAINT `property_id_refs_id_51188b7c` FOREIGN KEY (`property_id`) REFERENCES `core_property` (`id`),
   CONSTRAINT `feature_id_refs_id_a40968c0` FOREIGN KEY (`feature_id`) REFERENCES `core_feature` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -725,7 +730,7 @@ CREATE TABLE `core_property_services` (
   KEY `core_property_services_91a0ac17` (`service_id`),
   CONSTRAINT `property_id_refs_id_ef4b95ff` FOREIGN KEY (`property_id`) REFERENCES `core_property` (`id`),
   CONSTRAINT `service_id_refs_id_e1f4d5aa` FOREIGN KEY (`service_id`) REFERENCES `core_service` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -777,7 +782,7 @@ CREATE TABLE `core_service` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -804,7 +809,7 @@ CREATE TABLE `core_sub_category` (
   PRIMARY KEY (`id`),
   KEY `core_sub_category_6f33f001` (`category_id`),
   CONSTRAINT `category_id_refs_id_97180265` FOREIGN KEY (`category_id`) REFERENCES `core_category` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -838,6 +843,7 @@ CREATE TABLE `core_user_profile` (
 
 LOCK TABLES `core_user_profile` WRITE;
 /*!40000 ALTER TABLE `core_user_profile` DISABLE KEYS */;
+INSERT INTO `core_user_profile` VALUES (1,'1550452536'),(2,'541150452536');
 /*!40000 ALTER TABLE `core_user_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -862,7 +868,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_37ef4eb4` (`content_type_id`),
   CONSTRAINT `content_type_id_refs_id_93d2d1f8` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `user_id_refs_id_c0d12874` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -871,7 +877,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2014-04-05 15:55:55',1,24,'1','Argentina',1,''),(2,'2014-04-05 15:56:17',1,25,'1','Capital Federal, Argentina',1,'');
+INSERT INTO `django_admin_log` VALUES (1,'2014-04-05 15:55:55',1,24,'1','Argentina',1,''),(2,'2014-04-05 15:56:17',1,25,'1','Capital Federal, Argentina',1,''),(3,'2014-04-05 16:32:20',1,16,'1','Pergamino 650 > Capital Federal-Saavedra',1,''),(4,'2014-04-05 16:32:30',1,17,'1','Casas-Pergamino 650',1,''),(5,'2014-04-05 16:33:27',1,18,'1','titulo 1',1,''),(6,'2014-04-05 16:50:57',1,2,'1','ROLE_USER',1,''),(7,'2014-04-05 16:51:05',1,2,'2','ROLE_ADMIN',1,''),(8,'2014-04-05 16:51:14',1,2,'3','ROLE_AGENT',1,''),(9,'2014-04-05 16:51:29',1,2,'4','ROLE_COMPANY',1,''),(10,'2014-04-05 16:51:42',1,2,'5','ROLE_SUPER_ADMIN',1,''),(11,'2014-04-05 16:52:31',1,2,'6','ROLE_CLIENT',1,''),(12,'2014-04-05 16:52:40',1,2,'7','ROLE_USER_SEARCH',1,''),(13,'2014-04-05 16:52:56',1,3,'1','propiet@propiet.com',2,'No ha modificado ningún campo.'),(14,'2014-04-05 17:55:56',1,3,'1','propiet@propiet.com',2,'Modifica first_name y last_name.'),(15,'2014-04-05 17:56:18',1,3,'1','propiet@propiet.com',2,'Modifica groups.'),(16,'2014-04-05 18:09:36',1,3,'1','propiet@propiet.com',2,'Se agregó Perfíl de usuario \"propiet@propiet.com\".'),(17,'2014-04-05 18:26:22',1,18,'1','titulo 1',3,''),(18,'2014-04-05 18:35:39',1,18,'3','titulo 1',1,''),(19,'2014-04-06 03:00:59',1,18,'3','titulo 1',3,''),(20,'2014-04-06 03:07:40',1,15,'1','Altillo',1,''),(21,'2014-04-06 03:07:51',1,15,'2','Balcón',1,''),(22,'2014-04-06 03:07:59',1,15,'3','Baulera',1,''),(23,'2014-04-06 03:08:07',1,15,'4','Cocina',1,''),(24,'2014-04-06 03:08:14',1,15,'5','Hall',1,''),(25,'2014-04-06 03:08:23',1,15,'6','Jardín',1,''),(26,'2014-04-06 03:08:31',1,15,'7','Patio',1,''),(27,'2014-04-06 03:08:39',1,15,'8','Sótano',1,''),(28,'2014-04-06 03:08:46',1,15,'9','Terraza',1,''),(29,'2014-04-06 03:08:53',1,15,'10','Toilette',1,''),(30,'2014-04-06 03:10:23',1,15,'11','Comedor',1,''),(31,'2014-04-06 03:10:32',1,15,'12','Comedor de diario',1,''),(32,'2014-04-06 03:10:44',1,15,'13','Dependencia de servicio',1,''),(33,'2014-04-06 03:10:52',1,15,'14','Dormitorio en suite',1,''),(34,'2014-04-06 03:11:00',1,15,'15','Escritorio',1,''),(35,'2014-04-06 03:11:07',1,15,'16','Hall',1,''),(36,'2014-04-06 03:11:15',1,15,'17','Lavadero',1,''),(37,'2014-04-06 03:11:20',1,15,'18','Living',1,''),(38,'2014-04-06 03:11:27',1,15,'19','Living comedor',1,''),(39,'2014-04-06 03:11:36',1,15,'20','Terraza',1,''),(40,'2014-04-06 03:11:42',1,15,'21','Vestidor',1,''),(41,'2014-04-06 03:17:45',1,16,'5','Pergamino 650 > Capital Federal-Boca',3,''),(42,'2014-04-06 03:17:45',1,16,'4','Pergamino 650 > Capital Federal-Boca',3,''),(43,'2014-04-06 03:39:32',1,17,'2','Cocheras-Pergamino 650',1,''),(44,'2014-04-06 03:40:01',1,17,'3','Casas-Pergamino 650',1,''),(45,'2014-04-06 03:42:12',1,17,'3','Casas-Pergamino 650',3,''),(46,'2014-04-06 03:42:12',1,17,'2','Cocheras-Pergamino 650',3,''),(47,'2014-04-06 03:42:25',1,16,'8','Pergamino 650 > Capital Federal-Boca',3,''),(48,'2014-04-06 03:42:25',1,16,'7','Pergamino 650 > Capital Federal-Caballito',3,''),(49,'2014-04-06 03:42:25',1,16,'6','Pergamino 650 > Capital Federal-Barracas',3,''),(50,'2014-04-06 03:44:26',1,16,'9','Pergamino 650 > Capital Federal-Boca',3,''),(51,'2014-04-06 03:46:35',1,17,'4','Cocheras-Pergamino 650',1,''),(52,'2014-04-06 04:15:30',1,17,'4','Cocheras-Pergamino 650',3,''),(53,'2014-04-06 04:26:08',1,17,'5','Cocheras-Pergamino 650',3,''),(54,'2014-04-06 10:11:57',1,18,'5','Casa en venta en la calle Baker Street 221B, Barrio Norte',2,'Se agregó Foto \"4\".'),(55,'2014-04-06 10:40:36',1,18,'5','Casa en venta en la calle Baker Street 221B, Barrio Norte',2,'Se eliminó Foto \"None\". Se eliminó Foto \"None\". Se eliminó Foto \"None\". Se eliminó Foto \"None\".'),(56,'2014-04-06 11:20:00',1,18,'7','Pergamino 650',3,''),(57,'2014-04-06 11:20:00',1,18,'6','Pergamino 650',3,''),(58,'2014-04-06 11:20:23',1,16,'24','Pergamino 650 > Capital Federal-Abasto',3,''),(59,'2014-04-06 11:20:23',1,16,'23','Pergamino 650 > Capital Federal-Abasto',3,''),(60,'2014-04-06 11:20:23',1,16,'22','Baker street 221B > Capital Federal-Barrio Norte',3,''),(61,'2014-04-06 11:20:23',1,16,'21','Baker street 221B > Capital Federal-Abasto',3,''),(62,'2014-04-06 11:20:23',1,16,'20','Baker street 221B > Capital Federal-Abasto',3,''),(63,'2014-04-06 11:20:23',1,16,'19','Baker street 221B > Capital Federal-Barrio Norte',3,''),(64,'2014-04-06 11:20:23',1,16,'18','Pergamino 650 > Capital Federal-Abasto',3,''),(65,'2014-04-06 11:20:23',1,16,'17','Pergamino 650 > Capital Federal-Abasto',3,''),(66,'2014-04-06 11:20:23',1,16,'16','Pergamino 650 > Capital Federal-Abasto',3,''),(67,'2014-04-06 11:20:23',1,16,'15','Pergamino 650 > Capital Federal-Abasto',3,''),(68,'2014-04-06 11:20:23',1,16,'14','Pergamino 650 > Capital Federal-Agronomía',3,''),(69,'2014-04-06 11:20:23',1,16,'13','Pergamino 650 > Capital Federal-Abasto',3,''),(70,'2014-04-06 11:20:23',1,16,'12','Pergamino 650 > Capital Federal-Abasto',3,''),(71,'2014-04-06 11:20:23',1,16,'11','Pergamino 650 > Capital Federal-Abasto',3,''),(72,'2014-04-06 11:20:23',1,16,'10','Pergamino 650 > Capital Federal-Abasto',3,''),(73,'2014-04-06 11:47:44',1,16,'26','Pergamino 650 > Capital Federal-Abasto',3,''),(74,'2014-04-06 12:45:04',1,16,'31','Pergamino 650 > Capital Federal-Abasto',3,''),(75,'2014-04-06 12:45:04',1,16,'30','Pergamino 650 > Capital Federal-Boca',3,''),(76,'2014-04-06 12:45:04',1,16,'29','Pergamino 650 > Capital Federal-Abasto',3,''),(77,'2014-04-06 12:45:04',1,16,'28','Pergamino 650 > Capital Federal-Abasto',3,''),(78,'2014-04-06 12:45:04',1,16,'27','Pergamino 650 > Capital Federal-Abasto',3,''),(79,'2014-04-06 12:45:04',1,16,'25','Pergamino 650 > Capital Federal-Boca',3,'');
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -924,7 +930,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('j1mzt22hwvwnjm0qkj4d62hye1yfv3r0','OWM0NGZjN2RlNmZkMDZjOTI4MGE0ZDA1YTZhMjc2NWFhMDM0OGExNTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MX0=','2014-04-19 15:55:38');
+INSERT INTO `django_session` VALUES ('0i3xwmhhwkcfdqxw8wklwtnvqcpob6ix','OWM0NGZjN2RlNmZkMDZjOTI4MGE0ZDA1YTZhMjc2NWFhMDM0OGExNTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MX0=','2014-04-19 18:09:49'),('j1mzt22hwvwnjm0qkj4d62hye1yfv3r0','OWM0NGZjN2RlNmZkMDZjOTI4MGE0ZDA1YTZhMjc2NWFhMDM0OGExNTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MX0=','2014-04-19 15:55:38'),('mog4t8pgoj7onoctwwn6qsth94s4wbbp','OWM0NGZjN2RlNmZkMDZjOTI4MGE0ZDA1YTZhMjc2NWFhMDM0OGExNTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MX0=','2014-04-19 18:10:08'),('msdj9be4dbrkjev9r9p7ywpyv8fslpfv','YWY5MzUxNDNmZjMzNDQ3YTM1ZGZiOTBjYTgyY2UzYjIzZDdlYmExZDp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6Mn0=','2014-04-19 18:17:23');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -966,7 +972,7 @@ CREATE TABLE `south_migrationhistory` (
   `migration` varchar(255) NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -975,6 +981,7 @@ CREATE TABLE `south_migrationhistory` (
 
 LOCK TABLES `south_migrationhistory` WRITE;
 /*!40000 ALTER TABLE `south_migrationhistory` DISABLE KEYS */;
+INSERT INTO `south_migrationhistory` VALUES (1,'core','0002_auto__add_field_property_stage__add_field_property_deliveryYear','2014-04-06 03:06:06'),(2,'core','0003_auto__chg_field_property_total_meters__chg_field_property_square_meter','2014-04-06 03:35:43');
 /*!40000 ALTER TABLE `south_migrationhistory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1020,7 +1027,7 @@ CREATE TABLE `tastypie_apikey` (
   UNIQUE KEY `user_id` (`user_id`),
   KEY `tastypie_apikey_c0d4be93` (`key`),
   CONSTRAINT `user_id_refs_id_990aee10` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1029,7 +1036,7 @@ CREATE TABLE `tastypie_apikey` (
 
 LOCK TABLES `tastypie_apikey` WRITE;
 /*!40000 ALTER TABLE `tastypie_apikey` DISABLE KEYS */;
-INSERT INTO `tastypie_apikey` VALUES (1,1,'323318c1292865b6888979636b25f5ba501779df','2014-04-05 15:53:03');
+INSERT INTO `tastypie_apikey` VALUES (1,1,'323318c1292865b6888979636b25f5ba501779df','2014-04-05 15:53:03'),(2,2,'f0fe4094bccaea09c954a1fa8b7f5eeda084e89c','2014-04-05 18:17:06');
 /*!40000 ALTER TABLE `tastypie_apikey` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1042,4 +1049,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-05 18:16:06
+-- Dump completed on 2014-04-06 14:45:50
