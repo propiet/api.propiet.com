@@ -21,7 +21,7 @@ class Post(models.Model):
 	id = models.AutoField(primary_key=True, db_index=True)
 	property = models.ForeignKey(Property, verbose_name=_('Property'))
 	user = models.ForeignKey(User, verbose_name=_('User'), related_name='post_user')
-	agent = models.ForeignKey(User, verbose_name=_('Agent'), related_name='post_agent')	
+	agent = models.ForeignKey(User, verbose_name=_('Agent'), related_name='post_agent', default=None, blank=True, null=True)	
 	category = models.ForeignKey(Category, verbose_name=_('Category'))
 	operation = models.ForeignKey(Operation, verbose_name=_('Operation'))
 	price = models.FloatField(verbose_name=_('Price'), default=0)

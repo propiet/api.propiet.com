@@ -8,3 +8,5 @@ from core.forms.location_form import LocationForm
 from core.forms.saved_query_form import SavedQueryForm
 from core.forms.alert_form import AlertForm
 from core.forms.get_object_form import GetObjectForm
+from core.forms.property_form import PropertyForm
+from core.forms.post_photo_form import PostPhotoForm

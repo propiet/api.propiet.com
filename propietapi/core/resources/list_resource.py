@@ -18,9 +18,10 @@ from tastypie.serializers import Serializer
 # core
 from core.handlers  import *
 from core.constants import *
-from core.models import Service, Ambience, Feature
-from core.forms import GetObjectForm
+from core.models import Service, Ambience, Feature, Property, Category, SubCategory, Operation
+from core.forms import GetObjectForm, PropertyForm
 from cities_light.models import Country, Region, City
+from django.utils.translation import ugettext_lazy as _
 
 class ListResource(ModelResource):
      """ Class ListResource lists endpoint.
@@ -313,32 +314,316 @@ class ListResource(ModelResource):
      def get_form(self, request, **kwargs):
         request_data = self.requestHandler.getDataAuth(request)
         if request_data:
-            category = int(request_data['data']['category'])
-            subcategory = int(request_data['data']['subcategory'])
-            operation_type = int(request_data['data']['operation_type'])
-            model = str(PROPERTYFORM[category][subcategory])
-            form_class = GetObjectForm(model)
-            form = form_class()
-            default_data = {}
+            category_id = int(request_data['data']['category'])
+            category = Category.objects.get(pk=category_id)
+            subcategory_id = int(request_data['data']['subcategory'])
+            subcategory = SubCategory.objects.get(pk=subcategory_id)
+            operation_id = int(request_data['data']['operation_type'])
+            operation = Operation.objects.get(pk=operation_id)
 
+            form = PropertyForm()
+            default_data = {}            
             for field in form:
-                if(OPERATION_TYPE[operation_type] == 'Venta' or OPERATION_TYPE[operation_type] == 'Emprendimiento'):
-                    if (field.label != 'Ambiences' and field.label != 'Location' 
-                    and field.label != 'Category' and field.label != 'Subcategory'
-                    and field.label != 'User' and field.label != 'Services'
-                    and field.label != 'Features' and field.label != 'Expenses'):
 
-                        field_label = FIELDS_LABELS[field.html_name]
-                        default_data[field_label] = field.as_widget(attrs={"class":"form-control"})
+                # Required by Category
+                if(category.name == 'Departamentos' or category.name == 'Casas' or category.name == 'PH' or category.name == 'Quintas'):
+                    if(field.html_name == 'square_meters'):
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
+                    elif(field.html_name == 'quantityAmbiences'):
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
+                    elif(field.html_name == 'quantityBedrooms'):
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
+                    elif(field.html_name == 'antiqueness'):
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
+                    else:
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
+
+                elif(category.name == 'Terrenos y Lotes'):
+                    if(field.html_name == 'square_meters'):
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
+                    else:
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
+
+                elif(category.name == 'Campos y chacras'):
+                    if(field.html_name == 'hectares'):
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
+                    else:
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
+
+                elif(category.name == 'Cocheras'):
+                    if(field.html_name == 'garageCoverage'):
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
+                    else:
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
+
+                elif(category.name == 'Galpones, depósitos y edificios industriales' or category.name == 'Locales comerciales' or category.name == 'Oficinas' or category.name == 'Consultorios'):
+                    if(field.html_name == 'square_meters'):
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
+                    elif(field.html_name == 'antiqueness'):
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
+                    else:
+                        default_data[field.html_name] = {}
+                        default_data[field.html_name]['label'] = _(field.label)
+                        default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
                 else:
-                    if (field.label != 'Ambiences' and field.label != 'Location' 
-                    and field.label != 'Category' and field.label != 'Subcategory'
-                    and field.label != 'User' and field.label != 'Services'
-                    and field.label != 'Features' and field.label != 'ProvidesFunding'
-                    and field.label != 'SuitableCredit'):
+                    default_data[field.html_name] = {}
+                    default_data[field.html_name]['label'] = _(field.label)
+                    default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
 
-                        field_label = FIELDS_LABELS[field.html_name]
-                        default_data[field_label] = field.as_widget(attrs={"class":"form-control"})
+            # Unnecesary Fields
+            del default_data['user']
+            del default_data['category']
+            del default_data['subcategory']
+            del default_data['location']
+            del default_data['features']
+            del default_data['services']
+            del default_data['ambiences']
+
+            # Required by Operation
+            if(operation.operation == 'Venta'):
+                del default_data['expenses']
+                del default_data['stage']
+                del default_data['deliveryYear']
+            elif(operation.operation == 'Alquiler'):
+                del default_data['stage']
+                del default_data['deliveryYear']
+                del default_data['suitableCredit']
+                del default_data['providesFunding']
+            else: # Emprendimiento
+                del default_data['buildingType']
+                del default_data['buildingCondition']
+                del default_data['buildingStatus']
+                del default_data['antiqueness']
+                del default_data['expenses']
+                del default_data['suitableCredit']
+                del default_data['providesFunding']
+
+            # Remove by category
+            if(category.name == 'Departamentos'):
+                del default_data['roofType']
+                del default_data['industrialRoofType']
+                del default_data['roofHeight']
+                del default_data['gateType']
+                del default_data['frontGround']
+                del default_data['largeGround']
+                del default_data['hectares']
+                del default_data['fot']
+                del default_data['fos']        
+            elif(category.name == 'Casas'):         
+                del default_data['buildingStatus']       
+                del default_data['apartmentsPerFloor']                
+                del default_data['floorNumber']
+                del default_data['quantityElevators']
+                del default_data['industrialRoofType']
+                del default_data['roofHeight']
+                del default_data['gateType']
+                del default_data['quantityBuildingFloors']                                
+                del default_data['frontGround']
+                del default_data['largeGround']
+                del default_data['hectares']
+                del default_data['fot']
+                del default_data['fos']
+            elif(category.name == 'PH'):          
+                del default_data['buildingStatus']      
+                del default_data['apartmentsPerFloor']                
+                del default_data['floorNumber']
+                del default_data['quantityElevators']
+                del default_data['industrialRoofType']
+                del default_data['roofHeight']
+                del default_data['gateType']
+                del default_data['quantityBuildingFloors']                                
+                del default_data['frontGround']
+                del default_data['largeGround']
+                del default_data['hectares']
+                del default_data['fot']
+                del default_data['fos']
+            elif(category.name == 'Quintas'):
+                del default_data['buildingStatus']
+                del default_data['apartmentsPerFloor']                
+                del default_data['floorNumber']
+                del default_data['quantityElevators']
+                del default_data['industrialRoofType']
+                del default_data['roofHeight']
+                del default_data['gateType']
+                del default_data['quantityBuildingFloors']                                
+                del default_data['frontGround']
+                del default_data['largeGround']
+                del default_data['hectares']
+                del default_data['fot']
+                del default_data['fos']
+            elif(category.name == 'Terrenos y Lotes'):
+                del default_data['antiqueness']                
+                del default_data['total_uncovered_meters']
+                del default_data['lightness']
+                del default_data['orientation']
+                del default_data['disposition']
+                del default_data['quantityAmbiences']
+                del default_data['quantityBathrooms']
+                del default_data['quantityBedrooms']
+                del default_data['quantityGarages']
+                del default_data['garageCoverage']
+                del default_data['buildingType']
+                del default_data['buildingCondition']
+                del default_data['buildingStatus']
+                del default_data['buildingCategory']
+                del default_data['apartmentsPerFloor']
+                del default_data['quantityBuildingFloors']
+                del default_data['floorNumber']
+                del default_data['quantityElevators']
+                del default_data['roofType']
+                del default_data['industrialRoofType']
+                del default_data['roofHeight']
+                del default_data['gateType']                
+                del default_data['suitableProfessional']
+                del default_data['commercialUsage']
+            elif(category.name == 'Campos y chacras'):
+                del default_data['antiqueness']                
+                del default_data['total_uncovered_meters']
+                del default_data['lightness']
+                del default_data['orientation']
+                del default_data['disposition']
+                del default_data['quantityAmbiences']
+                del default_data['quantityBathrooms']
+                del default_data['quantityBedrooms']
+                del default_data['quantityGarages']
+                del default_data['garageCoverage']
+                del default_data['buildingType']
+                del default_data['buildingCondition']
+                del default_data['buildingStatus']
+                del default_data['buildingCategory']
+                del default_data['apartmentsPerFloor']
+                del default_data['quantityBuildingFloors']
+                del default_data['floorNumber']
+                del default_data['quantityElevators']
+                del default_data['roofType']
+                del default_data['industrialRoofType']
+                del default_data['roofHeight']
+                del default_data['gateType']                
+                del default_data['suitableProfessional']
+                del default_data['commercialUsage']
+            elif(category.name == 'Cocheras'):                
+                del default_data['total_meters']
+                del default_data['square_meters']
+                del default_data['total_uncovered_meters']
+                del default_data['lightness']
+                del default_data['orientation']
+                del default_data['disposition']
+                del default_data['quantityAmbiences']
+                del default_data['quantityBathrooms']
+                del default_data['quantityBedrooms']
+                del default_data['quantityGarages']                
+                del default_data['buildingType']
+                del default_data['buildingCondition']
+                del default_data['buildingStatus']
+                del default_data['buildingCategory']
+                del default_data['apartmentsPerFloor']
+                del default_data['quantityBuildingFloors']
+                del default_data['floorNumber']
+                del default_data['quantityElevators']
+                del default_data['roofType']
+                del default_data['industrialRoofType']
+                del default_data['roofHeight']
+                del default_data['gateType']
+                del default_data['frontGround']
+                del default_data['largeGround']
+                del default_data['hectares']
+                del default_data['fot']
+                del default_data['fos']
+                del default_data['suitableProfessional']
+                del default_data['commercialUsage']
+            elif(category.name == 'Galpones, depósitos y edificios industriales'):
+                del default_data['disposition']
+                del default_data['quantityAmbiences']
+                del default_data['quantityBedrooms']
+                del default_data['buildingType']
+                del default_data['buildingCondition']
+                del default_data['buildingCategory']
+                del default_data['apartmentsPerFloor']                
+                del default_data['floorNumber']                
+                del default_data['roofType']                                
+                del default_data['gateType']                
+                del default_data['hectares']                
+                del default_data['fos']
+                del default_data['suitableProfessional']                
+            elif(category.name == 'Locales comerciales'):                
+                del default_data['total_meters']                
+                del default_data['quantityAmbiences']                
+                del default_data['quantityBedrooms']                
+                del default_data['buildingType']
+                del default_data['buildingCondition']                
+                del default_data['buildingCategory']
+                del default_data['apartmentsPerFloor']
+                del default_data['quantityBuildingFloors']
+                del default_data['floorNumber']
+                del default_data['quantityElevators']
+                del default_data['roofType']
+                del default_data['industrialRoofType']
+                del default_data['roofHeight']
+                del default_data['gateType']
+                del default_data['frontGround']
+                del default_data['largeGround']
+                del default_data['hectares']
+                del default_data['fot']
+                del default_data['fos']
+                del default_data['suitableProfessional']
+                del default_data['commercialUsage']
+            elif(category.name == 'Oficinas'):
+                del default_data['roofType']
+                del default_data['industrialRoofType']
+                del default_data['roofHeight']
+                del default_data['gateType']
+                del default_data['quantityAmbiences']                
+                del default_data['quantityBedrooms']
+                del default_data['frontGround']
+                del default_data['largeGround']
+                del default_data['hectares']
+                del default_data['fot']
+                del default_data['fos']
+                del default_data['suitableProfessional']
+                del default_data['commercialUsage']
+            elif(category.name == 'Consultorios'):
+                del default_data['roofType']
+                del default_data['industrialRoofType']
+                del default_data['roofHeight']
+                del default_data['gateType']
+                del default_data['quantityAmbiences']                
+                del default_data['quantityBedrooms']
+                del default_data['frontGround']
+                del default_data['largeGround']
+                del default_data['hectares']
+                del default_data['fot']
+                del default_data['fos']
+                del default_data['suitableProfessional']
+                del default_data['commercialUsage']
+            else:
+                del default_data['suitableProfessional']
+                del default_data['commercialUsage']
 
             return self.create_response(request, {
                 'response':{

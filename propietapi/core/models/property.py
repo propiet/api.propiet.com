@@ -118,6 +118,21 @@ class Property(models.Model):
         (15, 'Zinc'),
         (16, 'Otro'),
     )
+    STAGE = (
+        (0, 'No especificado'),
+        (1, 'En Pozo'),
+        (2, 'En Construcción'),
+        (3, 'Terminado'),        
+    )
+    DELIVERY = (
+        (0, 'No especificado'),
+        (2014, 2014),
+        (2015, 2015),
+        (2016, 2016),
+        (2017, 2017),
+        (2018, 2018),
+        (2019, 2019),
+    )
 
     id = models.AutoField(primary_key=True, db_index=True)
     user = models.ForeignKey(User, verbose_name=_('User'))
@@ -126,8 +141,8 @@ class Property(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
     antiqueness = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=ANTIQUENESS, default=0, verbose_name=_('Antiqueness'))
-    square_meters = models.FloatField(verbose_name=_('Square Meters'))
-    total_meters = models.FloatField(verbose_name=_('Total Meters'))
+    square_meters = models.FloatField(blank=True, null=True, default=None,verbose_name=_('Square Meters'))
+    total_meters = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Total Meters'))
     total_uncovered_meters = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Total Uncovered Meters'))
     location = models.OneToOneField(Location, verbose_name=_('Location'))
     features = models.ManyToManyField(Feature, blank=True, verbose_name=_('Features'))
@@ -159,6 +174,8 @@ class Property(models.Model):
     hectares = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Hectares'))
     fot = models.FloatField(blank=True, null=True, default=None, verbose_name=_('FOT'))
     fos = models.FloatField(blank=True, null=True, default=None, verbose_name=_('FOS'))
+    stage = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=STAGE, default=0, verbose_name=_('Stage'))
+    deliveryYear = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=DELIVERY, default=0, verbose_name=_('Delivery Year'))
     suitableProfessional = models.PositiveSmallIntegerField(blank=True, max_length=1, choices=SUITABLE, default=0, verbose_name=_('Suitable Professional'))
     commercialUsage = models.PositiveSmallIntegerField(max_length=1, choices=SUITABLE, blank=True, default=0, verbose_name=_('Commercial Usage'))   
     suitableCredit = models.PositiveSmallIntegerField(max_length=1, choices=SUITABLE, blank=True, null=True, default=0, verbose_name=_('Suitable Credit'))

@@ -1,7 +1,17 @@
 from django.contrib import admin
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from core.models import *
+
+class UserProfileInline(admin.TabularInline):
+    model = UserProfile
+    max_num = 1
+    min_num = 1
+    extra = 1
+
+class UserAdmin(admin.ModelAdmin):
+    model = Post
+    inlines = (UserProfileInline,)
 
 class PostPhotoInline(admin.TabularInline):
     model = PostPhoto
@@ -13,7 +23,8 @@ class PostAdmin(admin.ModelAdmin):
     model = Post
     inlines = (PostPhotoInline,)
 
-
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 admin.site.unregister(Site)
 admin.site.register(Ambience)
 admin.site.register(Category)
