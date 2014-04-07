@@ -129,7 +129,7 @@ class SavedQueryResource(ModelResource):
             user.set_password(password)
             user.is_active = False
             user.save()
-            group = Group.objects.get(name='USER_SAVED_SEARCH')
+            group = Group.objects.get(name='ROLE_USER_SEARCH')
             group.user_set.add(user)
             group.save()
             saved_query_form = SavedQueryForm()
