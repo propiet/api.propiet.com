@@ -15,7 +15,7 @@ class UserAdmin(admin.ModelAdmin):
 
 class PostPhotoInline(admin.TabularInline):
     model = PostPhoto
-    max_num = 5
+    max_num = 15
     min_num = 1
     extra = 1
 
