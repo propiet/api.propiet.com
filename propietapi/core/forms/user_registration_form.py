@@ -9,6 +9,7 @@ class UserRegistrationForm(UserCreationForm):
 	email = forms.EmailField(required = True)
 	first_name = forms.CharField(required = True)
 	last_name = forms.CharField(required = True)
+	agency_name = forms.CharField(required = True)
 	phone = forms.IntegerField(required = True)
 	role = forms.CharField(required = True)
 
@@ -22,6 +23,7 @@ class UserRegistrationForm(UserCreationForm):
 		user.username = self.cleaned_data['email']
 		user.first_name = self.cleaned_data['first_name']
 		user.last_name = self.cleaned_data['last_name']
+		agency_name = self.cleaned_data['agency_name']
 		phone = int(self.cleaned_data['phone'])
 		role = self.cleaned_data['role']
 		if commit:
@@ -32,5 +34,6 @@ class UserRegistrationForm(UserCreationForm):
 			profile = UserProfile()
 			profile.user = user;
 			profile.phone = phone;
+			profile.agency_name = agency_name;
 			profile.save()
 		return user
