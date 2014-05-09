@@ -59,6 +59,12 @@ class UserResource(ModelResource):
             url(r"^(?P<resource_name>%s)/forgot_password%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('forgot_password'), name="api_user_forgot_password"),
+            url(r"^(?P<resource_name>%s)/contact_agent%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('contact_agent'), name="api_user_contact_agent"),
+            url(r"^(?P<resource_name>%s)/sell_agent%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('sell_agent'), name="api_user_sell_agent"),
         ]
 
      def login(self, request, **kwargs):
@@ -267,8 +273,48 @@ class UserResource(ModelResource):
         else:                
             return self.create_response(request, {'response': {'data':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
 
-     #def contact_agent(self, request, **kwargs):
-     #def sell_agent(self, request, **kwargs):
+     def contact_agent(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getDataAuth(request)
+        if request_data:
+            agent_id = request_data['data']['agent']
+            name = request_data['data']['name']
+            phone = request_data['data']['phone']
+            email = request_data['data']['email']
+            message = request_data['data']['message']
+            post_url = request_data['data']['post']
+            try:
+                agent = User.objects.get(pk=agent_id)
+                
+                if(agent):                    
+                    email_subject = '%s, hay un usuario interesado en tu propiedad' % (agent.first_name)
+                    email_body = "Hola %s, hay un usuario interesado en una de tus propiedades.\n\n Nombre: %s \nTel: %s \nEmail: %s \nMensaje: %s \nPropiedad: %s" % (agent.first_name, name, phone, email, message, post_url)
+                    send_mail(email_subject,email_body,'propiet@inboxapp.me',[agent.email])
+                    return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})                
+                else:                
+                    return self.create_response(request, {'response': {'data':'ERR_NOT_FOUND','success': False }})
+            except ObjectDoesNotExist:
+                pass
+                return self.create_response(request, {'response': {'data':'ERR_NOT_FOUND','success': False }})
+        else:                
+            return self.create_response(request, {'response': {'data':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
+     
+     def sell_agent(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getDataAuth(request)
+        if request_data:
+            lastname = request_data['data']['lastname']
+            firstname = request_data['data']['firstname']
+            phone = request_data['data']['phone']
+            email = request_data['data']['email']
+            message = request_data['data']['message']
+            address = request_data['data']['address']
+                               
+            email_subject = 'Nuevo pedido de tasación'
+            email_body = "Nombre: %s \nApellido: %s \nTel: %s \nEmail: %s \Dirección: %s \nDescripción: %s" % (firstname, lastname, phone, email, address, message)
+            send_mail(email_subject,email_body,'propiet@inboxapp.me',['mfunes@propiet.com'])              
+        else:                
+            return self.create_response(request, {'response': {'data':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
 
      def is_secure(self, request):         
          #if(request.is_secure()):                
