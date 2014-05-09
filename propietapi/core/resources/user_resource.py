@@ -310,8 +310,8 @@ class UserResource(ModelResource):
             message = request_data['data']['message']
             address = request_data['data']['address']
                                
-            email_subject = 'Nuevo pedido de tasación'
-            email_body = "Nombre: %s \nApellido: %s \nTel: %s \nEmail: %s \Dirección: %s \nDescripción: %s" % (firstname, lastname, phone, email, address, message)
+            email_subject = 'Nuevo pedido de tasacion'
+            email_body = "Nombre: %s \nApellido: %s \nTel: %s \nEmail: %s \nDireccion: %s \nDescripcion: %s" % (firstname, lastname, phone, email, address, message)
             send_mail(email_subject,email_body,'propiet@inboxapp.me',['liocuevas@gmail.com'])
             return self.create_response(request, {'response': {'data':'SCC_SENT','success': True }})                            
         else:                
