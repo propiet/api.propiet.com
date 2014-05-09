@@ -303,8 +303,8 @@ class UserResource(ModelResource):
         self.is_secure(request)
         request_data = self.requestHandler.getDataAuth(request)
         if request_data:
-            lastname = request_data['data']['lastname']
-            firstname = request_data['data']['firstname']
+            lastname = request_data['data']['last_name']
+            firstname = request_data['data']['first_name']
             phone = request_data['data']['phone']
             email = request_data['data']['email']
             message = request_data['data']['message']
@@ -312,7 +312,8 @@ class UserResource(ModelResource):
                                
             email_subject = 'Nuevo pedido de tasación'
             email_body = "Nombre: %s \nApellido: %s \nTel: %s \nEmail: %s \Dirección: %s \nDescripción: %s" % (firstname, lastname, phone, email, address, message)
-            send_mail(email_subject,email_body,'propiet@inboxapp.me',['mfunes@propiet.com'])              
+            send_mail(email_subject,email_body,'propiet@inboxapp.me',['liocuevas@gmail.com'])
+            return self.create_response(request, {'response': {'data':'SCC_SENT','success': True }})                            
         else:                
             return self.create_response(request, {'response': {'data':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
 
