@@ -48,6 +48,6 @@ class Post(models.Model):
 	def get_user(self):
 		return self.user	
 
-	def __unicode__(self):		
-        return u'{c}'.format(c=self.title)
+	def __unicode__(self):
+		return u'{c}'.format(c=self.title)
 		
