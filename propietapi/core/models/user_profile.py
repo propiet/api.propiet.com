@@ -6,6 +6,9 @@ class UserProfile(models.Model):
 	
     user = models.ForeignKey(User, unique=True, primary_key=True, related_name='profile', verbose_name=_('User'))
     phone = models.TextField(max_length=40, unique=False, verbose_name=_('Phone'))
+    agency_name = models.CharField(max_length=100, blank=True, null=True, default=None, verbose_name=_('Agency Name'))
+    activation_key = models.CharField(max_length=40, default=None, verbose_name=_('Activation Key'))
+    key_expires = models.DateTimeField(default=None, verbose_name=_('Activation Key Expires'))
 
     class Meta:
     	db_table = "core_user_profile"

@@ -28,6 +28,7 @@ class Post(models.Model):
 	currency = models.ForeignKey(Currency, verbose_name=_('Currency'))
 	title = models.CharField(verbose_name=_('Title'), max_length=200)
 	description = models.TextField(verbose_name=_('Description'), max_length=500)
+	hidden_note = models.TextField(verbose_name=_('Hidden Note'), max_length=500, default=None, blank=True, null=True)
 	status = models.PositiveSmallIntegerField(verbose_name=_('Status'), default=0, max_length=1, choices=STATUS)
 	featured = models.BooleanField(verbose_name=_('Featured'), default=0)
 	video_url = models.URLField(verbose_name=_('Video Url'), max_length=500, default=None, blank=True, null=True)
@@ -47,5 +48,6 @@ class Post(models.Model):
 	def get_user(self):
 		return self.user	
 
-	def __unicode__(self):		
-		return unicode(str(self.title))
+	def __unicode__(self):
+		return u'{c}'.format(c=self.title)
+		

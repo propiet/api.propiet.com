@@ -4,7 +4,7 @@ from django.db import models
 from core.models import Post
 from django.utils.translation import ugettext_lazy as _
 from imagekit.models import ProcessedImageField
-from imagekit.processors import ResizeToFill
+from imagekit.processors import Resize
 from django.utils.translation import ugettext_lazy as _
 
 # PostPhoto Model
@@ -16,7 +16,7 @@ class PostPhoto(models.Model):
 	post = models.ForeignKey(Post, verbose_name=_('Post'), default=None, blank=True)
 	creation_date = models.DateTimeField(auto_now_add=True)
 	last_update = models.DateTimeField(auto_now=True)
-	file = ProcessedImageField(processors=[ResizeToFill(800, 600)], format='JPEG', options={'quality': 75}, upload_to=lambda instance, filename: 'post/{0}/{1}'.format(instance.post.pk, str(uuid.uuid4())+'.jpg'), verbose_name=_('File'))
+	file = ProcessedImageField(processors=[Resize(800, 600)], format='JPEG', options={'quality': 75}, upload_to=lambda instance, filename: 'post/{0}/{1}'.format(instance.post.pk, str(uuid.uuid4())+'.jpg'), verbose_name=_('File'))
 	
 	class Meta:
 		db_table = "core_post_photo"

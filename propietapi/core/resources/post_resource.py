@@ -201,8 +201,10 @@ class PostResource(ModelResource):
                 location = Location.objects.get(property=post.property.pk)
                 user = User.objects.get(pk=post.user.pk)
                 if(post.agent != None):
-                    agent = User.objects.get(pk=post.agent.pk)                
-                        
+                    agent = User.objects.get(pk=post.agent.pk)
+                    agent_profile = UserProfile.objects.get(pk=post.agent.pk)                
+                    user_profile = UserProfile.objects.get(pk=user.pk)
+
                     return self.create_response(request, {
                         'response':{
                             'data':{
@@ -215,6 +217,7 @@ class PostResource(ModelResource):
                                     'title': post.title,
                                     'status': post.status,
                                     'description': post.description,
+                                    'hidden_note': post.hidden_note,
                                     'region': {'id':post.region.pk, 'name':post.region.name},
                                     'city':{'id':post.city.pk, 'name':post.city.name},
                                 },
@@ -225,7 +228,9 @@ class PostResource(ModelResource):
                                 'ambiences':self.serializer.encode(property.ambiences.all()),
                                 'location':self.serializer.encode(location),
                                 'user':self.serializer.encode(user),
+                                'user_profile':self.serializer.encode(user_profile),
                                 'agent':self.serializer.encode(agent),
+                                'agent_profile':self.serializer.encode(agent_profile),
                                 'images':self.serializer.encode(PostPhoto.objects.filter(post=post.pk)),
                                 },                        
                             'success': True
@@ -244,6 +249,7 @@ class PostResource(ModelResource):
                                     'title': post.title,
                                     'status': post.status,
                                     'description': post.description,
+                                    'hidden_note': post.hidden_note,
                                     'region': {'id':post.region.pk, 'name':post.region.name},
                                     'city':{'id':post.city.pk, 'name':post.city.name},
                                 },
@@ -254,6 +260,7 @@ class PostResource(ModelResource):
                                 'ambiences':self.serializer.encode(property.ambiences.all()),                           
                                 'location':self.serializer.encode(location),
                                 'user':self.serializer.encode(user),
+                                'user_profile':self.serializer.encode(user_profile),
                                 'images':self.serializer.encode(PostPhoto.objects.filter(post=post.pk)),              
                                 },                        
                             'success': True
