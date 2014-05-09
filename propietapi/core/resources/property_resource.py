@@ -35,6 +35,9 @@ class PropertyResource(ModelResource):
             'location': ALL_WITH_RELATIONS,
             'category': ALL_WITH_RELATIONS,
             'subcategory': ALL_WITH_RELATIONS,
+            'feature': ALL_WITH_RELATIONS,
+            'ambience': ALL_WITH_RELATIONS,
+            'service': ALL_WITH_RELATIONS,
             'antiqueness': ['exact', 'lt', 'lte', 'gte', 'gt'],
             'orientation': ['exact', 'lt', 'lte', 'gte', 'gt'],
         }

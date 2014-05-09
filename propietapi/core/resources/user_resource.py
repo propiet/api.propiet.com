@@ -1,10 +1,13 @@
+# -*- coding: utf-8 -*-
 # Django imports
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.conf.urls import *
 from django.utils import simplejson
 from django.db import IntegrityError
-from django.core.exceptions import ValidationError 
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+import datetime, random, sha
 # Tastypie imports
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.resources import ModelResource
@@ -50,6 +53,9 @@ class UserResource(ModelResource):
             url(r"^(?P<resource_name>%s)/me%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('me'), name="api_user_me"),
+            url(r"^(?P<resource_name>%s)/activate%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('activate'), name="api_user_activate"),
         ]
 
      def login(self, request, **kwargs):
@@ -151,7 +157,7 @@ class UserResource(ModelResource):
             userRegistrationForm = UserRegistrationForm(request_data['data'])            
             try:            
                 if(userRegistrationForm.is_valid()):                           
-                   userRegistrationForm.save()
+                   userRegistrationForm.save()                   
                    return self.create_response(request, {'response': {'data':'SCC_CREATED','success': True }},HttpCreated)
                 else:            
                     return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':userRegistrationForm.errors,'success': False }})     
@@ -181,6 +187,11 @@ class UserResource(ModelResource):
                         if(request_data['data']['password1'] == request_data['data']['password2']):
                            user.set_password(request_data['data']['password1'])
                            user.save()
+
+                           email_subject = '%s, Se ha modificado su contraseña exitosamente' % (user.first_name)
+                           email_body = "Hola %s, Se ha modificado su contraseña exitosamente!\n\nPara administrar tu contraseña accede a:\n\nhttp://dev.propiet.com/perfil \n\n" % (user.first_name)
+                           send_mail(email_subject,email_body,'propiet@inboxapp.me',[user.email])
+
                            return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
                         else:            
                             return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','data':{'password1': 'passwords not match'},'success': False }})
@@ -193,6 +204,41 @@ class UserResource(ModelResource):
                 return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
         else:                
             return self.create_response(request, {'response': {'error':'ERR_INVALID_KEY','success': False }}, HttpUnauthorized)
+
+     def activate(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getData(request)
+        if request_data:
+            activation_key = request_data['data']['activation_key']
+            profile = UserProfile.objects.get(activation_key=activation_key)
+            if(profile):
+                if profile.key_expires < datetime.datetime.today():
+                    salt = sha.new(str(random.random())).hexdigest()[:5]
+                    profile.activation_key = sha.new(salt+profile.user.username).hexdigest()
+                    profile.key_expires = datetime.datetime.today() + datetime.timedelta(2)
+                    profile.save()
+                    email_subject = '%s, Activa tu cuenta en propiet.com' % (profile.user.first_name)
+                    email_body = "%s, debido a que expiro tu anterior enlace de activacion de propiet.com\n\nTe enviamos uno nuevo, haz click en el siguiente enlace para activar tu cuenta vigente durante 48 horas:\n\nhttp://dev.propiet.com/confirmacion/%s \n\n" % (profile.user.first_name, profile.activation_key)
+                    send_mail(email_subject,email_body,'propiet@inboxapp.me',[profile.user.email])
+                    return self.create_response(request, {'response': {'error':'ERR_USER_EXPIRED','success': False }})
+                user_account = profile.user
+                user_account.is_active = True
+                user_account.save()
+                profile.key_expires = datetime.datetime.today() - datetime.timedelta(2)
+                profile.save()
+                email_subject = 'Felicidades %s, ya eres parte de propiet.com' % (profile.user.first_name)
+                email_body = "%s, gracias confirmar tu cuenta!\n\nPropiet.com, Una mejor manera de vender y encontrar su hogar.\n\nhttp://dev.propiet.com \n\n" % (profile.user.first_name)
+                send_mail(email_subject,email_body,'propiet@inboxapp.me',[profile.user.email])
+
+                return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
+            else:                
+                return self.create_response(request, {'response': {'error':'ERR_NOT_FOUND','success': False }})
+        else:                
+            return self.create_response(request, {'response': {'error':'ERR_INVALID_KEY','success': False }}, HttpUnauthorized)
+
+     #def forgot_password(self, request, **kwargs):
+     #def contact_agent(self, request, **kwargs):
+     #def sell_agent(self, request, **kwargs):
 
      def is_secure(self, request):         
          #if(request.is_secure()):                

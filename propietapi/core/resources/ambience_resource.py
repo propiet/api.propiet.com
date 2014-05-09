@@ -22,5 +22,9 @@ class AmbienceResource(ModelResource):
         serializer = Serializer()
         paginator_class = Paginator
         excludes = ['creation_date', 'last_update']
+        filtering = {
+            'id': ['exact', 'lt', 'lte', 'gte', 'gt','in'],
+            'name': ['exact', 'lt', 'lte', 'gte', 'gt','in'],            
+        }
         #authentication = ApiKeyAuthentication()
         #authorization = DjangoAuthorization()

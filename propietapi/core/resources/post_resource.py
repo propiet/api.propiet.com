@@ -227,6 +227,7 @@ class PostResource(ModelResource):
                                 'location':self.serializer.encode(location),
                                 'user':self.serializer.encode(user),
                                 'agent':self.serializer.encode(agent),
+                                'agent_phone':self.serializer.encode(agent.profile.phone),
                                 'images':self.serializer.encode(PostPhoto.objects.filter(post=post.pk)),
                                 },                        
                             'success': True
