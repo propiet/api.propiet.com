@@ -407,9 +407,13 @@ class ListResource(ModelResource):
 
             # Required by Operation
             if(operation.operation == 'Venta'):
-                del default_data['expenses']
-                del default_data['stage']
-                del default_data['deliveryYear']
+                if(category.name == 'Departamentos'):
+                    del default_data['stage']
+                    del default_data['deliveryYear']
+                else:
+                    del default_data['expenses']
+                    del default_data['stage']
+                    del default_data['deliveryYear']
             elif(operation.operation == 'Alquiler'):
                 del default_data['stage']
                 del default_data['deliveryYear']
