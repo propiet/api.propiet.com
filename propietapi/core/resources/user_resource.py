@@ -188,8 +188,8 @@ class UserResource(ModelResource):
                            user.set_password(request_data['data']['password1'])
                            user.save()
 
-                           email_subject = '%s, Se ha modificado su contraseña exitosamente' % (user.first_name)
-                           email_body = "Hola %s, Se ha modificado su contraseña exitosamente!\n\nPara administrar tu contraseña accede a:\n\nhttp://dev.propiet.com/perfil \n\n" % (user.first_name)
+                           email_subject = '%s, Se ha modificado su clave exitosamente' % (user.first_name)
+                           email_body = "Hola %s, Se ha modificado su clave exitosamente!\n\nPara administrar su perfil acceda a:\n\nhttp://dev.propiet.com/perfil \n\n" % (user.first_name)
                            send_mail(email_subject,email_body,'propiet@inboxapp.me',[user.email])
 
                            return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
