@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.conf.urls import *
 from django.utils import simplejson
 from django.db import IntegrityError
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.mail import send_mail
 import datetime, random, sha
 # Tastypie imports
@@ -56,6 +56,9 @@ class UserResource(ModelResource):
             url(r"^(?P<resource_name>%s)/activate%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('activate'), name="api_user_activate"),
+            url(r"^(?P<resource_name>%s)/forgot_password%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('forgot_password'), name="api_user_forgot_password"),
         ]
 
      def login(self, request, **kwargs):
@@ -189,7 +192,7 @@ class UserResource(ModelResource):
                            user.save()
 
                            email_subject = '%s, Se ha modificado su clave exitosamente' % (user.first_name)
-                           email_body = "Hola %s, Se ha modificado su clave exitosamente!\n\nPara administrar su perfil acceda a:\n\nhttp://dev.propiet.com/perfil \n\n" % (user.first_name)
+                           email_body = "Hola %s, Se ha modificado su clave exitosamente!\n\nPara administrar su perfil acceda a:\n\nhttp://www.propiet.com/perfil \n\n" % (user.first_name)
                            send_mail(email_subject,email_body,'propiet@inboxapp.me',[user.email])
 
                            return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
@@ -210,33 +213,60 @@ class UserResource(ModelResource):
         request_data = self.requestHandler.getData(request)
         if request_data:
             activation_key = request_data['data']['activation_key']
-            profile = UserProfile.objects.get(activation_key=activation_key)
-            if(profile):
-                if profile.key_expires < datetime.datetime.today():
-                    salt = sha.new(str(random.random())).hexdigest()[:5]
-                    profile.activation_key = sha.new(salt+profile.user.username).hexdigest()
-                    profile.key_expires = datetime.datetime.today() + datetime.timedelta(2)
+            try:
+                profile = UserProfile.objects.get(activation_key=activation_key)            
+                if(profile):
+                    if profile.key_expires < datetime.datetime.today():
+                        salt = sha.new(str(random.random())).hexdigest()[:5]
+                        profile.activation_key = sha.new(salt+profile.user.username).hexdigest()
+                        profile.key_expires = datetime.datetime.today() + datetime.timedelta(2)
+                        profile.save()
+                        email_subject = '%s, Activa tu cuenta en propiet.com' % (profile.user.first_name)
+                        email_body = "%s, debido a que expiro tu anterior enlace de activacion de propiet.com\n\nTe enviamos uno nuevo, haz click en el siguiente enlace para activar tu cuenta vigente durante 48 horas:\n\nhttp://www.propiet.com/confirmacion/%s \n\n" % (profile.user.first_name, profile.activation_key)
+                        send_mail(email_subject,email_body,'propiet@inboxapp.me',[profile.user.email])
+                        return self.create_response(request, {'response': {'error':'ERR_USER_EXPIRED','success': False }})
+                    user_account = profile.user
+                    user_account.is_active = True
+                    user_account.save()
+                    profile.key_expires = datetime.datetime.today() - datetime.timedelta(2)
                     profile.save()
-                    email_subject = '%s, Activa tu cuenta en propiet.com' % (profile.user.first_name)
-                    email_body = "%s, debido a que expiro tu anterior enlace de activacion de propiet.com\n\nTe enviamos uno nuevo, haz click en el siguiente enlace para activar tu cuenta vigente durante 48 horas:\n\nhttp://dev.propiet.com/confirmacion/%s \n\n" % (profile.user.first_name, profile.activation_key)
+                    email_subject = 'Felicidades %s, ya sos parte de propiet.com' % (profile.user.first_name)
+                    email_body = "%s, gracias confirmar tu cuenta!\n\nPropiet.com, Una mejor manera de vender y encontrar su hogar.\n\nhttp://www.propiet.com \n\n" % (profile.user.first_name)
                     send_mail(email_subject,email_body,'propiet@inboxapp.me',[profile.user.email])
-                    return self.create_response(request, {'response': {'error':'ERR_USER_EXPIRED','success': False }})
-                user_account = profile.user
-                user_account.is_active = True
-                user_account.save()
-                profile.key_expires = datetime.datetime.today() - datetime.timedelta(2)
-                profile.save()
-                email_subject = 'Felicidades %s, ya eres parte de propiet.com' % (profile.user.first_name)
-                email_body = "%s, gracias confirmar tu cuenta!\n\nPropiet.com, Una mejor manera de vender y encontrar su hogar.\n\nhttp://dev.propiet.com \n\n" % (profile.user.first_name)
-                send_mail(email_subject,email_body,'propiet@inboxapp.me',[profile.user.email])
 
-                return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
-            else:                
-                return self.create_response(request, {'response': {'error':'ERR_NOT_FOUND','success': False }})
+                    return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
+                else:                
+                    return self.create_response(request, {'response': {'data':'ERR_NOT_FOUND','success': False }})
+            except ObjectDoesNotExist:
+                pass
+                return self.create_response(request, {'response': {'data':'ERR_NOT_FOUND','success': False }})
         else:                
-            return self.create_response(request, {'response': {'error':'ERR_INVALID_KEY','success': False }}, HttpUnauthorized)
+            return self.create_response(request, {'response': {'data':'ERR_INVALID_KEY','success': False }}, HttpUnauthorized)
 
-     #def forgot_password(self, request, **kwargs):
+     def forgot_password(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getDataAuth(request)
+        if request_data:
+            email = request_data['data']['email']
+            try:
+                user = User.objects.get(email=email)
+                
+                if(user):
+                    password = User.objects.make_random_password()
+                    user.set_password(password)
+                    user.save()
+                    email_subject = 'Recuperar Clave'
+                    email_body = "Hola %s, Se ha generado una nueva clave.\n\nIngresar en: http://www.propiet.com/login\nEmail: %s \nClave: %s \n\nNo olvides que para cambiar esta clave auto-generada debes acceder a:\nhttp://www.propiet.com/perfil \n\n" % (user.first_name,user.email,password)
+                    send_mail(email_subject,email_body,'propiet@inboxapp.me',[user.email])
+                    return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})                
+                else:                
+                    return self.create_response(request, {'response': {'data':'ERR_NOT_FOUND','success': False }})
+            except ObjectDoesNotExist:
+                pass
+                return self.create_response(request, {'response': {'data':'ERR_NOT_FOUND','success': False }})
+        else:                
+            return self.create_response(request, {'response': {'data':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
+
      #def contact_agent(self, request, **kwargs):
      #def sell_agent(self, request, **kwargs):
 

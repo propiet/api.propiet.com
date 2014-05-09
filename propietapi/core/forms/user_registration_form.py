@@ -44,6 +44,6 @@ class UserRegistrationForm(UserCreationForm):
 			profile.key_expires = datetime.datetime.today() + datetime.timedelta(2)
 			profile.save()
 			email_subject = '%s, Gracias por registrarte en propiet.com' % (user.first_name)
-			email_body = "Hola %s, gracias por registrarte en propiet.com!\n\nPara completar tu registro, haz click en el siguiente enlace vigente durante 48 horas:\n\nhttp://dev.propiet.com/confirmacion/%s \n\n" % (user.first_name, profile.activation_key)
+			email_body = "Hola %s, gracias por registrarte en propiet.com!\n\nPara completar tu registro, haz click en el siguiente enlace vigente durante 48 horas:\n\nhttp://www.propiet.com/confirmacion/%s \n\n" % (user.first_name, profile.activation_key)
 			send_mail(email_subject,email_body,'propiet@inboxapp.me',[user.email])
 		return user
