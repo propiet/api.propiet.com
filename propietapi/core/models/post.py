@@ -49,4 +49,5 @@ class Post(models.Model):
 		return self.user	
 
 	def __unicode__(self):		
-		return unicode(str(self.title))
+        return u'{c}'.format(c=self.title)
+		
