@@ -312,7 +312,7 @@ class UserResource(ModelResource):
                                
             email_subject = 'Nuevo pedido de tasacion'
             email_body = "Nombre: %s \nApellido: %s \nTel: %s \nEmail: %s \nDireccion: %s \nDescripcion: %s" % (firstname, lastname, phone, email, address, message)
-            send_mail(email_subject,email_body,'propiet@inboxapp.me',['liocuevas@gmail.com'])
+            send_mail(email_subject,email_body,'propiet@inboxapp.me',['propietc@gmail.com'])
             return self.create_response(request, {'response': {'data':'SCC_SENT','success': True }})                            
         else:                
             return self.create_response(request, {'response': {'data':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
