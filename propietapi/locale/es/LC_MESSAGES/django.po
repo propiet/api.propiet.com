@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-15 22:39-0500\n"
+"POT-Creation-Date: 2014-05-09 01:32-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,7 +125,7 @@ msgstr "Operación"
 msgid "Operations"
 msgstr "Operaciones"
 
-#: core/models/post.py:22 core/models/property.py:187
+#: core/models/post.py:22 core/models/property.py:186
 msgid "Property"
 msgstr "Propiedad"
 
@@ -202,8 +202,8 @@ msgid "Square Meters"
 msgstr "Superficie Total (M2)"
 
 #: core/models/property.py:145
-msgid "Total Meters"
-msgstr "Mt. Totales"
+msgid "Total Covered Meters"
+msgstr "Mt. Cubiertos"
 
 #: core/models/property.py:146
 msgid "Total Uncovered Meters"
@@ -250,98 +250,94 @@ msgid "Building Type"
 msgstr "Tipo de Inmueble"
 
 #: core/models/property.py:160
-msgid "Building Condition"
-msgstr "Condición del Inmueble"
-
-#: core/models/property.py:161
 msgid "Building Status"
 msgstr "Estado del Inmueble"
 
-#: core/models/property.py:162
+#: core/models/property.py:161
 msgid "Building Category"
 msgstr "Categoría del Inmueble"
 
-#: core/models/property.py:163
+#: core/models/property.py:162
 msgid "Apartments per Floor"
 msgstr "Departamentos por piso"
 
-#: core/models/property.py:164
+#: core/models/property.py:163
 msgid "Quantity Building Floors"
 msgstr "Cant. de Pisos en Edificio"
 
-#: core/models/property.py:165
+#: core/models/property.py:164
 msgid "Floor Number"
 msgstr "Piso"
 
-#: core/models/property.py:166
+#: core/models/property.py:165
 msgid "Quantity Elevators"
 msgstr "Cant. de Ascensores"
 
-#: core/models/property.py:167
+#: core/models/property.py:166
 msgid "Expenses"
 msgstr "Expensas"
 
-#: core/models/property.py:168
+#: core/models/property.py:167
 msgid "Roof Type"
 msgstr "Tipo de Techo"
 
-#: core/models/property.py:169
+#: core/models/property.py:168
 msgid "Industrial Roof Type"
 msgstr "Tipo de Techo industrial"
 
-#: core/models/property.py:170
+#: core/models/property.py:169
 msgid "Roof Height"
 msgstr "Altura del techo"
 
-#: core/models/property.py:171
+#: core/models/property.py:170
 msgid "Gate Type"
 msgstr "Tipo de Portón"
 
-#: core/models/property.py:172
+#: core/models/property.py:171
 msgid "Front Ground"
 msgstr "Mt. Frente"
 
-#: core/models/property.py:173
+#: core/models/property.py:172
 msgid "Large Ground"
 msgstr "Mt. Fondo"
 
-#: core/models/property.py:174
+#: core/models/property.py:173
 msgid "Hectares"
 msgstr "Hectáreas"
 
-#: core/models/property.py:175
+#: core/models/property.py:174
 msgid "FOT"
 msgstr "F.O.T"
 
-#: core/models/property.py:176
+#: core/models/property.py:175
 msgid "FOS"
 msgstr "F.O.S"
 
-#: core/models/property.py:177
+#: core/models/property.py:176
 msgid "Stage"
 msgstr "Etapa"
 
-#: core/models/property.py:178
+#: core/models/property.py:177
 msgid "Delivery Year"
 msgstr "Año de Entrega"
 
-#: core/models/property.py:179
+#: core/models/property.py:178
 msgid "Suitable Professional"
 msgstr "Apto Profesional"
 
-#: core/models/property.py:180
+#: core/models/property.py:179
 msgid "Commercial Usage"
 msgstr "Uso comercial"
 
-#: core/models/property.py:181
+#: core/models/property.py:180
 msgid "Suitable Credit"
 msgstr "Apto Crédito"
 
-#: core/models/property.py:182
+#: core/models/property.py:181
 msgid "Provides Funding"
 msgstr "Permite Financiación"
 
-#: core/models/property.py:188
+#: core/models/property.py:187
 msgid "Properties"
 msgstr "Propiedades"
 
@@ -365,14 +361,32 @@ msgstr "Subcategorias"
 msgid "Phone"
 msgstr "Teléfono"
 
-#: core/models/user_profile.py:13
+#: core/models/user_profile.py:9
+msgid "Agency Name"
+msgstr "Inmobiliaria"
+
+#: core/models/user_profile.py:10
+msgid "Activation Key"
+msgstr "Clave de activacion"
+
+#: core/models/user_profile.py:11
+msgid "Activation Key Expires"
+msgstr "Expiracion de clave"
+
+#: core/models/user_profile.py:16
 msgid "User Profile"
 msgstr "Perfíl de usuario"
 
-#: core/models/user_profile.py:14
+#: core/models/user_profile.py:17
 msgid "User Profiles"
 msgstr "Perfiles de usuario"
 
-#: propietapi/settings.py:63
+#: propietapi/settings.py:69
 msgid "Spanish"
 msgstr ""
+
+#~ msgid "Total Meters"
+#~ msgstr "Mt. Totales"
+
+#~ msgid "Building Condition"
+#~ msgstr "Condición del Inmueble"

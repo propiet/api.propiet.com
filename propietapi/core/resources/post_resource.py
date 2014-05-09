@@ -307,7 +307,7 @@ class PostResource(ModelResource):
             try:
                 if(locationForm.is_valid()):
                     location = locationForm.save()
-                    request_data['data']['property']['location'] = location.pk
+                    request_data['data']['property']['location'] = int(location.pk)
                     propertyForm = PropertyForm(request_data['data']['property'])
                     propertyForm.location = location.pk
 
