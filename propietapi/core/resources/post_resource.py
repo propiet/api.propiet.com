@@ -203,10 +203,11 @@ class PostResource(ModelResource):
                 property = Property.objects.get(pk=post.property.pk)
                 location = Location.objects.get(property=post.property.pk)
                 user = User.objects.get(pk=post.user.pk)
+                user_profile = UserProfile.objects.get(pk=user.pk)
                 if(post.agent != None):
                     agent = User.objects.get(pk=post.agent.pk)
                     agent_profile = UserProfile.objects.get(pk=post.agent.pk)                
-                    user_profile = UserProfile.objects.get(pk=user.pk)
+                    
 
                     return self.create_response(request, {
                         'response':{
