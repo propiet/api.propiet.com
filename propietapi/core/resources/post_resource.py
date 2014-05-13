@@ -369,6 +369,8 @@ class PostResource(ModelResource):
                         request_data['data']['post']['region'] = location.region.pk
                         request_data['data']['post']['city'] = location.city.pk
                         request_data['data']['post']['status'] = post.status
+                        if (post.agent != None):
+                            request_data['data']['post']['agent'] = post.agent.pk
                         postForm = PostForm(request_data['data']['post'], instance=post)
                         postForm.property = unit.pk
                         postForm.region = location.region.pk
@@ -862,85 +864,85 @@ class PostResource(ModelResource):
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
                     elif(field.html_name == 'quantityAmbiences'):
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
                     elif(field.html_name == 'quantityBedrooms'):
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
                     elif(field.html_name == 'antiqueness'):
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
                     else:
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
 
                 elif(category.name == 'Terrenos y Lotes'):
                     if(field.html_name == 'square_meters'):
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
                     else:
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
 
                 elif(category.name == 'Campos y chacras'):
                     if(field.html_name == 'hectares'):
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
                     else:
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
 
                 elif(category.name == 'Cocheras'):
                     if(field.html_name == 'garageCoverage'):
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
                     else:
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
 
                 elif(category.name == 'Galpones, depósitos y edificios industriales' or category.name == 'Locales comerciales' or category.name == 'Oficinas' or category.name == 'Consultorios'):
                     if(field.html_name == 'square_meters'):
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
                     elif(field.html_name == 'antiqueness'):
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"required":True,"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
                     else:
                         default_data[field.html_name] = {}
                         default_data[field.html_name]['label'] = _(field.label)
                         default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
-                        default_data[field.html_name]['value'] = field.data
+                        default_data[field.html_name]['value'] = field.value()
                 else:
                     default_data[field.html_name] = {}
                     default_data[field.html_name]['label'] = _(field.label)
                     default_data[field.html_name]['field'] = field.as_widget(attrs={"class":"form-control"})
-                    default_data[field.html_name]['value'] = field.data
+                    default_data[field.html_name]['value'] = field.value()
 
             # Unnecesary Fields
             del default_data['user']
