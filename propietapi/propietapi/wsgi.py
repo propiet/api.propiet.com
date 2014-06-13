@@ -14,6 +14,7 @@ framework.
 
 """
 import os
+from os import environ
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "propietapi.settings")
 
@@ -25,11 +26,14 @@ application = get_wsgi_application()
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
-import uwsgi
-from uwsgidecorators import timer
-from django.utils import autoreload
 
-@timer(3)
-def change_code_gracefull_reload(sig):
-    if autoreload.code_changed():
-        uwsgi.reload()
+DJANGO_DEV = environ.get('DJANGO_DEV', False)
+if not DJANGO_DEV:
+    import uwsgi
+    from uwsgidecorators import timer
+    from django.utils import autoreload
+
+    @timer(3)
+    def change_code_gracefull_reload(sig):
+        if autoreload.code_changed():
+            uwsgi.reload()
