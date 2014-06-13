@@ -1,0 +1,8 @@
+# === COMMON ===
+Django==1.6.5
+Pillow==2.4.0
+django-imagekit==3.2.1
+django-grappelli==2.5.3
+django-tastypie==0.11.1
+django-cities-light==2.4.2
+South==0.8.4

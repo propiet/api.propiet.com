@@ -1,0 +1,2 @@
+# ==== PROD ====
+MySQL-python==1.2.5
