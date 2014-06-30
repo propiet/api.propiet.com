@@ -2,6 +2,10 @@
 
 from settings.dev import *
 
+INSTALLED_APPS += ('djcelery', )
+
+BROKER_URL = 'amqp://propiet:propiet@localhost:5672//'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

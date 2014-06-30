@@ -83,3 +83,18 @@ export DJANGO_DEV=1" >> bin/postactivate``
 * uwsgi-plugin-python
 * nginx
 * HttpHeadersMoreModule
+* erlang
+* erlang-nox
+
+### Install RabbitMQ
+
+* ``sudo apt-get install erlang erlang-nox``
+* ``wget http://www.rabbitmq.com/releases/rabbitmq-server/v3.3.4/rabbitmq-server_3.3.4-1_all.deb``
+* ``sudo dpkg -i rabbitmq-server_3.3.4-1_all.deb``
+* ``sudo apt-get -f install # Esto es para finalizar la instalacion``
+
+#### User config
+
+* sudo rabbitmqctl add_user propiet propiet
+* sudo rabbitmqctl add_vhost propiet
+* sudo rabbitmqctl set_permissions -p propiet propiet ".*" ".*" ".*"

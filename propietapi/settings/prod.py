@@ -2,6 +2,8 @@
 
 from settings.base import *
 
+BROKER_URL = 'amqp://propiet:propiet@localhost:5672//'
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 

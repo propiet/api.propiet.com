@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 from core.models import Location, Category, SubCategory, Feature, Service, Ambience
 from django.utils.translation import ugettext_lazy as _
 
 # Property Model
+from core.tasks import create_property_on_zona_prop, update_property_on_zona_prop, delete_property_on_zona_prop
+
+
 class Property(models.Model):
     """Class Property
     @author: Lionel Cuevas <lionel@hoopemedia.com>"""
@@ -194,3 +199,19 @@ class Property(models.Model):
             return "None"
         else:
             return self.category.name+'-'+self.location.address
+
+
+@receiver(post_save, sender=Property)
+@receiver(post_delete, sender=Property)
+def property_post_connect(**kwargs):
+    instance = kwargs['instance']
+    if 'created' not in kwargs:
+        # Its a deletion:
+        delete_property_on_zona_prop.delay(instance)
+    else:
+        created = kwargs.get('created', False)
+        if created:
+            create_property_on_zona_prop.delay(instance)
+        else:
+            update_property_on_zona_prop.delay(instance)
+
