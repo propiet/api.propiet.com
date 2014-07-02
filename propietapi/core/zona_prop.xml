@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<proceso>
+<credenciales>
+        <proveedor>{{ ZONAPROP_PROVEEDOR }}</proveedor>
+        <password>{{ ZONAPROP_PASSWORD }}</password>
+    </credenciales>
+<publicacion>
+<usuario>{{ ZONAPROP_USUARIO }}</usuario>
+<aviso>
+<tipoPropiedad>{{ property_type }}</tipoPropiedad>
+<tipoOperacion>{{ operation_type }}</tipoOperacion>
+<idAvisoProveedor>{{ property_id }}</idAvisoProveedor>
+<contacto>
+<nombre>{{ ZONAPROP_CONTACT_FIRST_NAME }}</nombre>
+<apellido>{{ ZONAPROP_CONTACT_LAST_NAME }}</apellido>
+<telefono1>
+<codigoArea>{{ ZONAPROP_AREA_CODE }}</codigoArea>
+<numeroTelefono>{{ ZONAPROP_PHONE_NUMBER }}</numeroTelefono>
+</telefono1>
+<email>{{ ZONAPROP_CONTACT_MAIL }}</email>
+<horarioContacto>{{ ZONAPROP_HORARIO_ATENCION }}</horarioContacto>
+</contacto>
+<ubicacion>
+{% if location_id %}
+<idUbicacion>{{ location_id }}</idUbicacion>
+{% endif %}
+{% if other_location %}
+<otraUbicacion>{{ other_location }}</otraUbicacion>
+{% endif %}
+<nombreCalle>Monje</nombreCalle>
+<alturaCalle>100</alturaCalle>
+<piso>1</piso>
+<depto>A</depto>
+<entreCalle1>Ugarte</entreCalle1>
+<entreCalle2>Moreno</entreCalle2>
+</ubicacion>
+{% if images %}
+{% for image in images %}
+<urlImagenes>{{ image }}</urlImagenes>
+{% endfor %}
+{% endif %}
+{% if video %}
+<urlVideo>{{ video }}</urlVideo>
+{% endif %}
+<precio>{{ price }}</precio>
+<tipoMoneda>{{ currency }}</tipoMoneda>
+<subtitulo>{{ subtitle }}</subtitulo>
+{% for key, values in list_specs.items %}
+{% if values %}
+{% for value in values %}
+<especificaciones><nombre>{{ key }}</nombre><valor>{{ value }}</valor></especificaciones>
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% for key, value in specs.items %}
+{% if value %}
+<especificaciones><nombre>{{ key }}</nombre><valor>{{ value }}</valor></especificaciones>
+{% endif %}
+{% endfor %}
+<descripcion>{{ description }}</descripcion>
+<pais>ar</pais>
+</aviso>
+</publicacion>
+</proceso>

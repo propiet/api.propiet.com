@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 # Property Model
-from core.tasks import create_property_on_zona_prop, update_property_on_zona_prop, delete_property_on_zona_prop
+from core.tasks import update_post_on_zona_prop, delete_post_on_zona_prop
 
 
 class Property(models.Model):
@@ -423,17 +423,18 @@ class Property(models.Model):
         else:
             return self.category.name+'-'+self.location.address
 
+
 @receiver(post_save, sender=Property)
 @receiver(post_delete, sender=Property)
 def property_post_connect(**kwargs):
     instance = kwargs['instance']
-    if 'created' not in kwargs:
+    if 'created' not in kwargs and instance.post_set.exists():
         # Its a deletion:
-        delete_property_on_zona_prop.delay(instance)
+            post = instance.post_set.all()[0] #Asumo que hay un sólo post con esta property
+            delete_post_on_zona_prop.delay(post)
     else:
+        # Its a modification:
         created = kwargs.get('created', False)
-        if created:
-            create_property_on_zona_prop.delay(instance)
-        else:
-            update_property_on_zona_prop.delay(instance)
-
+        if not created and instance.post_set.exists():
+            post = instance.post_set.all()[0]
+            update_post_on_zona_prop.delay(post)
