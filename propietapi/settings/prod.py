@@ -20,11 +20,12 @@ DATABASES = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+DEFAULT_FROM_EMAIL = 'poli@devartis.com'
 EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'AKIAIQQ72BXKWY4UZWSQ'
-EMAIL_HOST_PASSWORD = 'AhYJun4ixzaspxy3SpjadchVgiusVjuk1VpOo3RVHzeC'
+EMAIL_HOST_USER = 'AKIAINE3NNQDKNSTE4LA'
+EMAIL_HOST_PASSWORD = 'AluYW9uzNxrRZRpKXxvZjhUuTzJ48pzN3PsBS642Owp2'
 
 ALLOWED_HOSTS = ['api.propiet.com', ]
 

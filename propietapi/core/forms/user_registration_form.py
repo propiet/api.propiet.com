@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from django import forms            
+from django import forms
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth.forms import UserCreationForm 
@@ -45,5 +46,5 @@ class UserRegistrationForm(UserCreationForm):
 			profile.save()
 			email_subject = '%s, Gracias por registrarte en propiet.com' % (user.first_name)
 			email_body = "Hola %s, gracias por registrarte en propiet.com!\n\nPara completar tu registro, haz click en el siguiente enlace vigente durante 48 horas:\n\nhttp://www.propiet.com/confirmacion/%s \n\n" % (user.first_name, profile.activation_key)
-			send_mail(email_subject,email_body,'propiet@inboxapp.me',[user.email])
+			send_mail(email_subject, email_body, settings.DEFAULT_FROM_EMAIL, [user.email])
 		return user

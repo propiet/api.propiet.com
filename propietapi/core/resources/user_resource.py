@@ -2,6 +2,7 @@
 # Django imports
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
 from django.conf.urls import *
 from django.utils import simplejson
 from django.db import IntegrityError
@@ -199,7 +200,7 @@ class UserResource(ModelResource):
 
                            email_subject = '%s, Se ha modificado su clave exitosamente' % (user.first_name)
                            email_body = "Hola %s, Se ha modificado su clave exitosamente!\n\nPara administrar su perfil acceda a:\n\nhttp://www.propiet.com/perfil \n\n" % (user.first_name)
-                           send_mail(email_subject,email_body,'propiet@inboxapp.me',[user.email])
+                           send_mail(email_subject, email_body, settings.DEFAULT_FROM_EMAIL, [user.email])
 
                            return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
                         else:            
@@ -229,7 +230,7 @@ class UserResource(ModelResource):
                         profile.save()
                         email_subject = '%s, Activa tu cuenta en propiet.com' % (profile.user.first_name)
                         email_body = "%s, debido a que expiro tu anterior enlace de activacion de propiet.com\n\nTe enviamos uno nuevo, haz click en el siguiente enlace para activar tu cuenta vigente durante 48 horas:\n\nhttp://www.propiet.com/confirmacion/%s \n\n" % (profile.user.first_name, profile.activation_key)
-                        send_mail(email_subject,email_body,'propiet@inboxapp.me',[profile.user.email])
+                        send_mail(email_subject, email_body, settings.DEFAULT_FROM_EMAIL, [profile.user.email])
                         return self.create_response(request, {'response': {'error':'ERR_USER_EXPIRED','success': False }})
                     user_account = profile.user
                     user_account.is_active = True
@@ -238,7 +239,7 @@ class UserResource(ModelResource):
                     profile.save()
                     email_subject = 'Felicidades %s, ya sos parte de propiet.com' % (profile.user.first_name)
                     email_body = "%s, gracias confirmar tu cuenta!\n\nPropiet.com, Una mejor manera de vender y encontrar su hogar.\n\nhttp://www.propiet.com \n\n" % (profile.user.first_name)
-                    send_mail(email_subject,email_body,'propiet@inboxapp.me',[profile.user.email])
+                    send_mail(email_subject, email_body, settings.DEFAULT_FROM_EMAIL, [profile.user.email])
 
                     return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
                 else:                
@@ -263,7 +264,7 @@ class UserResource(ModelResource):
                     user.save()
                     email_subject = 'Recuperar Clave'
                     email_body = "Hola %s, Se ha generado una nueva clave.\n\nIngresar en: http://www.propiet.com/login\nEmail: %s \nClave: %s \n\nNo olvides que para cambiar esta clave auto-generada debes acceder a:\nhttp://www.propiet.com/perfil \n\n" % (user.first_name,user.email,password)
-                    send_mail(email_subject,email_body,'propiet@inboxapp.me',[user.email])
+                    send_mail(email_subject, email_body, settings.DEFAULT_FROM_EMAIL, [user.email])
                     return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})                
                 else:                
                     return self.create_response(request, {'response': {'data':'ERR_NOT_FOUND','success': False }})
@@ -289,7 +290,7 @@ class UserResource(ModelResource):
                 if(agent):                    
                     email_subject = '%s, hay un usuario interesado en tu propiedad' % (agent.first_name)
                     email_body = "Hola %s, hay un usuario interesado en una de tus propiedades.\n\n Nombre: %s \nTel: %s \nEmail: %s \nMensaje: %s \nPropiedad: %s" % (agent.first_name, name, phone, email, message, post_url)
-                    send_mail(email_subject,email_body,'propiet@inboxapp.me',[agent.email])
+                    send_mail(email_subject, email_body, settings.DEFAULT_FROM_EMAIL, [agent.email])
                     return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})                
                 else:                
                     return self.create_response(request, {'response': {'data':'ERR_NOT_FOUND','success': False }})
@@ -312,7 +313,7 @@ class UserResource(ModelResource):
                                
             email_subject = 'Nuevo pedido de tasacion'
             email_body = "Nombre: %s \nApellido: %s \nTel: %s \nEmail: %s \nDireccion: %s \nDescripcion: %s" % (firstname, lastname, phone, email, address, message)
-            send_mail(email_subject,email_body,'propiet@inboxapp.me',['propietc@gmail.com'])
+            send_mail(email_subject, email_body, settings.DEFAULT_FROM_EMAIL, ['propietc@gmail.com'])
             return self.create_response(request, {'response': {'data':'SCC_SENT','success': True }})                            
         else:                
             return self.create_response(request, {'response': {'data':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
