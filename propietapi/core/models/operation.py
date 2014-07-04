@@ -11,7 +11,8 @@ class Operation(models.Model):
     OPERATION_TYPE = {
     'zonaprop': {
         1: 'venta',
-        2: 'alquiler'
+        2: 'alquiler',
+        3: 'emprendimiento',
         }
     }
 
