@@ -12,7 +12,7 @@
 * Clone the repo: ``git clone git@git.devartis.com:propiet-api.git``
 * Go to propietapi dir: ``cd propiet-api/propietapi``
 * Create virtualenv: ``mkvirtualenv propiet-api``
-* Install dependencies: ``pip intall -r requirements/dev.txt``
+* Install dependencies: ``pip install -r requirements/dev.txt``
 * Edit your virtualenv's postactivate hook:
     * ``cdvirtualenv``
     * ``echo "export DJANGO_SETTINGS_MODULE='settings.dev_jrio'
@@ -39,28 +39,28 @@ export DJANGO_DEV=1" >> bin/postactivate``
 
 
     echo "# nginx
-        description "nginx http daemon"
-        author "Philipp Klose <me@'thisdomain'.de>"
+description 'nginx http daemon'
+author 'Philipp Klose'
 
-        start on (filesystem and net-device-up IFACE=lo)
-        stop on runlevel [!2345]
+start on (filesystem and net-device-up IFACE=lo)
+stop on runlevel [!2345]
 
-        env DAEMON=/opt/nginx/sbin/nginx
-        env PID=/opt/nginx/logs/nginx.pid
+env DAEMON=/opt/nginx/sbin/nginx
+env PID=/opt/nginx/logs/nginx.pid
 
-        expect fork
-        respawn
-        respawn limit 10 5
-        #oom never
+expect fork
+respawn
+respawn limit 10 5
+#oom never
 
-        pre-start script
-        $DAEMON -t
-        if [ $? -ne 0 ]
-        then exit $?
-        fi
-        end script
+pre-start script
+$DAEMON -t
+if [ $? -ne 0 ]
+then exit $?
+fi
+end script
 
-        exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
+exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 
 * Start nginx with: ``sudo service nginx_with_headers_more start``
 * Create a directory to hold nginx config files and set its permissions: ``sudo mkdir /opt/nginx/sites-available && sudo chown nobody:root /opt/nginx/sites-available``
