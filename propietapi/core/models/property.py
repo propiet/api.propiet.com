@@ -130,7 +130,7 @@ class Property(models.Model):
             }
         }
     }
-        
+
     ANTIQUENESS = (
         (0, 'No especificado'),
         (1, 'A Estrenar'),
@@ -262,7 +262,7 @@ class Property(models.Model):
     subcategory = models.ForeignKey(SubCategory, null=True, verbose_name=_('Subcategory'))
     creation_date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
-    antiqueness = models.PositiveSmallIntegerField(blank=True, null=True, max_length=1, choices=ANTIQUENESS, default=0, verbose_name=_('Antiqueness'))
+    antiqueness = models.PositiveSmallIntegerField(blank=True, null=True, default=None, verbose_name=_('Antiqueness'))
     square_meters = models.FloatField(blank=True, null=True, default=None,verbose_name=_('Square Meters'))
     total_covered_meters = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Total Covered Meters'))
     total_uncovered_meters = models.FloatField(blank=True, null=True, default=None, verbose_name=_('Total Uncovered Meters'))

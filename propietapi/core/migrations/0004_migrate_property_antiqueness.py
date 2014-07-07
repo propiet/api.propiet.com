@@ -1,99 +1,27 @@
 # -*- coding: utf-8 -*-
 from south.utils import datetime_utils as datetime
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 from django.db import models
 
-
-class Migration(SchemaMigration):
+class Migration(DataMigration):
 
     def forwards(self, orm):
-
-        # Changing field 'Property.orientation'
-        db.alter_column('core_property', 'orientation', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.buildingCategory'
-        db.alter_column('core_property', 'buildingCategory', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.commercialUsage'
-        db.alter_column('core_property', 'commercialUsage', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.quantityBathrooms'
-        db.alter_column('core_property', 'quantityBathrooms', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.antiqueness'
-        db.alter_column('core_property', 'antiqueness', self.gf('django.db.models.fields.PositiveSmallIntegerField')(null=True))
-
-        # Changing field 'Property.buildingType'
-        db.alter_column('core_property', 'buildingType', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.quantityAmbiences'
-        db.alter_column('core_property', 'quantityAmbiences', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.quantityBedrooms'
-        db.alter_column('core_property', 'quantityBedrooms', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.suitableProfessional'
-        db.alter_column('core_property', 'suitableProfessional', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.buildingStatus'
-        db.alter_column('core_property', 'buildingStatus', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.disposition'
-        db.alter_column('core_property', 'disposition', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.lightness'
-        db.alter_column('core_property', 'lightness', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.quantityGarages'
-        db.alter_column('core_property', 'quantityGarages', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
-
-        # Changing field 'Property.quantityElevators'
-        db.alter_column('core_property', 'quantityElevators', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1, null=True))
+        ANTIQUENESS_MAP = {
+            None: None,
+            0: None,
+            1: 0,
+            2: 5,
+            3: 15,
+            4: 50,
+            5: 51
+        }
+        for p in orm['core.Property'].objects.all():
+            p.antiqueness=ANTIQUENESS_MAP[p.antiqueness]
+            p.save()
 
     def backwards(self, orm):
-
-        # Changing field 'Property.orientation'
-        db.alter_column('core_property', 'orientation', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.buildingCategory'
-        db.alter_column('core_property', 'buildingCategory', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.commercialUsage'
-        db.alter_column('core_property', 'commercialUsage', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.quantityBathrooms'
-        db.alter_column('core_property', 'quantityBathrooms', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.antiqueness'
-        db.alter_column('core_property', 'antiqueness', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.buildingType'
-        db.alter_column('core_property', 'buildingType', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.quantityAmbiences'
-        db.alter_column('core_property', 'quantityAmbiences', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.quantityBedrooms'
-        db.alter_column('core_property', 'quantityBedrooms', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.suitableProfessional'
-        db.alter_column('core_property', 'suitableProfessional', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.buildingStatus'
-        db.alter_column('core_property', 'buildingStatus', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.disposition'
-        db.alter_column('core_property', 'disposition', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.lightness'
-        db.alter_column('core_property', 'lightness', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.quantityGarages'
-        db.alter_column('core_property', 'quantityGarages', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
-
-        # Changing field 'Property.quantityElevators'
-        db.alter_column('core_property', 'quantityElevators', self.gf('django.db.models.fields.PositiveSmallIntegerField')(max_length=1))
+        "Write your backwards methods here."
 
     models = {
         u'auth.group': {
@@ -331,3 +259,4 @@ class Migration(SchemaMigration):
     }
 
     complete_apps = ['core']
+    symmetrical = True
