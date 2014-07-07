@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-09 01:32-0500\n"
+"POT-Creation-Date: 2014-07-07 14:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: core/models/alert.py:16 core/models/post.py:23 core/models/property.py:138
+#: core/models/alert.py:16 core/models/post.py:28 core/models/property.py:260
 #: core/models/saved_query.py:11 core/models/user_profile.py:7
 msgid "User"
 msgstr "Usuario"
@@ -40,140 +40,140 @@ msgstr "Alerta"
 msgid "Alerts"
 msgstr "Alertas"
 
-#: core/models/ambience.py:10 core/models/category.py:10
-#: core/models/currency.py:11 core/models/feature.py:10
-#: core/models/saved_query.py:12 core/models/service.py:10
-#: core/models/subcategory.py:12
+#: core/models/ambience.py:37 core/models/category.py:29
+#: core/models/currency.py:20 core/models/feature.py:33
+#: core/models/saved_query.py:12 core/models/service.py:25
+#: core/models/subcategory.py:45
 msgid "Name"
 msgstr "Nombre"
 
-#: core/models/ambience.py:15
+#: core/models/ambience.py:42
 msgid "Ambience"
 msgstr "Ambiente"
 
-#: core/models/ambience.py:16 core/models/property.py:150
+#: core/models/ambience.py:43 core/models/property.py:272
 msgid "Ambiences"
 msgstr "Ambientes"
 
-#: core/models/category.py:15 core/models/post.py:25
-#: core/models/property.py:139 core/models/subcategory.py:11
+#: core/models/category.py:34 core/models/post.py:31
+#: core/models/property.py:261 core/models/subcategory.py:44
 msgid "Category"
 msgstr "Categoria"
 
-#: core/models/category.py:16
+#: core/models/category.py:35
 msgid "Categories"
 msgstr "Categorias"
 
-#: core/models/currency.py:10
+#: core/models/currency.py:19
 msgid "Symbol"
 msgstr "Simbolo"
 
-#: core/models/currency.py:16 core/models/post.py:28
+#: core/models/currency.py:25 core/models/post.py:34
 msgid "Currency"
 msgstr "Moneda"
 
-#: core/models/currency.py:17
+#: core/models/currency.py:26
 msgid "Currencies"
 msgstr "Monedas"
 
-#: core/models/feature.py:15
+#: core/models/feature.py:38
 msgid "Feature"
 msgstr "Adicional"
 
-#: core/models/feature.py:16 core/models/property.py:148
+#: core/models/feature.py:39 core/models/property.py:270
 msgid "Features"
 msgstr "Adicionales"
 
-#: core/models/location.py:13
+#: core/models/location.py:25
 msgid "Address"
 msgstr "Dirección"
 
-#: core/models/location.py:14
+#: core/models/location.py:26
 msgid "Longitude"
 msgstr "Longitud"
 
-#: core/models/location.py:15
+#: core/models/location.py:27
 msgid "Latitude"
 msgstr "Latitud"
 
-#: core/models/location.py:16
+#: core/models/location.py:28
 msgid "Country"
 msgstr "País"
 
-#: core/models/location.py:17 core/models/post.py:37
+#: core/models/location.py:29 core/models/post.py:44
 msgid "Region"
 msgstr "Región"
 
-#: core/models/location.py:18 core/models/post.py:38
+#: core/models/location.py:30 core/models/post.py:45
 msgid "City"
 msgstr "Ciudad"
 
-#: core/models/location.py:23 core/models/property.py:147
+#: core/models/location.py:35 core/models/property.py:269
 msgid "Location"
 msgstr "Ubicación"
 
-#: core/models/location.py:24
+#: core/models/location.py:36
 msgid "Locations"
 msgstr "Ubicaciones"
 
-#: core/models/operation.py:11 core/models/operation.py:16
-#: core/models/post.py:26
+#: core/models/operation.py:20 core/models/operation.py:25
+#: core/models/post.py:32
 msgid "Operation"
 msgstr "Operación"
 
-#: core/models/operation.py:17
+#: core/models/operation.py:26
 msgid "Operations"
 msgstr "Operaciones"
 
-#: core/models/post.py:22 core/models/property.py:186
+#: core/models/post.py:27 core/models/property.py:308
 msgid "Property"
 msgstr "Propiedad"
 
-#: core/models/post.py:24
+#: core/models/post.py:29
 msgid "Agent"
 msgstr "Agente"
 
-#: core/models/post.py:27
+#: core/models/post.py:33
 msgid "Price"
 msgstr "Precio"
 
-#: core/models/post.py:29
+#: core/models/post.py:35
 msgid "Title"
 msgstr "Título"
 
-#: core/models/post.py:30
+#: core/models/post.py:36
 msgid "Description"
 msgstr "Descripción"
 
-#: core/models/post.py:31
+#: core/models/post.py:37
 msgid "Hidden Note"
 msgstr "Nota interna"
 
-#: core/models/post.py:32
+#: core/models/post.py:38
 msgid "Status"
 msgstr "Estado"
 
-#: core/models/post.py:33
+#: core/models/post.py:39
 msgid "Featured"
 msgstr "Destacado"
 
-#: core/models/post.py:34
+#: core/models/post.py:40
 msgid "Video Url"
 msgstr "Url de Video"
 
-#: core/models/post.py:35
+#: core/models/post.py:41
 msgid "Map Image Url"
 msgstr "Url de Mapa"
 
-#: core/models/post.py:36
+#: core/models/post.py:43
 msgid "Plane Url"
 msgstr "Url de Plano"
 
-#: core/models/post.py:45 core/models/post_photo.py:16
+#: core/models/post.py:53 core/models/post_photo.py:16
 msgid "Post"
 msgstr "Publicación"
 
-#: core/models/post.py:46
+#: core/models/post.py:54
 msgid "Posts"
 msgstr "Publicaciones"
 
@@ -189,155 +189,155 @@ msgstr "Foto"
 msgid "Photos"
 msgstr "Fotos"
 
-#: core/models/property.py:140 core/models/subcategory.py:17
+#: core/models/property.py:262 core/models/subcategory.py:50
 msgid "Subcategory"
 msgstr "Subcategoría"
 
-#: core/models/property.py:143
+#: core/models/property.py:265
 msgid "Antiqueness"
 msgstr "Antiguedad"
 
-#: core/models/property.py:144
+#: core/models/property.py:266
 msgid "Square Meters"
 msgstr "Superficie Total (M2)"
 
-#: core/models/property.py:145
+#: core/models/property.py:267
 msgid "Total Covered Meters"
 msgstr "Mt. Cubiertos"
 
-#: core/models/property.py:146
+#: core/models/property.py:268
 msgid "Total Uncovered Meters"
 msgstr "Mt. Descubiertos"
 
-#: core/models/property.py:149 core/models/service.py:16
+#: core/models/property.py:271 core/models/service.py:31
 msgid "Services"
 msgstr "Servicios"
 
-#: core/models/property.py:151
+#: core/models/property.py:273
 msgid "Lightness"
 msgstr "Luminosidad"
 
-#: core/models/property.py:152
+#: core/models/property.py:274
 msgid "Orientation"
 msgstr "Orientación"
 
-#: core/models/property.py:153
+#: core/models/property.py:275
 msgid "Disposition"
 msgstr "Disposición"
 
-#: core/models/property.py:154
+#: core/models/property.py:276
 msgid "Quantity Ambiences"
 msgstr "Cant. de Ambientes"
 
-#: core/models/property.py:155
+#: core/models/property.py:277
 msgid "Quantity Bathrooms"
 msgstr "Cant. de Baños"
 
-#: core/models/property.py:156
+#: core/models/property.py:278
 msgid "Quantity Bedrooms"
 msgstr "Cant. de Dormitorios"
 
-#: core/models/property.py:157
+#: core/models/property.py:279
 msgid "Quantity Garages"
 msgstr "Cant. de Cocheras"
 
-#: core/models/property.py:158
+#: core/models/property.py:280
 msgid "Garage Coverage"
 msgstr "Cobertura de Cochera"
 
-#: core/models/property.py:159
+#: core/models/property.py:281
 msgid "Building Type"
-msgstr "Tipo de Inmueble"
+msgstr "Tipo de Edificio"
 
-#: core/models/property.py:160
+#: core/models/property.py:282
 msgid "Building Status"
 msgstr "Estado del Inmueble"
 
-#: core/models/property.py:161
+#: core/models/property.py:283
 msgid "Building Category"
 msgstr "Categoría del Inmueble"
 
-#: core/models/property.py:162
+#: core/models/property.py:284
 msgid "Apartments per Floor"
 msgstr "Departamentos por piso"
 
-#: core/models/property.py:163
+#: core/models/property.py:285
 msgid "Quantity Building Floors"
 msgstr "Cant. de Pisos en Edificio"
 
-#: core/models/property.py:164
+#: core/models/property.py:286
 msgid "Floor Number"
 msgstr "Piso"
 
-#: core/models/property.py:165
+#: core/models/property.py:287
 msgid "Quantity Elevators"
 msgstr "Cant. de Ascensores"
 
-#: core/models/property.py:166
+#: core/models/property.py:288
 msgid "Expenses"
 msgstr "Expensas"
 
-#: core/models/property.py:167
+#: core/models/property.py:289
 msgid "Roof Type"
 msgstr "Tipo de Techo"
 
-#: core/models/property.py:168
+#: core/models/property.py:290
 msgid "Industrial Roof Type"
 msgstr "Tipo de Techo industrial"
 
-#: core/models/property.py:169
+#: core/models/property.py:291
 msgid "Roof Height"
 msgstr "Altura del techo"
 
-#: core/models/property.py:170
+#: core/models/property.py:292
 msgid "Gate Type"
 msgstr "Tipo de Portón"
 
-#: core/models/property.py:171
+#: core/models/property.py:293
 msgid "Front Ground"
 msgstr "Mt. Frente"
 
-#: core/models/property.py:172
+#: core/models/property.py:294
 msgid "Large Ground"
 msgstr "Mt. Fondo"
 
-#: core/models/property.py:173
+#: core/models/property.py:295
 msgid "Hectares"
 msgstr "Hectáreas"
 
-#: core/models/property.py:174
+#: core/models/property.py:296
 msgid "FOT"
 msgstr "F.O.T"
 
-#: core/models/property.py:175
+#: core/models/property.py:297
 msgid "FOS"
 msgstr "F.O.S"
 
-#: core/models/property.py:176
+#: core/models/property.py:298
 msgid "Stage"
 msgstr "Etapa"
 
-#: core/models/property.py:177
+#: core/models/property.py:299
 msgid "Delivery Year"
 msgstr "Año de Entrega"
 
-#: core/models/property.py:178
+#: core/models/property.py:300
 msgid "Suitable Professional"
 msgstr "Apto Profesional"
 
-#: core/models/property.py:179
+#: core/models/property.py:301
 msgid "Commercial Usage"
 msgstr "Uso comercial"
 
-#: core/models/property.py:180
+#: core/models/property.py:302
 msgid "Suitable Credit"
 msgstr "Apto Crédito"
 
-#: core/models/property.py:181
+#: core/models/property.py:303
 msgid "Provides Funding"
 msgstr "Permite Financiación"
 
-#: core/models/property.py:187
+#: core/models/property.py:309
 msgid "Properties"
 msgstr "Propiedades"
 
@@ -349,11 +349,11 @@ msgstr "Búsqueda Guardada"
 msgid "Saved Querys"
 msgstr "Búsquedas Guardadas"
 
-#: core/models/service.py:15
+#: core/models/service.py:30
 msgid "Service"
 msgstr "Servicio"
 
-#: core/models/subcategory.py:18
+#: core/models/subcategory.py:51
 msgid "Subcategories"
 msgstr "Subcategorias"
 
@@ -361,27 +361,27 @@ msgstr "Subcategorias"
 msgid "Phone"
 msgstr "Teléfono"
 
-#: core/models/user_profile.py:9
+#: core/models/user_profile.py:10
 msgid "Agency Name"
 msgstr "Inmobiliaria"
 
-#: core/models/user_profile.py:10
+#: core/models/user_profile.py:12
 msgid "Activation Key"
 msgstr "Clave de activacion"
 
-#: core/models/user_profile.py:11
+#: core/models/user_profile.py:13
 msgid "Activation Key Expires"
 msgstr "Expiracion de clave"
 
-#: core/models/user_profile.py:16
+#: core/models/user_profile.py:18
 msgid "User Profile"
 msgstr "Perfíl de usuario"
 
-#: core/models/user_profile.py:17
+#: core/models/user_profile.py:19
 msgid "User Profiles"
 msgstr "Perfiles de usuario"
 
-#: propietapi/settings.py:69
+#: settings/base.py:67
 msgid "Spanish"
 msgstr ""
 
