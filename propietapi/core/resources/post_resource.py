@@ -170,7 +170,7 @@ class PostResource(ModelResource):
             try:
                 posts = paginator.page(page)
             except PageNotAnInteger:
-                posts = paginator.page(1)
+                posts = paginator.page(0)
             except EmptyPage:
                 posts = paginator.page(paginator.num_pages)
             if posts:                                      
