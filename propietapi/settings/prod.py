@@ -10,9 +10,9 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'propiet_db',
+        'NAME': 'propiet_test_db',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'pr0p1eT',
         'HOST': '',
         'PORT': '',
     }
