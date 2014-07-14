@@ -71,6 +71,20 @@ exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 
 ## Production / Staging
 
+### Install pyenv
+
+* ``curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash``
+* ``pyenv update``
+* ``pyenv install 2.7.8``
+* ``git clone https://github.com/yyuu/pyenv-virtualenvwrapper.git ~/.pyenv/plugins/pyenv-virtualenvwrapper``
+* ``echo "export WORKON_HOME=~/.env" >> ~/.bashrc``
+* Logout / Login
+* ``cd /path/to/propiet/api/dir``
+* ``pyenv local 2.7.8``
+* ``pyenv virtualenvwrapper``
+* ``mkvirtualenv propiet-api``
+* ``pip install -r requirements/prod.txt``
+
 * Clone this repo inside the /home/sites folder.
 * Add to your hosts file on local machine (/etc/hosts) 192.168.56.101 api.propiet.com
 * Run the file ('''run.sh ''') inside setup folder.
@@ -79,6 +93,16 @@ exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 
 *System dependencies*
 
+* make
+* build-essential
+* zlib1g-dev
+* libbz2-dev
+* libreadline-dev
+* libsqlite3-dev
+* wget
+* curl
+* llvm
+* libssl-dev
 * uwsgi
 * uwsgi-plugin-python
 * nginx
@@ -86,6 +110,7 @@ exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 * erlang
 * erlang-nox
 * libtiff4-dev
+* libmysqlclient-dev
 * libjpeg8-dev
 * zlib1g-dev
 * libfreetype6-dev
@@ -94,6 +119,7 @@ exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 * tcl8.5-dev
 * tk8.5-dev
 * python-tk
+* git
 
 ### Install RabbitMQ
 

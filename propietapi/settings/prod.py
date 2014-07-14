@@ -12,7 +12,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'propiet_db',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'pr0p1eT',
         'HOST': '',
         'PORT': '',
     }
@@ -20,7 +20,7 @@ DATABASES = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-DEFAULT_FROM_EMAIL = 'poli@devartis.com'
+DEFAULT_FROM_EMAIL = 'info@propiet.com'
 EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

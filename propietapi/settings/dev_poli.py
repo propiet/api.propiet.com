@@ -2,7 +2,7 @@
 
 from settings.dev import *
 
-INSTALLED_APPS += ('djcelery', )
+INSTALLED_APPS += ('djcelery', 'django_extensions', )
 
 BROKER_URL = 'amqp://propiet:propiet@localhost:5672//'
 
