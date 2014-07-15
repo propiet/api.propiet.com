@@ -74,7 +74,7 @@ exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 
 ### Get the source code
 
-* Clone this repo inside /path/to/propiet/api/dir: ``mkdir -p /path/to/propiet/api/dir && cd /path/to/propiet/api/dir && git clone git@git.devartis.com .``
+* Clone this repo inside /path/to/propiet/api/dir: ``mkdir -p /path/to/propiet/api/dir && cd /path/to/propiet/api/dir && git clone git@git.devartis.com:propiet-api .``
 
 ### Install pyenv
 
@@ -89,7 +89,7 @@ exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 * ``pyenv virtualenvwrapper``
 * ``mkvirtualenv propiet-api-prod``
 * Config hooks: ``cdvirtualenv && echo "export OLD_DJANGO_SETTINGS_MODULE=\$DJANGO_SETTINGS_MODULE
-export DJANGO_SETTINGS_MODULE=settings.prod" > bin/postactivate && echo "export DJANGO_SETTINGS_MODULE=\$OLD_DJANGO_SETTINGS_MODULE" > bin/postdeactivate && cd -``
+export DJANGO_SETTINGS_MODULE=settings.prod" >> bin/postactivate && echo "export DJANGO_SETTINGS_MODULE=\$OLD_DJANGO_SETTINGS_MODULE" >> bin/postdeactivate && cd - && deactivate && workon propiet-api-prod``
 * ``pip install -r requirements/prod.txt``
 
 ### uwsgi and nginx configuration
