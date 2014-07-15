@@ -477,7 +477,7 @@ class PostResource(ModelResource):
             #form_data = {'post': int(post_id), 'file':pic}            
             #postPhotoForm = PostPhotoForm(form_data)
             try:
-                return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})      
+                return self.create_response(request, {'response': {'data':'SCC_UPDATED', 'photo':post_photo.file, 'id':post_photo.id, 'success': True }})
             #    if(postPhotoForm.is_valid()):
             #        postPhotoForm.save()                        
             #    else:
