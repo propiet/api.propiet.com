@@ -71,6 +71,11 @@ exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 
 ## Production / Staging
 
+
+### Get the source code
+
+* Clone this repo inside /path/to/propiet/api/dir: ``mkdir -p /path/to/propiet/api/dir && cd /path/to/propiet/api/dir && git clone git@git.devartis.com .``
+
 ### Install pyenv
 
 * ``curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash``
@@ -78,17 +83,18 @@ exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 * ``PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs4" pyenv install 2.7.6``
 * ``git clone https://github.com/yyuu/pyenv-virtualenvwrapper.git ~/.pyenv/plugins/pyenv-virtualenvwrapper``
 * ``echo "export WORKON_HOME=~/.env" >> ~/.bashrc``
-* Logout / Login
+* Close SSH session / Login again
 * ``cd /path/to/propiet/api/dir``
 * ``pyenv local 2.7.6``
 * ``pyenv virtualenvwrapper``
 * ``mkvirtualenv propiet-api``
 * ``pip install -r requirements/prod.txt``
 
-* Clone this repo inside the /home/sites folder.
-* Add to your hosts file on local machine (/etc/hosts) 192.168.56.101 api.propiet.com
-* Run the file ('''run.sh ''') inside setup folder.
+### uwsgi and nginx configuration
 
+* Map uwsgi config file: ``sudo ln -s /path/to/propiet/api/dir/propietapi/setup/prod/api.propiet.com.ini /etc/uwsgi/apps-available/ && sudo ln -s /etc/uwsgi/apps-available/api.propiet.com.ini /etc/uwsgi/apps-enabled/``
+* Map nginx config file: ``sudo ln -s /path/to/propiet/api/dir/propietapi/setup/prod/api.propiet.com.conf /etc/nginx/sites-available/ && sudo ln -s /etc/nginx/sites-available/api.propiet.com.conf /etc/nginx/sites-enabled/``
+* Restart both services: ``sudo service uwsgi restart && sudo serice nginx restart``
 * Access to the admin http://api.propiet.com/admin
 
 *System dependencies*
