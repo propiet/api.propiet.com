@@ -75,12 +75,12 @@ exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 
 * ``curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash``
 * ``pyenv update``
-* ``pyenv install 2.7.8``
+* ``PYTHON_CONFIGURE_OPTS="--enable-unicode=ucs4" pyenv install 2.7.6``
 * ``git clone https://github.com/yyuu/pyenv-virtualenvwrapper.git ~/.pyenv/plugins/pyenv-virtualenvwrapper``
 * ``echo "export WORKON_HOME=~/.env" >> ~/.bashrc``
 * Logout / Login
 * ``cd /path/to/propiet/api/dir``
-* ``pyenv local 2.7.8``
+* ``pyenv local 2.7.6``
 * ``pyenv virtualenvwrapper``
 * ``mkvirtualenv propiet-api``
 * ``pip install -r requirements/prod.txt``
