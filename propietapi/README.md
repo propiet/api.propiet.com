@@ -87,7 +87,9 @@ exec $DAEMON" | sudo tee -a /etc/init/nginx_with_headers_more.conf
 * ``cd /path/to/propiet/api/dir``
 * ``pyenv local 2.7.6``
 * ``pyenv virtualenvwrapper``
-* ``mkvirtualenv propiet-api``
+* ``mkvirtualenv propiet-api-prod``
+* Config hooks: ``cdvirtualenv && echo "export OLD_DJANGO_SETTINGS_MODULE=\$DJANGO_SETTINGS_MODULE
+export DJANGO_SETTINGS_MODULE=settings.prod" > bin/postactivate && echo "export DJANGO_SETTINGS_MODULE=\$OLD_DJANGO_SETTINGS_MODULE" > bin/postdeactivate && cd -``
 * ``pip install -r requirements/prod.txt``
 
 ### uwsgi and nginx configuration
