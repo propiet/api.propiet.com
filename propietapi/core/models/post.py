@@ -60,8 +60,8 @@ class Post(models.Model):
         return u'{c}'.format(c=self.title)
 
 
-@receiver(post_save, sender=Post)
-@receiver(post_delete, sender=Post)
+#@receiver(post_save, sender=Post)
+#@receiver(post_delete, sender=Post)
 def post_post_connect(**kwargs):
     instance = kwargs['instance']
     if 'created' not in kwargs or instance.status == 4:

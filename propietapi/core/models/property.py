@@ -431,8 +431,8 @@ class Property(models.Model):
             return self.category.name+'-'+self.location.address
 
 
-@receiver(post_save, sender=Property)
-@receiver(post_delete, sender=Property)
+#@receiver(post_save, sender=Property)
+#@receiver(post_delete, sender=Property)
 def property_post_connect(**kwargs):
     instance = kwargs['instance']
     if 'created' not in kwargs and instance.post_set.exists():
