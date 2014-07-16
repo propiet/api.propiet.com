@@ -326,7 +326,7 @@ class PostResource(ModelResource):
                         postForm.city = location.city.pk
                         if(postForm.is_valid()):
                             post = postForm.save()
-                            return self.create_response(request, {'response': {'data':'SCC_CREATED','id':post.pk,'success': True }},HttpCreated)
+                            return self.create_response(request, {'response': {'data':'SCC_CREATED','id':post.pk,'title':post.title,'success': True }},HttpCreated)
                         else:
                             return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postForm.errors,'success': False }})
                     else:
