@@ -48,6 +48,7 @@ def create_post_on_zona_prop(post):
     specs['cant_pisos_edificio'] = prop.quantityBuildingFloors
     specs['expensas'] = prop.expenses
     specs['altura-techo'] = prop.roofHeight
+    specs['antiguedad'] = prop.antiqueness
 
     #Campos obligatorios para algun tipo de propiedad
     specs['hectareas'] = prop.get_zonaprop_hectares()
