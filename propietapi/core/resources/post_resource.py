@@ -153,12 +153,22 @@ class PostResource(ModelResource):
             status = int(request_data['data']['status'])
             agent = int(request_data['data']['agent'])
 
+            """
+                Cases: Lists of Posts Where
+                1) User and status exists 
+                2) Only Status, not agent
+                3) Posts to the Agent (user = 0)
+                4) All posts(user = -1,all agents), status >= 0
+                5) Serach Post user,status and agent number
+            """
             if(agent == 0 and user > 0 and status >= 0):
                 post_list = Post.objects.filter(user=user,status=status).order_by('-creation_date')
             elif (agent == 0 and user == 0 and status >= 0):
                 post_list = Post.objects.filter(status=status,agent=None).order_by('-creation_date')
             elif (agent > 0 and user == 0 and status < 0):
                 post_list = Post.objects.filter(agent=agent).order_by('-creation_date')
+            elif (agent == 0 and user < 0 and status >= 0):
+                post_list = Post.objects.filter(status=status).order_by('-creation_date')
             else:
                 post_list = Post.objects.filter(user=user,status=status,agent=agent).order_by('-creation_date')
 
