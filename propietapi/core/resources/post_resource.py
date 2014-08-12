@@ -172,7 +172,72 @@ class PostResource(ModelResource):
             else:
                 post_list = Post.objects.filter(user=user,status=status,agent=agent).order_by('-creation_date')
 
-            paginator = Paginator(post_list.values(), 50)
+            if post_list:
+                preposts = []
+                for post in post_list:
+                    property = Property.objects.get(pk=post.property.pk)
+                    location = Location.objects.get(property=post.property.pk)
+                    user = User.objects.get(pk=post.user.pk)
+                    user_profile = UserProfile.objects.get(pk=user.pk)
+                    if(post.agent != None):
+                        agent = User.objects.get(pk=post.agent.pk)
+                        agent_profile = UserProfile.objects.get(pk=post.agent.pk) 
+                        test = { 'data':{
+                                    'post_data': {
+                                            'id': post.pk,
+                                            'category': {'id':post.category.pk, 'name':post.category.name},
+                                            'operation': {'id':post.operation.pk, 'name':post.operation.operation},
+                                            'price': post.price,
+                                            'currency': {'id':post.currency.pk, 'name':post.currency.name},
+                                            'title': post.title,
+                                            'status': post.status,
+                                            'description': post.description,
+                                            'hidden_note': post.hidden_note,
+                                            'region': {'id':post.region.pk, 'name':post.region.name},
+                                            'city':{'id':post.city.pk, 'name':post.city.name},
+                                        },
+                                    'post':self.serializer.encode(post),
+                                    'property':self.serializer.encode(property),
+                                    'services':self.serializer.encode(property.services.all()),
+                                    'features':self.serializer.encode(property.features.all()),
+                                    'ambiences':self.serializer.encode(property.ambiences.all()),
+                                    'location':self.serializer.encode(location),
+                                    'user':self.serializer.encode(user),
+                                    'user_profile':self.serializer.encode(user_profile),
+                                    'agent':self.serializer.encode(agent),
+                                    'agent_profile':self.serializer.encode(agent_profile),
+                                    'images':self.serializer.encode(PostPhoto.objects.filter(post=post.pk)),
+                                        },
+                                    }
+                    else:
+                        test= {'data':{
+                                'post_data': {
+                                    'id': post.pk,
+                                    'category': {'id':post.category.pk, 'name':post.category.name},
+                                    'operation': {'id':post.operation.pk, 'name':post.operation.operation},
+                                    'price': post.price,
+                                    'currency': {'id':post.currency.pk, 'name':post.currency.name},
+                                    'title': post.title,
+                                    'status': post.status,
+                                    'description': post.description,
+                                    'hidden_note': post.hidden_note,
+                                    'region': {'id':post.region.pk, 'name':post.region.name},
+                                    'city':{'id':post.city.pk, 'name':post.city.name},
+                                },
+                                'post':self.serializer.encode(post),
+                                'property':self.serializer.encode(property),
+                                'services':self.serializer.encode(property.services.all()),
+                                'features':self.serializer.encode(property.features.all()),
+                                'ambiences':self.serializer.encode(property.ambiences.all()),                           
+                                'location':self.serializer.encode(location),
+                                'user':self.serializer.encode(user),
+                                'user_profile':self.serializer.encode(user_profile),
+                                'images':self.serializer.encode(PostPhoto.objects.filter(post=post.pk)),              
+                                },
+                            }                      
+                    preposts.append(test) 
+
+            paginator = Paginator(preposts, 50)
             if('page' in request_data['pagination']):
                 page = request_data['pagination']['page']
             else:
@@ -183,7 +248,7 @@ class PostResource(ModelResource):
                 posts = paginator.page(0)
             except EmptyPage:
                 posts = paginator.page(paginator.num_pages)
-            if posts:                                      
+            if posts:                
                 return self.create_response(request, {
                     'response':{
                         'data':{
