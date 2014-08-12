@@ -7,6 +7,7 @@ from django.conf.urls import *
 from django.utils import simplejson
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core import serializers
 # Tastypie imports
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.resources import ModelResource
@@ -224,7 +225,7 @@ class PostResource(ModelResource):
                                     'region': {'id':post.region.pk, 'name':post.region.name},
                                     'city':{'id':post.city.pk, 'name':post.city.name},
                                 },
-                                'post':self.serializer.encode(post),
+                                'post': self.serializer.encode(post),
                                 'property':self.serializer.encode(property),
                                 'services':self.serializer.encode(property.services.all()),
                                 'features':self.serializer.encode(property.features.all()),
@@ -300,7 +301,7 @@ class PostResource(ModelResource):
                                     'region': {'id':post.region.pk, 'name':post.region.name},
                                     'city':{'id':post.city.pk, 'name':post.city.name},
                                 },
-                                'post':self.serializer.encode(post),
+                                'post': self.serializer.encode(post),
                                 'property':self.serializer.encode(property),
                                 'services':self.serializer.encode(property.services.all()),
                                 'features':self.serializer.encode(property.features.all()),
