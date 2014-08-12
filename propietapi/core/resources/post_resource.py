@@ -168,7 +168,7 @@ class PostResource(ModelResource):
                 post_list = Post.objects.filter(status=status,agent=None).order_by('-creation_date')
             elif (agent > 0 and user == 0 and status < 0):
                 post_list = Post.objects.filter(agent=agent).order_by('-creation_date')
-            elif (agent == 0 and user < 0 and status >= 0):
+            elif (agent == 0 and user == (-1) and status >= 0):
                 post_list = Post.objects.filter(status=status).order_by('-creation_date')
             else:
                 post_list = Post.objects.filter(user=user,status=status,agent=agent).order_by('-creation_date')
@@ -179,6 +179,8 @@ class PostResource(ModelResource):
                     property = Property.objects.get(pk=post.property.pk)
                     location = Location.objects.get(property=post.property.pk)
                     user = User.objects.get(pk=post.user.pk)
+                    api_key = ApiKey.objects.get(user=user)
+                    user_group = user.groups.all()[0]
                     user_profile = UserProfile.objects.get(pk=user.pk)
                     if(post.agent != None):
                         agent = User.objects.get(pk=post.agent.pk)
@@ -196,18 +198,19 @@ class PostResource(ModelResource):
                                             'hidden_note': post.hidden_note,
                                             'region': {'id':post.region.pk, 'name':post.region.name},
                                             'city':{'id':post.city.pk, 'name':post.city.name},
+                                            'role': user_group,
                                         },
-                                    'post':self.serializer.encode(post),
-                                    'property':self.serializer.encode(property),
-                                    'services':self.serializer.encode(property.services.all()),
-                                    'features':self.serializer.encode(property.features.all()),
-                                    'ambiences':self.serializer.encode(property.ambiences.all()),
-                                    'location':self.serializer.encode(location),
-                                    'user':self.serializer.encode(user),
-                                    'user_profile':self.serializer.encode(user_profile),
-                                    'agent':self.serializer.encode(agent),
-                                    'agent_profile':self.serializer.encode(agent_profile),
-                                    'images':self.serializer.encode(PostPhoto.objects.filter(post=post.pk)),
+                                    'post':simplejson.loads(self.serializer.encode(post)),
+                                    'property':simplejson.loads(self.serializer.encode(property)),
+                                    'services':simplejson.loads(self.serializer.encode(property.services.all())),
+                                    'features':simplejson.loads(self.serializer.encode(property.features.all())),
+                                    'ambiences':simplejson.loads(self.serializer.encode(property.ambiences.all())),
+                                    'location': simplejson.loads(self.serializer.encode(location)),
+                                    'user':simplejson.loads(self.serializer.encode(user)),
+                                    'user_profile':simplejson.loads(self.serializer.encode(user_profile)),
+                                    'agent':simplejson.loads(self.serializer.encode(agent)),
+                                    'agent_profile':simplejson.loads(self.serializer.encode(agent_profile)),
+                                    'images':simplejson.loads(self.serializer.encode(PostPhoto.objects.filter(post=post.pk))),
                                         },
                                     }
                     else:
@@ -224,46 +227,47 @@ class PostResource(ModelResource):
                                     'hidden_note': post.hidden_note,
                                     'region': {'id':post.region.pk, 'name':post.region.name},
                                     'city':{'id':post.city.pk, 'name':post.city.name},
+                                    'role': user_group,
                                 },
-                                'post': self.serializer.encode(post),
-                                'property':self.serializer.encode(property),
-                                'services':self.serializer.encode(property.services.all()),
-                                'features':self.serializer.encode(property.features.all()),
-                                'ambiences':self.serializer.encode(property.ambiences.all()),                           
-                                'location':self.serializer.encode(location),
-                                'user':self.serializer.encode(user),
-                                'user_profile':self.serializer.encode(user_profile),
-                                'images':self.serializer.encode(PostPhoto.objects.filter(post=post.pk)),              
-                                },
+                                'post':simplejson.loads(self.serializer.encode(post)),
+                                'property':simplejson.loads(self.serializer.encode(property)),
+                                'services':simplejson.loads(self.serializer.encode(property.services.all())),
+                                'features':simplejson.loads(self.serializer.encode(property.features.all())),
+                                'ambiences':simplejson.loads(self.serializer.encode(property.ambiences.all())),
+                                'location': simplejson.loads(self.serializer.encode(location)),
+                                'user':simplejson.loads(self.serializer.encode(user)),
+                                'user_profile':simplejson.loads(self.serializer.encode(user_profile)),
+                                'images':simplejson.loads(self.serializer.encode(PostPhoto.objects.filter(post=post.pk))),             
+                                },                  
                             }                      
                     preposts.append(test) 
 
-            paginator = Paginator(preposts, 50)
-            if('page' in request_data['pagination']):
-                page = request_data['pagination']['page']
-            else:
-                page = 1
-            try:
-                posts = paginator.page(page)
-            except PageNotAnInteger:
-                posts = paginator.page(0)
-            except EmptyPage:
-                posts = paginator.page(paginator.num_pages)
-            if posts:                
-                return self.create_response(request, {
-                    'response':{
-                        'data':{
-                            'list':list(posts)
-                            },
-                        'pagination': {
-                            'page': page,
-                            'count': paginator.count,
-                            'num_pages': paginator.num_pages,
-                            'page_range': paginator.page_range,
-                            },
-                        'success': True
-                        },                    
-                })
+                paginator = Paginator(preposts, 50)
+                if('page' in request_data['pagination']):
+                    page = request_data['pagination']['page']
+                else:
+                    page = 1
+                try:
+                    posts = paginator.page(page)
+                except PageNotAnInteger:
+                    posts = paginator.page(0)
+                except EmptyPage:
+                    posts = paginator.page(paginator.num_pages)
+                if posts:                
+                    return self.create_response(request, {
+                        'response':{
+                            'data':{
+                                'list':list(posts)
+                                },
+                            'pagination': {
+                                'page': page,
+                                'count': paginator.count,
+                                'num_pages': paginator.num_pages,
+                                'page_range': paginator.page_range,
+                                },
+                            'success': True
+                            },                    
+                    })
             else:
                 return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})            
         else:
@@ -284,7 +288,7 @@ class PostResource(ModelResource):
                     agent = User.objects.get(pk=post.agent.pk)
                     agent_profile = UserProfile.objects.get(pk=post.agent.pk)                
                     
-
+                    
                     return self.create_response(request, {
                         'response':{
                             'data':{
@@ -306,7 +310,7 @@ class PostResource(ModelResource):
                                 'services':self.serializer.encode(property.services.all()),
                                 'features':self.serializer.encode(property.features.all()),
                                 'ambiences':self.serializer.encode(property.ambiences.all()),
-                                'location':self.serializer.encode(location),
+                                'location': self.serializer.encode(location),
                                 'user':self.serializer.encode(user),
                                 'user_profile':self.serializer.encode(user_profile),
                                 'agent':self.serializer.encode(agent),
