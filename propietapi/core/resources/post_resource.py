@@ -34,6 +34,10 @@ class PostResource(ModelResource):
      """ Class PostResource post endpoint.
         @author: Lionel Cuevas <lionel@hoopemedia.com>"""
 
+     RED_INTERNA = "Red Interna"
+     ASIGNADAS = "Asignadas"
+     PUBLICADAS = "Publicadas"
+
      requestHandler = RequestHandler()
      serializer = SerializationHandler()
 
@@ -85,62 +89,139 @@ class PostResource(ModelResource):
                 self.wrap_view('removePhoto'), name="api_post_photo_remove"),
         ]
 
-     def search(self, request, **kwargs):        
+     def search(self, request, **kwargs):
+        self.is_secure(request)        
         request_data = self.requestHandler.getDataAuth(request)
         kwargs = {}
-        if request_data:
-            if('operation' in request_data):
-                kwargs['operation'] = request_data['operation']
+        if request_data: 
+            if(request_data['data']['page'] == "Publicadas"):
+                kwargs['user'] = request_data['data']['user']
+            if(request_data['data']['page'] == "Asignadas"):
+                kwargs['agent'] = request_data['data']['user']
+                
+            # if('operation' in request_data):
+            #     kwargs['operation'] = request_data['operation']
 
-            if('category' in request_data):
-                kwargs['category'] = request_data['category']
+            # if('category' in request_data):
+            #     kwargs['category'] = request_data['category']
 
-            if('region' in request_data):
-                kwargs['region'] = request_data['region']
+            # if('region' in request_data):
+            #     kwargs['region'] = request_data['region']
 
-            if('city' in request_data):
-                cities = []                
-                for i in request_data['city']:                                        
-                    cities.append(i['id'])
-                kwargs['city__in'] = cities
+            # if('city' in request_data):
+            #     cities = []                
+            #     for i in request_data['city']:                                        
+            #         cities.append(i['id'])
+            #     kwargs['city__in'] = cities
 
-            if('price_min' in request_data):
-                kwargs['price__gte'] = request_data['price_min']
+            # if('price_min' in request_data):
+            #     kwargs['price__gte'] = request_data['price_min']
 
-            if('price_max' in request_data):
-                kwargs['price__lte'] = request_data['price_max']
+            # if('price_max' in request_data):
+            #     kwargs['price__lte'] = request_data['price_max']
 
-            if('currency' in request_data):
-                kwargs['currency'] = request_data['currency']
-
+            # if('currency' in request_data):
+            #     kwargs['currency'] = request_data['currency']
             kwargs['status'] = 3 #Retrieve only Published posts
+            location = Location.objects.filter(address__icontains=request_data['data']['address'])
+            property = Property.objects.filter(location=location)
+            kwargs['property'] = property
             post_list = Post.objects.filter(**kwargs).order_by('-creation_date')
-            paginator = Paginator(post_list.values(), 50)
-            if('page' in request_data['pagination']):                
-                page = request_data['pagination']['page']
-            else:
-                page = 1
-            try:
-                posts = paginator.page(page)
-            except PageNotAnInteger:
-                posts = paginator.page(1)
-            except EmptyPage:
-                posts = paginator.page(paginator.num_pages)            
-            if posts:                                      
-                return self.create_response(request, {
-                    'response':{
-                        'data':{
-                            'list':list(posts)
-                            },
-                        'pagination': {
-                            'page': page,
-                            'count': paginator.count,
-                            'num_pages': paginator.num_pages,
-                            'page_range': paginator.page_range,
-                            },
-                        'success': True
-                        },                    
-                })
+            if post_list:
+                preposts = []
+                for post in post_list:
+                    property = Property.objects.get(pk=post.property.pk)
+                    location = Location.objects.get(property=post.property.pk)
+                    user = User.objects.get(pk=post.user.pk)
+                    api_key = ApiKey.objects.get(user=user)
+                    user_group = user.groups.all()[0]
+                    user_profile = UserProfile.objects.get(pk=user.pk)
+                    if(post.agent != None):
+                        agent = User.objects.get(pk=post.agent.pk)
+                        agent_profile = UserProfile.objects.get(pk=post.agent.pk) 
+                        test = { 'data':{
+                                    'post_data': {
+                                            'id': post.pk,
+                                            'category': {'id':post.category.pk, 'name':post.category.name},
+                                            'operation': {'id':post.operation.pk, 'name':post.operation.operation},
+                                            'price': post.price,
+                                            'currency': {'id':post.currency.pk, 'name':post.currency.name},
+                                            'title': post.title,
+                                            'status': post.status,
+                                            'description': post.description,
+                                            'hidden_note': post.hidden_note,
+                                            'region': {'id':post.region.pk, 'name':post.region.name},
+                                            'city':{'id':post.city.pk, 'name':post.city.name},
+                                            'role': user_group,
+                                        },
+                                    'post':simplejson.loads(self.serializer.encode(post)),
+                                    'property':simplejson.loads(self.serializer.encode(property)),
+                                    'services':simplejson.loads(self.serializer.encode(property.services.all())),
+                                    'features':simplejson.loads(self.serializer.encode(property.features.all())),
+                                    'ambiences':simplejson.loads(self.serializer.encode(property.ambiences.all())),
+                                    'location': simplejson.loads(self.serializer.encode(location)),
+                                    'user':simplejson.loads(self.serializer.encode(user)),
+                                    'user_profile':simplejson.loads(self.serializer.encode(user_profile)),
+                                    'agent':simplejson.loads(self.serializer.encode(agent)),
+                                    'agent_profile':simplejson.loads(self.serializer.encode(agent_profile)),
+                                    'images':simplejson.loads(self.serializer.encode(PostPhoto.objects.filter(post=post.pk))),
+                                        },
+                                    }
+                    else:
+                        test= {'data':{
+                                'post_data': {
+                                    'id': post.pk,
+                                    'category': {'id':post.category.pk, 'name':post.category.name},
+                                    'operation': {'id':post.operation.pk, 'name':post.operation.operation},
+                                    'price': post.price,
+                                    'currency': {'id':post.currency.pk, 'name':post.currency.name},
+                                    'title': post.title,
+                                    'status': post.status,
+                                    'description': post.description,
+                                    'hidden_note': post.hidden_note,
+                                    'region': {'id':post.region.pk, 'name':post.region.name},
+                                    'city':{'id':post.city.pk, 'name':post.city.name},
+                                    'role': user_group,
+                                },
+                                'post':simplejson.loads(self.serializer.encode(post)),
+                                'property':simplejson.loads(self.serializer.encode(property)),
+                                'services':simplejson.loads(self.serializer.encode(property.services.all())),
+                                'features':simplejson.loads(self.serializer.encode(property.features.all())),
+                                'ambiences':simplejson.loads(self.serializer.encode(property.ambiences.all())),
+                                'location': simplejson.loads(self.serializer.encode(location)),
+                                'user':simplejson.loads(self.serializer.encode(user)),
+                                'user_profile':simplejson.loads(self.serializer.encode(user_profile)),
+                                'images':simplejson.loads(self.serializer.encode(PostPhoto.objects.filter(post=post.pk))),             
+                                },                  
+                            }                      
+                    preposts.append(test) 
+
+                paginator = Paginator(preposts, 50)
+                if('page' in request_data['pagination']):
+                    page = request_data['pagination']['page']
+                else:
+                    page = 1
+                try:
+                    posts = paginator.page(page)
+                except PageNotAnInteger:
+                    posts = paginator.page(0)
+                except EmptyPage:
+                    posts = paginator.page(paginator.num_pages)
+                if posts:                
+                    return self.create_response(request, {
+                        'response':{
+                            'data':{
+                                'list':list(posts)
+                                },
+                            'pagination': {
+                                'page': page,
+                                'count': paginator.count,
+                                'num_pages': paginator.num_pages,
+                                'page_range': paginator.page_range,
+                                },
+                            'success': True
+                            },                    
+                    })
             else:
                 return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
         else:
@@ -153,6 +234,7 @@ class PostResource(ModelResource):
             user = int(request_data['data']['user'])
             status = int(request_data['data']['status'])
             agent = int(request_data['data']['agent'])
+            
 
             """
                 Cases: Lists of Posts Where
