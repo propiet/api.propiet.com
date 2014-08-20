@@ -93,11 +93,15 @@ class PostResource(ModelResource):
         self.is_secure(request)        
         request_data = self.requestHandler.getDataAuth(request)
         kwargs = {}
-        if request_data: 
+        if request_data:
+            kwargs['status'] = 3 #Retrieve only Published posts 
             if(request_data['data']['page'] == "Publicadas"):
                 kwargs['user'] = request_data['data']['user']
             if(request_data['data']['page'] == "Asignadas"):
                 kwargs['agent'] = request_data['data']['user']
+            if(request_data['data']['page'] == "Nuevas"):
+                kwargs['user'] = request_data['data']['user']
+                kwargs['status'] = 1 #Retrieve only New posts    
                 
             # if('operation' in request_data):
             #     kwargs['operation'] = request_data['operation']
@@ -122,7 +126,7 @@ class PostResource(ModelResource):
 
             # if('currency' in request_data):
             #     kwargs['currency'] = request_data['currency']
-            kwargs['status'] = 3 #Retrieve only Published posts
+            
             location = Location.objects.filter(address__icontains=request_data['data']['address'])
             property = Property.objects.filter(location=location)
             kwargs['property'] = property
