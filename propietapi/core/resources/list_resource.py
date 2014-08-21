@@ -18,10 +18,12 @@ from tastypie.serializers import Serializer
 # core
 from core.handlers  import *
 from core.constants import *
-from core.models import Service, Ambience, Feature, Property, Category, SubCategory, Operation
+from core.models import Post,Service, Ambience, Feature, Property, Category, SubCategory, Operation, Location
 from core.forms import GetObjectForm, PropertyForm
 from cities_light.models import Country, Region, City
 from django.utils.translation import ugettext_lazy as _
+
+from lxml import etree
 
 class ListResource(ModelResource):
      """ Class ListResource lists endpoint.
@@ -68,7 +70,99 @@ class ListResource(ModelResource):
             url(r"^(?P<resource_name>%s)/search%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('search'), name="api_list_search"),
+            url(r"^(?P<resource_name>%s)/xml%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('xml'), name="api_list_xml"),
         ]
+
+     def xml(self,request,**kwargs):
+
+        URL = "http://propiet.com/publicacion/"
+        post = Post.objects.get(pk=223)
+        
+        if post:
+            
+            property = Property.objects.get(pk=post.property.pk)
+            category =  Category.objects.get(pk=post.category_id)
+            sub_category = SubCategory.objects.get(pk=property.subcategory_id)
+            location = Location.objects.get(property=post.property.pk)
+
+            body = etree.Element("ads")
+            ad = etree.SubElement(body,"ad")
+            post_id = etree.SubElement(ad,"id")
+            post_id.text = etree.CDATA(str(post.id))
+            post_url = etree.SubElement(ad,"url")
+            post_url.text = etree.CDATA(URL+str(post.id)+"-"+post.title)
+            post_title = etree.SubElement(ad,"title")
+            post_title.text = etree.CDATA(post.title)
+            post_content = etree.SubElement(ad,"content")
+            post_content.text = etree.CDATA(post.description)
+
+            #TYPE CONVERTION
+            if (post.operation.operation == "Alquiler"):
+                oper_text = "for rent"
+            elif(post.operation.operation == "Venta"):
+                oper_text = "for sale"
+            else:
+                oper_text = " "
+
+            post_type = etree.SubElement(ad,"type")
+            post_type.text = etree.CDATA(oper_text)
+
+            #PROPERTY TYPE 
+
+            
+            if category:
+                pr_type = category.name
+                spr_type = sub_category.name
+                if(pr_type == "Departamentos"):
+                    cate_text = "apartament"
+                elif(pr_type == "Casas"):
+                    cate_text = "house"
+                elif(pr_type == "PH"):
+                    cate_text = "ph"
+                elif(pr_type == "Countries y Barrios cerrados"):
+                    if(spr_type == "Terreno"):
+                        cate_text = "country"
+                    elif(spr_type == "Casa"):
+                        cate_text = "country house"
+                elif(pr_type == "Quintas"):
+                    cate_text = "farm"
+                elif(pr_type == "Terrenos y Lotes"):
+                    cate_text = "lot"
+                elif(pr_type == "Campos y Chacras"):
+                    cate_text = "farm"
+                elif(pr_type == "Galpones depositos y edificios industriales"):
+                    cate_text  = "store"
+                elif(pr_type == "Locales comerciales"):
+                    cate_text = ""
+                elif(pr_type == "Oficinas"):
+                    cate_text = "office"
+                elif(pr_type == "Consultorios"):
+                    cate_text == ""
+                elif(pr_type == "Cocheras"):
+                    cate_text = "garage"
+            else:
+                cate_text = " "
+
+            post_category = etree.SubElement(ad,"property_type")
+            post_category.text = etree.CDATA(cate_text)
+
+            #ADDRESS
+            
+            post_address = etree.SubElement(ad,"address")
+            post_address.text = etree.CDATA(location.address)
+
+            #REGION
+
+            post_region = etree.SubElement(ad,"region")
+            post_region.text = etree.CDATA(post.region.name)
+
+
+            filename='/home/sites/api.propiet.com/propietapi/media/test.xml'
+            with open(filename,'w') as f:
+                test = f.write(etree.tostring(body,encoding='utf-8'))
+            return self.create_response(request,{'test': test})
 
      def categories(self, request, **kwargs):
         request_data = self.requestHandler.getDataAuth(request)
