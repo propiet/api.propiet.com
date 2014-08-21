@@ -582,21 +582,20 @@ class PostResource(ModelResource):
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)        
         if request_data:
-            posts = request_data['data']['posts']
+            post_id = request_data['data']['post']
             agent_id = request_data['data']['agent']
             form_data = {'agent': int(agent_id), 'status':3}
 
-            for post_id in posts:
-                post = Post.objects.get(pk=int(post_id))                
-                postAgentForm = PostAgentForm(form_data, instance=post)
-                try:
-                    if(postAgentForm.is_valid()):
-                        postAgentForm.save()                        
-                    else:
-                        return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postAgentForm.errors,'success': False }}) 
-                except ValidationError as e:
-                    pass
-                    return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postAgentForm.errors,'success': False }})
+            post = Post.objects.get(pk=int(post_id))                
+            postAgentForm = PostAgentForm(form_data, instance=post)
+            try:
+                if(postAgentForm.is_valid()):
+                    postAgentForm.save()                        
+                else:
+                    return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postAgentForm.errors,'success': False }}) 
+            except ValidationError as e:
+                pass
+                return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postAgentForm.errors,'success': False }})
             return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})      
         else:
             return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
