@@ -110,7 +110,6 @@ class ListResource(ModelResource):
             post_type.text = etree.CDATA(oper_text)
 
             #PROPERTY TYPE 
-
             
             if category:
                 pr_type = category.name
@@ -158,7 +157,59 @@ class ListResource(ModelResource):
             post_region = etree.SubElement(ad,"region")
             post_region.text = etree.CDATA(post.region.name)
 
+            #AGENCY INFORMATION
+            agency = etree.SubElement(ad,"agency")
 
+            #id
+            agency_id = etree.SubElement(agency,"id")
+            agency_id.text = etree.CDATA(str(5851))
+            #name
+            agency_name = etree.SubElement(agency,"name")
+            agency_name.text = etree.CDATA("Propiet")
+            #phone
+            agency_phone = etree.SubElement(agency,"phone")
+            agency_phone.text = etree.CDATA("011-4706-3466")
+            #email
+            agency_email = etree.SubElement(agency,"email")
+            agency_email.text = etree.CDATA("contacto@propiet.com")
+            #address
+            agency_address = etree.SubElement(agency,"address")
+            agency_address.text = etree.CDATA("Av. Libertador 5851")
+            #city_area
+            city_area = etree.SubElement(agency,"city_area")
+            city_area.text = etree.CDATA("Belgrano")
+            #city
+            city = etree.SubElement(agency,"city")
+            city.text = etree.CDATA("Ciudad de Buenos Aires")
+            #region
+            region = etree.SubElement(agency,"region")
+            region.text = etree.CDATA("Ciudad de Buenos Aires")
+            #country
+            country = etree.SubElement(agency,"country")
+            country.text = etree.CDATA("Argentina")
+            #logo_url
+            logo = etree.SubElement(agency,"logo_url")
+            logo.text = etree.CDATA("http://www.propiet.com/bundles/nucleushubcms/images/whiteLogo.png")
+
+            #PRICE
+            if (post.currency.name == "Dólares"):
+                curr = "USD"
+            elif(post.currency.name == "Pesos"):
+                curr = "ARS"
+
+            post_price = etree.SubElement(ad,"price", currency = curr)
+            post_price = etree.CDATA(str(post.price))
+
+            #AGENT
+            agent = etree.SubElement(ad,"agent")
+
+            agent = User.objects.get(pk=post.agent.pk)
+            agent_profile = UserProfile.objects.get(pk=post.agent.pk)
+
+            #email
+            agent_
+            #name
+            #phone
             filename='/home/sites/api.propiet.com/propietapi/media/test.xml'
             with open(filename,'w') as f:
                 test = f.write(etree.tostring(body,encoding='utf-8'))
