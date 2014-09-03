@@ -328,7 +328,7 @@ class PostResource(ModelResource):
                             }                      
                     preposts.append(test) 
 
-                paginator = Paginator(preposts, 25)
+                paginator = Paginator(preposts, 20)
                 if('page' in request_data['pagination']):
                     page = request_data['pagination']['page']
                 else:

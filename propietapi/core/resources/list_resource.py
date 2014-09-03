@@ -18,7 +18,7 @@ from tastypie.serializers import Serializer
 # core
 from core.handlers  import *
 from core.constants import *
-from core.models import Post,Service, Ambience, Feature, Property, Category, SubCategory, Operation, Location
+from core.models import Post,Service, Ambience, Feature, Property, Category, SubCategory, Operation, Location, UserProfile, PostPhoto
 from core.forms import GetObjectForm, PropertyForm
 from cities_light.models import Country, Region, City
 from django.utils.translation import ugettext_lazy as _
@@ -76,10 +76,11 @@ class ListResource(ModelResource):
         ]
 
      def xml(self,request,**kwargs):
-
-        URL = "http://propiet.com/publicacion/"
-        post = Post.objects.get(pk=223)
         
+        URL = "http://propiet.com/publicacion/"
+        URL_IMAGE = "http://api.propiet.com/media/"
+        post = Post.objects.get(pk=215)
+                             
         if post:
             
             property = Property.objects.get(pk=post.property.pk)
@@ -87,8 +88,11 @@ class ListResource(ModelResource):
             sub_category = SubCategory.objects.get(pk=property.subcategory_id)
             location = Location.objects.get(property=post.property.pk)
 
-            body = etree.Element("ads")
-            ad = etree.SubElement(body,"ad")
+            parser = etree.XMLParser(strip_cdata=False)
+            xml = etree.parse('/home/sites/api.propiet.com/propietapi/media/test.xml', parser)
+            #xml = etree.parse()
+            ads = xml.getroot()
+            ad = etree.Element("ad")
             post_id = etree.SubElement(ad,"id")
             post_id.text = etree.CDATA(str(post.id))
             post_url = etree.SubElement(ad,"url")
@@ -176,44 +180,126 @@ class ListResource(ModelResource):
             agency_address = etree.SubElement(agency,"address")
             agency_address.text = etree.CDATA("Av. Libertador 5851")
             #city_area
-            city_area = etree.SubElement(agency,"city_area")
-            city_area.text = etree.CDATA("Belgrano")
+            agency_city_area = etree.SubElement(agency,"city_area")
+            agency_city_area.text = etree.CDATA("Belgrano")
             #city
-            city = etree.SubElement(agency,"city")
-            city.text = etree.CDATA("Ciudad de Buenos Aires")
+            agency_city = etree.SubElement(agency,"city")
+            agency_city.text = etree.CDATA("Ciudad de Buenos Aires")
             #region
-            region = etree.SubElement(agency,"region")
-            region.text = etree.CDATA("Ciudad de Buenos Aires")
+            agency_region = etree.SubElement(agency,"region")
+            agency_region.text = etree.CDATA("Ciudad de Buenos Aires")
             #country
-            country = etree.SubElement(agency,"country")
-            country.text = etree.CDATA("Argentina")
+            agency_country = etree.SubElement(agency,"country")
+            agency_country.text = etree.CDATA("Argentina")
             #logo_url
-            logo = etree.SubElement(agency,"logo_url")
-            logo.text = etree.CDATA("http://www.propiet.com/bundles/nucleushubcms/images/whiteLogo.png")
+            agency_logo = etree.SubElement(agency,"logo_url")
+            agency_logo.text = etree.CDATA("http://www.propiet.com/bundles/nucleushubcms/images/whiteLogo.png")
 
             #PRICE
             if (post.currency.name == "Dólares"):
                 curr = "USD"
             elif(post.currency.name == "Pesos"):
                 curr = "ARS"
-
+            else:
+                curr = ""
             post_price = etree.SubElement(ad,"price", currency = curr)
             post_price = etree.CDATA(str(post.price))
 
             #AGENT
             agent = etree.SubElement(ad,"agent")
 
-            agent = User.objects.get(pk=post.agent.pk)
-            agent_profile = UserProfile.objects.get(pk=post.agent.pk)
+            user = User.objects.get(pk=post.agent.pk)
+            user_profile = UserProfile.objects.get(pk=post.agent.pk)
 
             #email
-            agent_
+            agent_mail = etree.SubElement(agent,"email")
+            agent_mail.text = etree.CDATA(user.email)
             #name
+            agent_name = etree.SubElement(agent,"name")
+            agent_name = etree.CDATA(user_profile.agency_name)
             #phone
+            agent_phone = etree.SubElement(agent,"phone")
+            agent_phone.text = etree.CDATA(user_profile.phone)
+
+            #PICTURES
+            pictures = etree.SubElement(ad,"pictures")
+
+            photos = PostPhoto.objects.filter(post=post.pk)
+            photo_first = True;
+            if photos:
+                for photo in photos:
+                    if photo_first:
+                        photo_file = etree.SubElement(pictures,"picture", featured = "true")
+                        photo_first = False
+                    else:
+                        photo_file = etree.SubElement(pictures,"picture")
+                    photo_file.text = etree.CDATA(URL_IMAGE+str(photo.file))
+
+            #date
+            post_date = etree.SubElement(ad,"date")
+            post_date.text = etree.CDATA(str(post.creation_date.date()))
+            
+            #city_area
+            post_city_area = etree.SubElement(ad,"city_area")
+            post_city_area.text = etree.CDATA(location.region.name)
+
+            #city
+            post_city = etree.SubElement(ad,"city")
+            post_city.text = etree.CDATA(location.city.name)
+
+            #floor_number
+            if post.property.floorNumber:
+                post_floor_number = etree.SubElement(ad,"floor_number")
+                post_floor_number.text = etree.CDATA(post.property.floorNumber)
+            #floor_area
+            if post.property.total_covered_meters:
+                post_floor_area = etree.SubElement(ad,"floor_area")
+                post_floor_area.text = etree.CDATA(post.property.total_covered_meters) 
+            #floor_area_open
+            if post.property.total_uncovered_meters:
+                post_floor_area_open = etree.SubElement(ad, "floor_area_open")
+                post_floor_area_open.text = etree.CDATA(post.property.total_uncovered_meters)
+            #rooms
+            if post.property.quantityAmbiences:
+                post_rooms = etree.SubElement(ad,"rooms")
+                post_rooms.text = etree.CDATA(str(post.property.quantityAmbiences))
+            #bedrooms
+            if post.property.quantityBedrooms:
+                post_bedrooms = etree.SubElement(ad,"bedrooms")
+                post_bedrooms.text = etree.CDATA(str(post.property.quantityBedrooms))            
+            #bathrooms
+            if post.property.quantityBathrooms:
+                post_bathrooms = etree.SubElement(ad,"bathrooms")
+                post_bathrooms.text = etree.CDATA(str(post.property.quantityBathrooms))
+            #condition
+            
+
+            #is_furnished
+            
+            #parking
+            if post.propery.quantityGarages:
+                post_parking = etree.SubElement(ad,"parking")
+                post_parking.text = etree.CDATA(str(1))
+
+            ambientes = property.ambiences.all()
+            for ambiente in ambientes:
+                if ambiente == "Patio":
+                    #patio
+                    post_patio = etree.SubElement(ad,"patio")
+                    post_patio.text = etree.CDATA("1")
+                if ambiente == "Terraza":
+                    #terrace
+                    
+            #balcony
+            #feauters
+                #feauter
+
+            
+            ads.append(ad)
             filename='/home/sites/api.propiet.com/propietapi/media/test.xml'
             with open(filename,'w') as f:
-                test = f.write(etree.tostring(body,encoding='utf-8'))
-            return self.create_response(request,{'test': test})
+                test = f.write(etree.tostring(ads,encoding='utf-8'))
+            return self.create_response(request, {'test': test}) 
 
      def categories(self, request, **kwargs):
         request_data = self.requestHandler.getDataAuth(request)
