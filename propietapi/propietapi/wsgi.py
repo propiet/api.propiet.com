@@ -13,9 +13,8 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-import os
+import os,sys
 from os import environ
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "propietapi.settings")
 
 # This application object is used by any WSGI server configured to use this
@@ -27,13 +26,13 @@ application = get_wsgi_application()
 # from helloworld.wsgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
 
-DJANGO_DEV = environ.get('DJANGO_DEV', False)
-if not DJANGO_DEV:
-    import uwsgi
-    from uwsgidecorators import timer
-    from django.utils import autoreload
+#DJANGO_DEV = environ.get('DJANGO_DEV', False)
+#if not DJANGO_DEV:
+#    import uwsgi
+#    from uwsgidecorators import timer
+#    from django.utils import autoreload
 
-    @timer(3)
-    def change_code_gracefull_reload(sig):
-        if autoreload.code_changed():
-            uwsgi.reload()
+#    @timer(3)
+#    def change_code_gracefull_reload(sig):
+#        if autoreload.code_changed():
+#            uwsgi.reload()
