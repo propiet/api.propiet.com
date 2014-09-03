@@ -1,6 +1,6 @@
 #! coding: utf-8
 
-from settings.base import *
+from base import *
 
 BROKER_URL = 'amqp://propiet:propiet@localhost:5672//'
 

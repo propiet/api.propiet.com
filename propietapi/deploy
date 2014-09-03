@@ -1,0 +1,51 @@
+
+sudo apt-get --yes install supervisor python-lxml libxslt1-dev libxslt1.1 libxml2-dev libxml2 libssl-dev
+
+sudo /etc/init.d/supervisor restart
+
+# instala la app
+
+cd
+virtualenv env-propiet-api
+source env-propiet-api/bin/activate
+cd env-propiet-api/
+git clone https://github.com/propiet/api.propiet.com.git
+cd api.propiet.com/propietapi
+pip install -r requirements/prod.txt 
+pip install uwsgi lxml
+
+# link externo a lxml
+
+cd /home/ubuntu/env-propiet-api/lib/python2.7/site-packages$ ln -s /usr/lib/python2.7/dist-packages/lxml
+
+# configuracion
+
+cd /home/ubuntu/env-propiet-api/api.propiet.com/propietapi/propietapi
+ln -s ../settings/base.py 
+ln -s ../settings/prod.py settings.py 
+
+# configura supervisor con uwsgi
+
+echo '[program:api.propiet.com]
+command=/home/ubuntu/env-propiet-api/bin/uwsgi --ini /home/ubuntu/env-propiet-api/api.propiet.com/propietapi/setup/prod/api.propiet.com.ini
+autostart=true
+autorestart=true
+redirect_stderr=true
+user=ubuntu
+numprocs=1
+stdout_logfile=/var/log/api.propiet.com.log
+stderr_logfile=/var/log/api.propiet.com.log
+startsecs=10
+stopwaitsecs=30 > /etc/supervisor/conf.d/api.propiet.com.conf
+
+# actualiza supervisor con la nueva configuracion
+
+supervisorctl reread
+supervisorctl update
+
+# configura nginx
+
+cd /etc/nginx/sites-enabled
+ls -s /home/ubuntu/env-propiet-api/api.propiet.com/propietapi/setup/prod/api.propiet.com.conf
+
+/etc/init.d/nginx reload
