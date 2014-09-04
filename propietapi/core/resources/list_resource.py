@@ -288,6 +288,7 @@ class ListResource(ModelResource):
                     post_patio = etree.SubElement(ad,"patio")
                     post_patio.text = etree.CDATA("1")
                 if ambiente == "Terraza":
+		    pass
                     #terrace
                     
             #balcony
