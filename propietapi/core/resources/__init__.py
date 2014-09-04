@@ -16,3 +16,4 @@ from core.resources.post_resource import PostResource
 from core.resources.list_resource import ListResource
 from core.resources.saved_query_resource import SavedQueryResource
 from core.resources.search_resource import SearchResource
+from core.resources.integration_resource import IntegrationResource
