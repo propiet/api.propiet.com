@@ -1,6 +1,6 @@
 #! coding: utf-8
 
-from settings.prod import *
+from prod import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
