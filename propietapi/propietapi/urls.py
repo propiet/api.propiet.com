@@ -7,6 +7,7 @@ from tastypie.api import Api
 
 # API REST URL Configurations
 v1_api = Api(api_name='v1')
+v1_api.register(IntegrationResource())
 v1_api.register(CategoryResource())
 v1_api.register(CityResource())
 v1_api.register(CountryResource())
