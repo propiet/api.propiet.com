@@ -50,8 +50,8 @@ class SubCategory(models.Model):
         verbose_name = _('Subcategory')
         verbose_name_plural = _('Subcategories')
 
-    def get_zonaprop_subcategory(self):
-        return self.SUBCATEGORY_MAP['zonaprop'][self.id]
+    # def get_zonaprop_subcategory(self):
+    #     return self.SUBCATEGORY_MAP['zonaprop'][self.id]
 
     def __unicode__(self):
         return self.name

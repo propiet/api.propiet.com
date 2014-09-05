@@ -38,11 +38,11 @@ class Location(models.Model):
     def get_user(self):
         return self.user
 
-    def get_zonaprop_cod(self):
-        try:
-            return self.LOCATION_MAP['zonaprop'][self.city_id]
-        except KeyError:
-            return None
+    # def get_zonaprop_cod(self):
+    #     try:
+    #         return self.LOCATION_MAP['zonaprop'][self.city_id]
+    #     except KeyError:
+    #         return None
 
     def __unicode__(self):
         return self.address + ' > ' + self.region.name + '-' + self.city.name

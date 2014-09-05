@@ -25,8 +25,8 @@ class Currency(models.Model):
         verbose_name = _('Currency')
         verbose_name_plural = _('Currencies')
 
-    def get_zonaprop_currency(self):
-        return self.CURRENCY_MAP['zonaprop'][self.id]
+    # def get_zonaprop_currency(self):
+    #     return self.CURRENCY_MAP['zonaprop'][self.id]
 
     def __unicode__(self):
         return self.symbol

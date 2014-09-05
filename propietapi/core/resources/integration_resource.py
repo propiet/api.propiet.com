@@ -52,6 +52,7 @@ class IntegrationResource(ModelResource):
         
         if request_data:
             post = Post.objects.get(pk=request_data['post_id'])
+            
             if post.operation.operation == "Emprendimiento":
                 filename='/home/sites/api.propiet.com/propietapi/media/emprender.xml'
             else:
@@ -61,13 +62,13 @@ class IntegrationResource(ModelResource):
             xml = etree.parse(filename, parser)
             root = xml.getroot()
             for ad in root.findall('ad'):
-                if int(ad.find("id").text) == request_data['post']['id']:
+                if int(ad.find("id").text) == post.id:
                     root.remove(ad)
                     with open(filename,'w') as f:
                         test = f.write(etree.tostring(xml,encoding='utf-8'))
-                    return self.create_response(request, {'response':{'success': True},})       
-                else:
-                    return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
+                    return self.create_response(request, {'response':{'success': True}})       
+            else:
+                return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
         else:
             return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False}}, HttpUnauthorized) 
 

@@ -30,8 +30,8 @@ class Service(models.Model):
         verbose_name = _('Service')
         verbose_name_plural = _('Services')
 
-    def get_zonaprop_service(self):
-        return self.SERVICE_MAP['zonaprop'][self.id]
+    # def get_zonaprop_service(self):
+    #     return self.SERVICE_MAP['zonaprop'][self.id]
 
     def __unicode__(self):
             return self.name

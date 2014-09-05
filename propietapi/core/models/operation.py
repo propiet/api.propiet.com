@@ -28,5 +28,5 @@ class Operation(models.Model):
     def __unicode__(self):
         return self.operation
 
-    def get_zonaprop_operation(self):
-        return self.OPERATION_TYPE['zonaprop'][self.id]
+    # def get_zonaprop_operation(self):
+    #     return self.OPERATION_TYPE['zonaprop'][self.id]

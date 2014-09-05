@@ -311,112 +311,112 @@ class Property(models.Model):
     def get_user(self):
         return self.user
 
-    def get_zonaprop_lightness(self):
-        return self._get_zonaprop_property_value('lightness', self.lightness)
+    # def get_zonaprop_lightness(self):
+    #     return self._get_zonaprop_property_value('lightness', self.lightness)
 
-    def get_zonaprop_orientation(self):
-        return self._get_zonaprop_property_value('orientation', self.orientation)
+    # def get_zonaprop_orientation(self):
+    #     return self._get_zonaprop_property_value('orientation', self.orientation)
 
-    def get_zonaprop_disposition(self):
-        return self._get_zonaprop_property_value('disposition', self.disposition)
+    # def get_zonaprop_disposition(self):
+    #     return self._get_zonaprop_property_value('disposition', self.disposition)
 
-    def get_zonaprop_quantity_ambiences(self):
-        return self._get_zonaprop_property_value('quantity', self.quantityAmbiences)
+    # def get_zonaprop_quantity_ambiences(self):
+    #     return self._get_zonaprop_property_value('quantity', self.quantityAmbiences)
 
-    def get_zonaprop_quantity_bathrooms(self):
-        return self._get_zonaprop_property_value('quantity', self.quantityBathrooms)
+    # def get_zonaprop_quantity_bathrooms(self):
+    #     return self._get_zonaprop_property_value('quantity', self.quantityBathrooms)
 
-    def get_zonaprop_quantity_bedrooms(self):
-        return self._get_zonaprop_property_value('quantity', self.quantityBedrooms)
+    # def get_zonaprop_quantity_bedrooms(self):
+    #     return self._get_zonaprop_property_value('quantity', self.quantityBedrooms)
 
-    def get_zonaprop_quantity_garages(self):
-        return self._get_zonaprop_property_value('quantity', self.quantityGarages)
+    # def get_zonaprop_quantity_garages(self):
+    #     return self._get_zonaprop_property_value('quantity', self.quantityGarages)
 
-    def get_zonaprop_garage_coverage(self):
-        return self._get_zonaprop_property_value('garage_coverage', self.garageCoverage)
+    # def get_zonaprop_garage_coverage(self):
+    #     return self._get_zonaprop_property_value('garage_coverage', self.garageCoverage)
 
-    def get_zonaprop_building_type(self):
-        return self._get_zonaprop_property_value('building_type', self.buildingType)
+    # def get_zonaprop_building_type(self):
+    #     return self._get_zonaprop_property_value('building_type', self.buildingType)
 
-    def get_zonaprop_building_status(self):
-        return self._get_zonaprop_property_value('building_status', self.buildingStatus)
+    # def get_zonaprop_building_status(self):
+    #     return self._get_zonaprop_property_value('building_status', self.buildingStatus)
 
-    def get_zonaprop_building_category(self):
-        return self._get_zonaprop_property_value('building_category', self.buildingCategory)
+    # def get_zonaprop_building_category(self):
+    #     return self._get_zonaprop_property_value('building_category', self.buildingCategory)
 
-    def get_zonaprop_quantity_elevators(self):
-        return self._get_zonaprop_property_value('quantity', self.quantityElevators)
+    # def get_zonaprop_quantity_elevators(self):
+    #     return self._get_zonaprop_property_value('quantity', self.quantityElevators)
 
-    def get_zonaprop_roof_type(self):
-        return self._get_zonaprop_property_value('roof_type', self.roofType)
+    # def get_zonaprop_roof_type(self):
+    #     return self._get_zonaprop_property_value('roof_type', self.roofType)
 
-    def get_zonaprop_industrial_roof_type(self):
-        return self._get_zonaprop_property_value('industrial_roof_type', self.industrialRoofType)
+    # def get_zonaprop_industrial_roof_type(self):
+    #     return self._get_zonaprop_property_value('industrial_roof_type', self.industrialRoofType)
 
-    def get_zonaprop_gate_type(self):
-        return self._get_zonaprop_property_value('gate_type', self.gateType)
+    # def get_zonaprop_gate_type(self):
+    #     return self._get_zonaprop_property_value('gate_type', self.gateType)
 
-    def get_zonaprop_stage(self):
-        return self._get_zonaprop_property_value('stage', self.stage)
+    # def get_zonaprop_stage(self):
+    #     return self._get_zonaprop_property_value('stage', self.stage)
 
-    def get_zonaprop_suitable_professional(self):
-        return self._get_zonaprop_property_value('suitable', self.suitableProfessional)
+    # def get_zonaprop_suitable_professional(self):
+    #     return self._get_zonaprop_property_value('suitable', self.suitableProfessional)
 
-    def get_zonaprop_commercial_usage(self):
-        return self._get_zonaprop_property_value('suitable', self.commercialUsage)
+    # def get_zonaprop_commercial_usage(self):
+    #     return self._get_zonaprop_property_value('suitable', self.commercialUsage)
 
-    def get_zonaprop_suitable_credit(self):
-        return self._get_zonaprop_property_value('suitable', self.suitableCredit)
+    # def get_zonaprop_suitable_credit(self):
+    #     return self._get_zonaprop_property_value('suitable', self.suitableCredit)
 
-    def get_zonaprop_provides_funding(self):
-        return self._get_zonaprop_property_value('suitable', self.providesFunding)
+    # def get_zonaprop_provides_funding(self):
+    #     return self._get_zonaprop_property_value('suitable', self.providesFunding)
 
-    def get_zonaprop_property_type(self):
-        if self.subcategory.get_zonaprop_subcategory():
-            return self.category.get_zonaprop_category() + '_' + self.subcategory.get_zonaprop_subcategory()
-        else:
-            return self.category.get_zonaprop_category()
+    # def get_zonaprop_property_type(self):
+    #     if self.subcategory.get_zonaprop_subcategory():
+    #         return self.category.get_zonaprop_category() + '_' + self.subcategory.get_zonaprop_subcategory()
+    #     else:
+    #         return self.category.get_zonaprop_category()
 
-    def _get_zonaprop_property_value(self, property_set, property_key):
-        return self.PROPERTY_DESCRIPTION_MAP['zonaprop'][property_set].get(property_key, None)
+    # def _get_zonaprop_property_value(self, property_set, property_key):
+    #     return self.PROPERTY_DESCRIPTION_MAP['zonaprop'][property_set].get(property_key, None)
 
-    #Required Fields defaults
-    def get_zonaprop_hectares(self):
-        #Obligatorio para Campos y Chacras
-        if self.hectares is None and self.category_id == 7:
-            return settings.ZONA_PROP_HECTARES_DEFAULT
-        else:
-            return self.hectares
+    # #Required Fields defaults
+    # def get_zonaprop_hectares(self):
+    #     #Obligatorio para Campos y Chacras
+    #     if self.hectares is None and self.category_id == 7:
+    #         return settings.ZONA_PROP_HECTARES_DEFAULT
+    #     else:
+    #         return self.hectares
 
-    def get_zonaprop_ambiences(self):
-        #Obligatorio para Departamentos y Country_Departamento
-        if self.get_zonaprop_quantity_ambiences() is None and (self.category_id == 1 or self.subcategory_id == 15):
-            return settings.ZONA_PROP_QUANTITY_AMBIENCES_DEFAULT
-        else:
-            return self.get_zonaprop_quantity_ambiences()
+    # def get_zonaprop_ambiences(self):
+    #     #Obligatorio para Departamentos y Country_Departamento
+    #     if self.get_zonaprop_quantity_ambiences() is None and (self.category_id == 1 or self.subcategory_id == 15):
+    #         return settings.ZONA_PROP_QUANTITY_AMBIENCES_DEFAULT
+    #     else:
+    #         return self.get_zonaprop_quantity_ambiences()
 
-    def get_zonaprop_square_meters(self):
-        #obligatorio para todos menos Campos y chacras
-        if self.square_meters is None and not self.category_id == 7:
-            return settings.ZONA_PROP_SQUARE_METERS_DEFAULT
-        else:
-            return self.square_meters
+    # def get_zonaprop_square_meters(self):
+    #     #obligatorio para todos menos Campos y chacras
+    #     if self.square_meters is None and not self.category_id == 7:
+    #         return settings.ZONA_PROP_SQUARE_METERS_DEFAULT
+    #     else:
+    #         return self.square_meters
 
-    def get_zonaprop_bedrooms(self):
-        #obligatorio para todos menos Campos y chacras
-        if self.get_zonaprop_quantity_bedrooms() is None and (
-                self.category_id == 2 or self.category_id == 3 or self.category_id == 5 or self.subcategory_id == 14):
-            return settings.ZONA_PROP_QUANTITY_BEDROOMS_DEFAULT
-        else:
-            return self.get_zonaprop_quantity_bedrooms()
+    # def get_zonaprop_bedrooms(self):
+    #     #obligatorio para todos menos Campos y chacras
+    #     if self.get_zonaprop_quantity_bedrooms() is None and (
+    #             self.category_id == 2 or self.category_id == 3 or self.category_id == 5 or self.subcategory_id == 14):
+    #         return settings.ZONA_PROP_QUANTITY_BEDROOMS_DEFAULT
+    #     else:
+    #         return self.get_zonaprop_quantity_bedrooms()
 
-    def get_zonaprop_covered_meters(self):
-        #obligatorio para todos menos Campos y Chacras, Terrenos y lotes y Country Barrios Cerrados_Terreno
-        if self.total_covered_meters is None and not (
-                self.category_id == 7 or self.category_id == 6 or self.subcategory_id == 16):
-            return settings.ZONA_PROP_COVERED_METERS_DEFAULT
-        else:
-            return self.total_covered_meters
+    # def get_zonaprop_covered_meters(self):
+    #     #obligatorio para todos menos Campos y Chacras, Terrenos y lotes y Country Barrios Cerrados_Terreno
+    #     if self.total_covered_meters is None and not (
+    #             self.category_id == 7 or self.category_id == 6 or self.subcategory_id == 16):
+    #         return settings.ZONA_PROP_COVERED_METERS_DEFAULT
+    #     else:
+    #         return self.total_covered_meters
 
     def __unicode__(self):
         if self.id is None:
@@ -433,15 +433,15 @@ class Property(models.Model):
 
 #@receiver(post_save, sender=Property)
 #@receiver(post_delete, sender=Property)
-def property_post_connect(**kwargs):
-    instance = kwargs['instance']
-    if 'created' not in kwargs and instance.post_set.exists():
-        # Its a deletion:
-            post = instance.post_set.all()[0] #Asumo que hay un sólo post con esta property
-            delete_post_on_zona_prop.delay(post)
-    else:
-        # Its a modification:
-        created = kwargs.get('created', False)
-        if not created and instance.post_set.exists():
-            post = instance.post_set.all()[0]
-            update_post_on_zona_prop.delay(post)
+# def property_post_connect(**kwargs):
+#     instance = kwargs['instance']
+#     if 'created' not in kwargs and instance.post_set.exists():
+#         # Its a deletion:
+#             post = instance.post_set.all()[0] #Asumo que hay un sólo post con esta property
+#             delete_post_on_zona_prop.delay(post)
+#     else:
+#         # Its a modification:
+#         created = kwargs.get('created', False)
+#         if not created and instance.post_set.exists():
+#             post = instance.post_set.all()[0]
+#             update_post_on_zona_prop.delay(post)

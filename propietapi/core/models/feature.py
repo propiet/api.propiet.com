@@ -38,8 +38,8 @@ class Feature(models.Model):
         verbose_name = _('Feature')
         verbose_name_plural = _('Features')
 
-    def get_zonaprop_feature(self):
-        return self.FEATURE_MAP['zonaprop'][self.id]
+    # def get_zonaprop_feature(self):
+    #     return self.FEATURE_MAP['zonaprop'][self.id]
 
     def __unicode__(self):
         return self.name

@@ -42,8 +42,8 @@ class Ambience(models.Model):
         verbose_name = _('Ambience')
         verbose_name_plural = _('Ambiences')
 
-    def get_zonaprop_ambience(self):
-        return self.AMBIENCE_MAP['zonaprop'][self.id]
+    # def get_zonaprop_ambience(self):
+    #     return self.AMBIENCE_MAP['zonaprop'][self.id]
 
     def __unicode__(self):
         return self.name

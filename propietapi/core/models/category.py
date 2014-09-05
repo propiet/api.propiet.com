@@ -34,8 +34,8 @@ class Category(models.Model):
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
 
-    def get_zonaprop_category(self):
-        return self.CATEGORY_MAP['zonaprop'][self.id]
+    # def get_zonaprop_category(self):
+    #     return self.CATEGORY_MAP['zonaprop'][self.id]
 
     def __unicode__(self):
         return self.name
