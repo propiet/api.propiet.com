@@ -94,9 +94,9 @@ class IntegrationResource(ModelResource):
                             
                 if post.operation.operation == "Emprendimiento":
 
-                    filename = '/home/sites/api.propiet.com/propietapi/media/emprender.xml'
+                    filename = '/home/ubuntu/prod/propiet-api/api.propiet.com/propietapi/media/emprender.xml'
                     parser = etree.XMLParser(strip_cdata=False)
-                    xml = etree.parse('/home/sites/api.propiet.com/propietapi/media/emprender.xml', parser)
+                    xml = etree.parse(filename, parser)
                     ads = xml.getroot()
                     ad = etree.Element("ad")
 
@@ -155,7 +155,7 @@ class IntegrationResource(ModelResource):
                     pictures = etree.SubElement(ad,"pictures")
 
                     photos = PostPhoto.objects.filter(post=post.pk)
-                    photo_first = True;
+                    photo_first = True
                     if photos:
                         for photo in photos:
                             if photo_first:
@@ -166,7 +166,7 @@ class IntegrationResource(ModelResource):
                             photo_file.text = etree.CDATA(URL_IMAGE+str(photo.file))
 
 
-                     #city_area
+                    #city_area
                     post_city_area = etree.SubElement(ad,"city_area")
                     post_city_area.text = etree.CDATA(location.region.name)
 
@@ -190,7 +190,7 @@ class IntegrationResource(ModelResource):
                             if amenitie.name == "Cancha deportes":
                                 amenitie_type = "Sport field"
                             if amenitie.name == "Gimnasio":
-                                amenitie_type == "Gym"
+                                amenitie_type = "Gym"
                             if amenitie.name == "Hidromasaje":
                                 amenitie_type = "Hidromassage"
                             if amenitie.name == "Laundry":
@@ -210,16 +210,17 @@ class IntegrationResource(ModelResource):
                             if amenitie.name == "SUM":
                                 amenitie_type = "Multipurpose Room"
                             if amenitie.name == "Vigilancia":
-                                amenitie_type = "V"
+                                amenitie_type = "Vigilance"
                             post_amenitie.text = etree.CDATA(amenitie_type)
 
                     #Servicios
-                    services = property.services.all()
+                    servicios = property.services.all()
 
-                    if services:
+                    if servicios:
                         post_servicies = etree.SubElement(ad,"services")
-                        for service in services:
+                        for service in servicios:
                             post_service = etree.SubElement(post_servicies,"service")
+                            service_type = ""
                             if service.name == "Agua corriente":
                                 service_type = "Water"
                             if service.name == "Desagüe cloacal":
@@ -237,12 +238,14 @@ class IntegrationResource(ModelResource):
                             if service.name == "Video Cable":
                                 service_type = "Cable"
                             post_service.text = etree.CDATA(service_type)
+                            
                     ads.append(ad)
 
                     with open(filename,'w') as f:
                         test = f.write(etree.tostring(ads,encoding='utf-8'))
+                    return self.create_response(request, {'response':{'success': True}})
                 else:
-                    filename='/home/sites/api.propiet.com/propietapi/media/propiedades.xml'
+                    filename='/home/ubuntu/prod/propiet-api/api.propiet.com/propietapi/media/propiedades.xml'
                     parser = etree.XMLParser(strip_cdata=False)
                     xml = etree.parse(filename, parser)
                     ads = xml.getroot()
@@ -460,7 +463,7 @@ class IntegrationResource(ModelResource):
                     
                     with open(filename,'w') as f:
                         test = f.write(etree.tostring(ads,encoding='utf-8'))
-                    return self.create_response(request, {'response':{'success': True},})       
+                    return self.create_response(request, {'response':{'success': True}})       
             else:
                 return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
         else:
