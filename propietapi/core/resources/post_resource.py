@@ -44,7 +44,10 @@ class PostResource(ModelResource):
      class Meta:
         allowed_methods = ['post']
         queryset = Post.objects.all() 
-        resource_name = 'post'        
+        resource_name = 'post' 
+
+
+     #objects = CachingManager()      
 
      def prepend_urls(self):
         return [
@@ -268,65 +271,77 @@ class PostResource(ModelResource):
                     api_key = ApiKey.objects.get(user=user)
                     user_group = user.groups.all()[0]
                     user_profile = UserProfile.objects.get(pk=user.pk)
-                    if(post.agent != None):
-                        agent = User.objects.get(pk=post.agent.pk)
-                        agent_profile = UserProfile.objects.get(pk=post.agent.pk) 
-                        test = { 'data':{
-                                    'post_data': {
-                                            'id': post.pk,
-                                            'category': {'id':post.category.pk, 'name':post.category.name},
-                                            'operation': {'id':post.operation.pk, 'name':post.operation.operation},
-                                            'price': post.price,
-                                            'currency': {'id':post.currency.pk, 'name':post.currency.name},
-                                            'title': post.title,
-                                            'status': post.status,
-                                            'description': post.description,
-                                            'hidden_note': post.hidden_note,
-                                            'region': {'id':post.region.pk, 'name':post.region.name},
-                                            'city':{'id':post.city.pk, 'name':post.city.name},
-                                            'role': user_group,
-                                        },
-                                    'post':simplejson.loads(self.serializer.encode(post)),
-                                    'property':simplejson.loads(self.serializer.encode(property)),
-                                    'services':simplejson.loads(self.serializer.encode(property.services.all())),
-                                    'features':simplejson.loads(self.serializer.encode(property.features.all())),
-                                    'ambiences':simplejson.loads(self.serializer.encode(property.ambiences.all())),
-                                    'location': simplejson.loads(self.serializer.encode(location)),
-                                    'user':simplejson.loads(self.serializer.encode(user)),
-                                    'user_profile':simplejson.loads(self.serializer.encode(user_profile)),
-                                    'agent':simplejson.loads(self.serializer.encode(agent)),
-                                    'agent_profile':simplejson.loads(self.serializer.encode(agent_profile)),
-                                    'images':simplejson.loads(self.serializer.encode(PostPhoto.objects.filter(post=post.pk))),
-                                        },
-                                    }
-                    else:
-                        test= {'data':{
-                                'post_data': {
-                                    'id': post.pk,
-                                    'category': {'id':post.category.pk, 'name':post.category.name},
-                                    'operation': {'id':post.operation.pk, 'name':post.operation.operation},
-                                    'price': post.price,
-                                    'currency': {'id':post.currency.pk, 'name':post.currency.name},
-                                    'title': post.title,
-                                    'status': post.status,
-                                    'description': post.description,
-                                    'hidden_note': post.hidden_note,
-                                    'region': {'id':post.region.pk, 'name':post.region.name},
-                                    'city':{'id':post.city.pk, 'name':post.city.name},
-                                    'role': user_group,
-                                },
+                    test = { 'data':{
                                 'post':simplejson.loads(self.serializer.encode(post)),
                                 'property':simplejson.loads(self.serializer.encode(property)),
-                                'services':simplejson.loads(self.serializer.encode(property.services.all())),
-                                'features':simplejson.loads(self.serializer.encode(property.features.all())),
-                                'ambiences':simplejson.loads(self.serializer.encode(property.ambiences.all())),
                                 'location': simplejson.loads(self.serializer.encode(location)),
                                 'user':simplejson.loads(self.serializer.encode(user)),
                                 'user_profile':simplejson.loads(self.serializer.encode(user_profile)),
-                                'images':simplejson.loads(self.serializer.encode(PostPhoto.objects.filter(post=post.pk))),             
-                                },                  
-                            }                      
-                    preposts.append(test) 
+                                },
+                            }
+                    preposts.append(test)
+                #     property = Property.objects.get(pk=post.property.pk)
+                #     location = Location.objects.get(property=post.property.pk)
+                #     user = User.objects.get(pk=post.user.pk)
+                #     api_key = ApiKey.objects.get(user=user)
+                #     user_group = user.groups.all()[0]
+                #     user_profile = UserProfile.objects.get(pk=user.pk)
+                #     if(post.agent != None):
+                #         agent = User.objects.get(pk=post.agent.pk)
+                #         agent_profile = UserProfile.objects.get(pk=post.agent.pk) 
+                #         test = { 'data':{
+                #                     'post_data': {
+                #                             'id': post.pk,
+                #                             'category': {'id':post.category.pk, 'name':post.category.name},
+                #                             'operation': {'id':post.operation.pk, 'name':post.operation.operation},
+                #                             'price': post.price,
+                #                             'currency': {'id':post.currency.pk, 'name':post.currency.name},
+                #                             'title': post.title,
+                #                             'status': post.status,
+                #                             'description': post.description,
+                #                             'hidden_note': post.hidden_note,
+                #                             'region': {'id':post.region.pk, 'name':post.region.name},
+                #                             'city':{'id':post.city.pk, 'name':post.city.name},
+                #                             'role': user_group,
+                #                         },
+                #                     'post':simplejson.loads(self.serializer.encode(post)),
+                #                     'property':simplejson.loads(self.serializer.encode(property)),
+                #                     'location': simplejson.loads(self.serializer.encode(location)),
+                #                     'user':simplejson.loads(self.serializer.encode(user)),
+                #                     'user_profile':simplejson.loads(self.serializer.encode(user_profile)),
+                #                     'agent':simplejson.loads(self.serializer.encode(agent)),
+                #                     'agent_profile':simplejson.loads(self.serializer.encode(agent_profile)),
+                #                     'images':simplejson.loads(self.serializer.encode(PostPhoto.objects.filter(post=post.pk))),
+                #                         },
+                #                     }
+                #     else:
+                #         test= {'data':{
+                #                 'post_data': {
+                #                     'id': post.pk,
+                #                     'category': {'id':post.category.pk, 'name':post.category.name},
+                #                     'operation': {'id':post.operation.pk, 'name':post.operation.operation},
+                #                     'price': post.price,
+                #                     'currency': {'id':post.currency.pk, 'name':post.currency.name},
+                #                     'title': post.title,
+                #                     'status': post.status,
+                #                     'description': post.description,
+                #                     'hidden_note': post.hidden_note,
+                #                     'region': {'id':post.region.pk, 'name':post.region.name},
+                #                     'city':{'id':post.city.pk, 'name':post.city.name},
+                #                     'role': user_group,
+                #                 },
+                #                 'post':simplejson.loads(self.serializer.encode(post)),
+                #                 'property':simplejson.loads(self.serializer.encode(property)),
+                #                 'services':simplejson.loads(self.serializer.encode(property.services.all())),
+                #                 'features':simplejson.loads(self.serializer.encode(property.features.all())),
+                #                 'ambiences':simplejson.loads(self.serializer.encode(property.ambiences.all())),
+                #                 'location': simplejson.loads(self.serializer.encode(location)),
+                #                 'user':simplejson.loads(self.serializer.encode(user)),
+                #                 'user_profile':simplejson.loads(self.serializer.encode(user_profile)),
+                #                 'images':simplejson.loads(self.serializer.encode(PostPhoto.objects.filter(post=post.pk))),             
+                #                 },                  
+                #             }                      
+                #     preposts.append(test) 
 
                 paginator = Paginator(preposts, 20)
                 if('page' in request_data['pagination']):
@@ -343,7 +358,7 @@ class PostResource(ModelResource):
                     return self.create_response(request, {
                         'response':{
                             'data':{
-                                'list':list(posts)
+                                'list': list(posts)
                                 },
                             'pagination': {
                                 'page': page,
@@ -458,6 +473,7 @@ class PostResource(ModelResource):
                             'email': agent.email,
                             'firstname': agent.first_name,
                             'lastname': agent.last_name,
+                            'agency_name': user_profile.agency_name,
                             'role': user_group,
                             'phone': user_profile.phone
                             },

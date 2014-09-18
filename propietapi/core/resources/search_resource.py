@@ -20,6 +20,7 @@ class SearchResource(ModelResource):
 
      property = fields.ForeignKey(PropertyResource, 'property', full=True)
      user = fields.ForeignKey(UserResource, 'user', full=True)
+     agent = fields.ForeignKey(UserResource, 'agent', full=True, null = True)
      category = fields.ForeignKey(CategoryResource, 'category', full=True)
      currency = fields.ForeignKey(CurrencyResource, 'currency', full=True)
      operation = fields.ForeignKey(OperationResource, 'operation', full=True)
@@ -33,6 +34,8 @@ class SearchResource(ModelResource):
         serializer = Serializer()
         paginator_class = Paginator
         filtering = {
+            'user': ALL_WITH_RELATIONS,
+            'agent': ALL_WITH_RELATIONS,
             'property': ALL_WITH_RELATIONS,
             'category': ALL_WITH_RELATIONS,
             'currency': ALL_WITH_RELATIONS,

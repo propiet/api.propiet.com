@@ -24,6 +24,8 @@ v1_api.register(PostResource())
 v1_api.register(ListResource())
 v1_api.register(SavedQueryResource())
 v1_api.register(SearchResource())
+v1_api.register(AgentResource())
+v1_api.register(PropertyResource())
 
 urlpatterns = patterns('',                    
      url(r'^grappelli/', include('grappelli.urls')),

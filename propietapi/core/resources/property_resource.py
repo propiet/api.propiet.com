@@ -40,6 +40,7 @@ class PropertyResource(ModelResource):
             'service': ALL_WITH_RELATIONS,
             'antiqueness': ['exact', 'lt', 'lte', 'gte', 'gt'],
             'orientation': ['exact', 'lt', 'lte', 'gte', 'gt'],
+            'id': ['in','exact'],
         }
         #authentication = ApiKeyAuthentication()
         #authorization = DjangoAuthorization()

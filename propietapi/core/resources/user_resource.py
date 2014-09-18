@@ -32,7 +32,11 @@ class UserResource(ModelResource):
      class Meta:
         allowed_methods = ['post']
         queryset = User.objects.all() 
-        resource_name = 'user'        
+        resource_name = 'user'
+        filtering = {
+            'id': ['exact', 'lt', 'lte', 'gte', 'gt','in','isnull'],
+            'first_name': ['exact', 'lt', 'lte', 'gte', 'gt','in'],            
+        }        
 
      def prepend_urls(self):
         return [
