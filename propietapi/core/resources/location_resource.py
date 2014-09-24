@@ -24,7 +24,7 @@ class LocationResource(ModelResource):
         excludes = ['creation_date', 'last_update']
         filtering = {
             'id': ['exact', 'lt', 'lte', 'gte', 'gt','in','isnull'],
-            'address': ['exact', 'lt', 'lte', 'gte', 'gt','in','contains'],            
+            'address': ['exact', 'lt', 'lte', 'gte', 'gt','in','contains','icontains'],            
         }
         #authentication = ApiKeyAuthentication()
         #authorization = DjangoAuthorization()

@@ -63,6 +63,9 @@ class PostResource(ModelResource):
             url(r"^(?P<resource_name>%s)/update%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('update'), name="api_post_update"),
+            url(r"^(?P<resource_name>%s)/remove%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('remove'), name="api_post_remove"),
             url(r"^(?P<resource_name>%s)/status%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('status'), name="api_post_status"),
@@ -512,7 +515,9 @@ class PostResource(ModelResource):
                         else:
                             return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postForm.errors,'success': False }})
                     else:
-                        return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':propertyForm.errors,'success': False }})                   
+                        for key, value in propertyForm.errors:
+                            error = value 
+                        return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data': error,'success': False }})                   
                 else:
                     return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':locationForm.errors,'success': False }}) 
             except ValidationError as e:
@@ -551,6 +556,7 @@ class PostResource(ModelResource):
                         request_data['data']['post']['region'] = location.region.pk
                         request_data['data']['post']['city'] = location.city.pk
                         request_data['data']['post']['status'] = post.status
+                        request_data['data']['post']['user'] = post.user.pk
                         if (post.agent != None):
                             request_data['data']['post']['agent'] = post.agent.pk
                         postForm = PostForm(request_data['data']['post'], instance=post)
@@ -570,6 +576,20 @@ class PostResource(ModelResource):
             except ValidationError as e:
                 pass
                 return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':{'location_form': locationForm.errors, 'property_form':propertyForm.errors, 'post_form':postForm.errors},'success': False }})
+        else:
+            return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
+
+     def remove(self, request, **kwargs):
+        self.is_secure(request)
+        request_data = self.requestHandler.getData(request)
+        if request_data:
+            post_id = int(request_data['data']['post'])
+            try:
+                post = Post.objects.get(pk=post_id)
+                post.delete()
+                return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
+            except DoesNotExist:
+                return self.create_response(request, {'response': {'error':'ERR_OBJECT_INVALID','post':request_data['data']['post'],'success': False }})
         else:
             return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
 
@@ -620,12 +640,11 @@ class PostResource(ModelResource):
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)        
         if request_data:
-            posts = request_data['data']['posts']
-            agent_id = request_data['data']['agent']
+            post = request_data['data']['post']
             form_data = {'agent': None, 'status': 1}
 
-            for post_id in posts:
-                post = Post.objects.get(pk=int(post_id), agent=int(agent_id))                
+            if post:
+                post = Post.objects.get(pk=int(post))                
                 postAgentForm = PostAgentForm(form_data, instance=post)
                 try:
                     if(postAgentForm.is_valid()):
@@ -635,7 +654,7 @@ class PostResource(ModelResource):
                 except ValidationError as e:
                     pass
                     return self.create_response(request, {'response': {'error':'ERR_FORM_INVALID','form':request_data['data'],'data':postAgentForm.errors,'success': False }})
-            return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
+                return self.create_response(request, {'response': {'data':'SCC_UPDATED','success': True }})
         else:
             return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False }}, HttpUnauthorized)
 
