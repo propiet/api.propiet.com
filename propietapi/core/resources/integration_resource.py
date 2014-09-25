@@ -29,6 +29,8 @@ class IntegrationResource(ModelResource):
      """ Class IntegrationResource integration of differents webs.
         @author: Lionel Cuevas <lionel@hoopemedia.com>"""
      requestHandler = RequestHandler() 
+     
+     
 
      class Meta:
         queryset = Post.objects.all()
@@ -45,18 +47,20 @@ class IntegrationResource(ModelResource):
                 self.wrap_view('properati_delete'), name="api_integration_properati_delete"),
             ]
             
+     
+
      def properati_delete(self,request,**kwargs):
         
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)
         
-        if request_data:
+        if True: #request_data:
             post = Post.objects.get(pk=request_data['post_id'])
             
             if post.operation.operation == "Emprendimiento":
-                filename='/home/sites/api.propiet.com/propietapi/media/emprender.xml'
+                filename = FILE_PROPERATI_EMPRENDER
             else:
-                filename='/home/sites/api.propiet.com/propietapi/media/propiedades.xml'
+                filename = FILE_PROPERATI_PROPIEDADES
             
             parser = etree.XMLParser(strip_cdata=False)
             xml = etree.parse(filename, parser)
@@ -74,6 +78,7 @@ class IntegrationResource(ModelResource):
 
      def properati_create(self,request,**kwargs):
         
+        
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)
         
@@ -83,8 +88,7 @@ class IntegrationResource(ModelResource):
         if request_data:
             
             post = Post.objects.get(pk=request_data['post_id'])
-                             
-            if post:
+            if post.status == 3:
                 if post.agent:
                     property = Property.objects.get(pk=post.property.pk)
                     category =  Category.objects.get(pk=post.category_id)
@@ -94,7 +98,7 @@ class IntegrationResource(ModelResource):
                                 
                     if post.operation.operation == "Emprendimiento":
 
-                        filename = '/home/sites/api.propiet.com/propietapi/media/emprender.xml'
+                        filename = FILE_PROPERATI_EMPRENDER
                         parser = etree.XMLParser(strip_cdata=False)
                         xml = etree.parse(filename, parser)
                         ads = xml.getroot()
@@ -245,7 +249,7 @@ class IntegrationResource(ModelResource):
                             test = f.write(etree.tostring(ads,encoding='utf-8'))
                         return self.create_response(request, {'response':{'success': True}})
                     else:
-                        filename='/home/sites/api.propiet.com/propietapi/media/propiedades.xml'
+                        filename = FILE_PROPERATI_PROPIEDADES
                         parser = etree.XMLParser(strip_cdata=False)
                         xml = etree.parse(filename, parser)
                         ads = xml.getroot()
@@ -272,39 +276,37 @@ class IntegrationResource(ModelResource):
                         post_type.text = etree.CDATA(oper_text)
 
                         #PROPERTY TYPE 
+                                                
+                        pr_type = category.name
+                        spr_type = sub_category.name
+                        if(pr_type == "Departamentos"):
+                            cate_text = "apartament"
+                        elif(pr_type == "Casas"):
+                            cate_text = "house"
+                        elif(pr_type == "PH"):
+                            cate_text = "ph"
+                        elif(pr_type == "Countries y Barrios cerrados"):
+                            if(spr_type == "Terreno"):
+                                cate_text = "country"
+                            elif(spr_type == "Casa"):
+                                cate_text = "country house"
+                        elif(pr_type == "Quintas"):
+                            cate_text = "farm"
+                        elif(pr_type == "Terrenos y Lotes"):
+                            cate_text = "lot"
+                        elif(pr_type == "Campos y Chacras"):
+                            cate_text = "farm"
+                        elif(pr_type == "Galpones depositos y edificios industriales"):
+                            cate_text  = "hangar"
+                        elif(pr_type == "Locales comerciales"):
+                            cate_text = "store"
+                        elif(pr_type == "Oficinas"):
+                            cate_text = "office"
+                        elif(pr_type == "Consultorios"):
+                            cate_text == "office"
+                        elif(pr_type == "Cocheras"):
+                            cate_text = "garage"
                         
-                        if category:
-                            pr_type = category.name
-                            spr_type = sub_category.name
-                            if(pr_type == "Departamentos"):
-                                cate_text = "apartament"
-                            elif(pr_type == "Casas"):
-                                cate_text = "house"
-                            elif(pr_type == "PH"):
-                                cate_text = "ph"
-                            elif(pr_type == "Countries y Barrios cerrados"):
-                                if(spr_type == "Terreno"):
-                                    cate_text = "country"
-                                elif(spr_type == "Casa"):
-                                    cate_text = "country house"
-                            elif(pr_type == "Quintas"):
-                                cate_text = "farm"
-                            elif(pr_type == "Terrenos y Lotes"):
-                                cate_text = "lot"
-                            elif(pr_type == "Campos y Chacras"):
-                                cate_text = "farm"
-                            elif(pr_type == "Galpones depositos y edificios industriales"):
-                                cate_text  = "store"
-                            elif(pr_type == "Locales comerciales"):
-                                cate_text = ""
-                            elif(pr_type == "Oficinas"):
-                                cate_text = "office"
-                            elif(pr_type == "Consultorios"):
-                                cate_text == ""
-                            elif(pr_type == "Cocheras"):
-                                cate_text = "garage"
-                        else:
-                            cate_text = " "
 
                         post_category = etree.SubElement(ad,"property_type")
                         post_category.text = etree.CDATA(cate_text)
@@ -354,14 +356,14 @@ class IntegrationResource(ModelResource):
                         agency_logo.text = etree.CDATA("http://www.propiet.com/bundles/nucleushubcms/images/whiteLogo.png")
 
                         #PRICE
-                        if (post.currency.name == "Dólares"):
+                        curr = ""
+                        if (post.currency.id == 2):
                             curr = "USD"
-                        elif(post.currency.name == "Pesos"):
+                        elif(post.currency.id == 1):
                             curr = "ARS"
-                        else:
-                            curr = ""
+                            
                         post_price = etree.SubElement(ad,"price", currency = curr)
-                        post_price = etree.CDATA(str(post.price))
+                        post_price.text = etree.CDATA(str(post.price))
 
                         #AGENT
                         agent = etree.SubElement(ad,"agent")
@@ -374,7 +376,7 @@ class IntegrationResource(ModelResource):
                         agent_mail.text = etree.CDATA(user.email)
                         #name
                         agent_name = etree.SubElement(agent,"name")
-                        agent_name = etree.CDATA(user_profile.agency_name)
+                        agent_name.text = etree.CDATA(user_profile.agency_name)
                         #phone
                         agent_phone = etree.SubElement(agent,"phone")
                         agent_phone.text = etree.CDATA(user_profile.phone)

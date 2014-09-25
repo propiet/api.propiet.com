@@ -23,6 +23,7 @@ class Location(models.Model):
 
     id = models.AutoField(primary_key=True, db_index=True)
     address = models.CharField(max_length=500, verbose_name=_('Address'))
+    number = models.IntegerField(blank=True, null=True, default=None, verbose_name=_('Numero'))
     longitude = models.CharField(max_length=100, blank=True, null=True, default=0, verbose_name=_('Longitude'))
     latitude = models.CharField(max_length=100, blank=True, null=True, default=0, verbose_name=_('Latitude'))
     country = models.ForeignKey(Country, null=True, verbose_name=_('Country'))
