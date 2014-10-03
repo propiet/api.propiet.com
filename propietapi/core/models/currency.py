@@ -8,13 +8,7 @@ class Currency(models.Model):
     """Class Currency
     @author: Lionel Cuevas <lionel@hoopemedia.com>"""
 
-    CURRENCY_MAP = {
-        'zonaprop': {
-            1: 'ARS',
-            2: 'USD'
-        }
-    }
-
+   
     id = models.AutoField(primary_key=True, db_index=True)
     symbol = models.CharField(max_length=10, verbose_name=_('Symbol'))
     name = models.CharField(max_length=100, verbose_name=_('Name'))

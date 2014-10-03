@@ -51,10 +51,10 @@ class IntegrationResource(ModelResource):
 
      def properati_delete(self,request,**kwargs):
         
-        self.is_secure(request)
+        
         request_data = self.requestHandler.getData(request)
         
-        if True: #request_data:
+        if request_data: #request_data:
             post = Post.objects.get(pk=request_data['post_id'])
             
             if post.operation.operation == "Emprendimiento":
@@ -78,17 +78,15 @@ class IntegrationResource(ModelResource):
 
      def properati_create(self,request,**kwargs):
         
-        
         self.is_secure(request)
         request_data = self.requestHandler.getData(request)
-        
-        URL = "http://propiet.com/publicacion/"
-        URL_IMAGE = "http://api.propiet.com/media/"
 
         if request_data:
             
             post = Post.objects.get(pk=request_data['post_id'])
+
             if post.status == 3:
+                
                 if post.agent:
                     property = Property.objects.get(pk=post.property.pk)
                     category =  Category.objects.get(pk=post.category_id)
@@ -98,9 +96,8 @@ class IntegrationResource(ModelResource):
                                 
                     if post.operation.operation == "Emprendimiento":
 
-                        filename = FILE_PROPERATI_EMPRENDER
                         parser = etree.XMLParser(strip_cdata=False)
-                        xml = etree.parse(filename, parser)
+                        xml = etree.parse(FILE_PROPERATI_EMPRENDER, parser)
                         ads = xml.getroot()
                         ad = etree.Element("ad")
 
@@ -114,7 +111,8 @@ class IntegrationResource(ModelResource):
                         #ADDRESS
                         
                         post_address = etree.SubElement(ad,"address")
-                        post_address.text = etree.CDATA(location.address)
+                        adre = location.address+" "+str(location.number)
+                        post_address.text = etree.CDATA(adre)
 
                         #REGION
 
@@ -245,13 +243,12 @@ class IntegrationResource(ModelResource):
                                 
                         ads.append(ad)
 
-                        with open(filename,'w') as f:
+                        with open(FILE_PROPERATI_EMPRENDER,'w') as f:
                             test = f.write(etree.tostring(ads,encoding='utf-8'))
                         return self.create_response(request, {'response':{'success': True}})
                     else:
-                        filename = FILE_PROPERATI_PROPIEDADES
                         parser = etree.XMLParser(strip_cdata=False)
-                        xml = etree.parse(filename, parser)
+                        xml = etree.parse(FILE_PROPERATI_PROPIEDADES, parser)
                         ads = xml.getroot()
                         ad = etree.Element("ad")
 
@@ -314,7 +311,8 @@ class IntegrationResource(ModelResource):
                         #ADDRESS
                         
                         post_address = etree.SubElement(ad,"address")
-                        post_address.text = etree.CDATA(location.address)
+                        adre = location.address+" "+str(location.number)
+                        post_address.text = etree.CDATA(adre)
 
                         #REGION
 
@@ -356,13 +354,13 @@ class IntegrationResource(ModelResource):
                         agency_logo.text = etree.CDATA("http://www.propiet.com/bundles/nucleushubcms/images/whiteLogo.png")
 
                         #PRICE
-                        curr = ""
-                        if (post.currency.id == 2):
-                            curr = "USD"
-                        elif(post.currency.id == 1):
-                            curr = "ARS"
+                        # curr = ""
+                        # if (post.currency.id == 2):
+                        #     curr = "USD"
+                        # elif(post.currency.id == 1):
+                        #     curr = "ARS"
                             
-                        post_price = etree.SubElement(ad,"price", currency = curr)
+                        post_price = etree.SubElement(ad,"price", currency = CURRENCY_MAP[post.currency.id])
                         post_price.text = etree.CDATA(str(post.price))
 
                         #AGENT
@@ -463,13 +461,55 @@ class IntegrationResource(ModelResource):
                     
                         ads.append(ad)
                         
-                        with open(filename,'w') as f:
+                        with open(FILE_PROPERATI_PROPIEDADES,'w') as f:
                             test = f.write(etree.tostring(ads,encoding='utf-8'))
                         return self.create_response(request, {'response':{'success': True}})       
             else:
                 return self.create_response(request, {'response': {'error':'ERR_EMPTY_LIST','success': False }})
         else:
             return self.create_response(request, {'response': {'error':'ERR_UNAUTHORIZED','success': False}}, HttpUnauthorized) 
+
+     # def zonaprop_create(self,request,**kwargs):
+        
+     #    #self.is_secure(request)
+     #    #request_data = self.requestHandler.getData(request)
+
+     #    if True:
+            
+     #        post = Post.objects.get(pk=request_data['post_id'])
+
+     #        if post.status == 3:
+                
+     #            if post.agent:
+
+     #                parser = etree.XMLParser(strip_cdata=False)
+     #                xml = etree.parse(FILE_PROPERATI_PROPIEDADES, parser)
+     #                proceso = xml.getroot()
+                    
+     #                #PROCESO
+     #                proceso = etree.Element("proceso")
+
+     #                #CREDENCIALES
+     #                credenciales = etree.SubElement(proceso,"credenciales")
+                    
+     #                cred_prove = etree.SubElement(credenciales,"proveedor")
+     #                cred_prove.text = "Proveedor Name"
+
+     #                cred_pass = etree.SubElement(credenciales,"password")
+     #                cred_pass.text = "Password"
+
+     #                #PUBLICACION
+     #                publicacion = etree.SubElement(proceso,"publicacion")
+
+     #                #USUARIO PROPIET EN ZONAPROP
+     #                usuario = etree.SubElement(publicacion,"usuario")
+     #                usuario.text = "ID USER PROPIET"
+
+     #                #PROPIEDAD AVISO
+     #                aviso = etree.SubElement(publicacion,"aviso")
+
+     #                #TIPO DE PROPIEDAD
+                    
 
      def is_secure(self, request):         
          #if(request.is_secure()):                

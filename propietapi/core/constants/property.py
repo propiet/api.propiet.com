@@ -2,20 +2,6 @@
 """ Property Constants
 	@author Lionel Cuevas <lionel@hoopemedia.com>"""
 
-CATEGORIES = {
-    1:'Departamentos',
-    2:'Casas',
-    3:'PH',
-    4:'Countries y barrios cerrados',
-    5:'Quintas',
-    6:'Terrenos y lotes',
-    7:'Campos y chacras',
-    8:'Galpones, depósitos y edificios industriales',
-    9:'Locales comerciales',    
-    10:'Oficinas',
-    11:'Consultorios',
-    12:'Cocheras',
-}
 SUBCATEGORIES = {
     1:{1:'Dúplex', 2:'Triplex', 3:'Loft', 4:'Piso', 5:'Semipiso', 6:'Penthouse', 7:'Departamento'},
     2:{8:'Dúplex', 9:'Triplex', 10:'Chalet', 11:'Cabaña', 12:'Casa'},
@@ -30,11 +16,8 @@ SUBCATEGORIES = {
     11:{25:'Consultorios'},
     12:{26:'Cocheras'},
 }
-OPERATION_TYPE = {
-    1: 'Venta',
-    2: 'Alquiler',
-    3: 'Emprendimiento'
-}
+
+
 PROPERTYFORM = {
     1:{1:'Department', 2:'Department', 3:'Department', 4:'Department', 5:'Department', 6:'Department', 7:'Department'},
     2:{8:'House', 9:'House', 10:'House', 11:'House', 12:'House'},
